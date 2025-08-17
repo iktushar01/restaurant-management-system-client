@@ -50,8 +50,8 @@ const Header = () => {
   };
 
   return (
-    <header className="h-14 bg-yellow-400 shadow-md">
-      <div className="flex justify-between items-center h-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <header className="h-14 bg-yellow-400 shadow-md ">
+      <div className=" flex justify-between items-center h-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <h2 className="text-black text-xl sm:text-2xl font-bold tracking-tight truncate">
           DineFlow
         </h2>

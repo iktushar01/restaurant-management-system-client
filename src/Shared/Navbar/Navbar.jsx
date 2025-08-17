@@ -32,7 +32,7 @@ const Navbar = () => {
     {
       name: 'Dashboard',
       icon: <FiHome />,
-      path: '/dashboard'
+      path: '/RestaurantDashboard/Index'
     },
     {
       name: 'Order',
@@ -65,7 +65,7 @@ const Navbar = () => {
       icon: <FiUsers />,
       path: '/hr',
       subMenu: [
-        { name: 'Add Designation', path: '/hr/designation' },
+        { name: 'Add Designation', path: '/hr/designation/Index' },
         { name: 'Add Earning Heading', path: '/hr/earning-heading' },
         { name: 'Add Deduction Heading', path: '/hr/deduction-heading' },
         { name: 'Employee Payroll', path: '/hr/payroll' },
@@ -166,7 +166,7 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex flex-wrap gap-1">
+        <div className="hidden md:flex justify-center flex-wrap gap-1">
           {menuItems.map((item, index) => (
             <div key={index} className="relative group">
               <NavLink

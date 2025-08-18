@@ -99,7 +99,7 @@ const Navbar = () => {
       path: '/bank',
       subMenu: [
         { name: 'Bank', path: '/bank/bankinfo/Index' },
-        { name: 'Branch', path: '/bank/branch' },
+        { name: 'Branch', path: '/bank/BankBranchInfo/Index' },
         { name: 'Transactions', path: '/bank/transactions' }
       ]
     },

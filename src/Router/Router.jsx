@@ -5,9 +5,10 @@ import HrDesignationIndex from "../Pages/HR_Pages/HrDesignation/HrDesignationInd
 import MainLayout from "../Layouts/MainLayout/MainLayout";
 import HrDesignationCreate from "../Pages/HR_Pages/HrDesignation/HrDesignationCreate";
 import HrDesignationEditById from "../Pages/HR_Pages/HrDesignation/HrDesignationEditById";
-import BankInfoIndex from "../Pages/HR_Pages/Bank/BankInfoIndex";
-import BankInfoCreate from "../Pages/HR_Pages/Bank/BankInfoCreate";
-import BankInfoEditById from "../Pages/HR_Pages/Bank/BankInfoEditById";
+import BankInfoIndex from "../Pages/Bank_pages/Bank/BankInfoIndex";
+import BankInfoCreate from "../Pages/Bank_pages/Bank/BankInfoCreate";
+import BankInfoEditById from "../Pages/Bank_pages/Bank/BankInfoEditById";
+import BranchInfoIndex from "../Pages/Bank_pages/Branch_Page/BranchInfoIndex";
 
 export const router = createBrowserRouter([
   {
@@ -37,10 +38,10 @@ export const router = createBrowserRouter([
         path: "hr/designation/Index/Edit/:id",
         element: <HrDesignationEditById />,
       },
-       //===================================//
+      //===================================//
       //============= Bank Menu =============//
       //===================================//
-       {
+      {
         path: "bank/bankinfo/Index",
         element: <BankInfoIndex />,
       },
@@ -50,6 +51,20 @@ export const router = createBrowserRouter([
       },
       {
         path: "bank/bankinfo/Index/Edit/:id",
+        element: <BankInfoEditById />,
+      },
+      //===============================================//
+      {
+        path: "bank/BankBranchInfo/Index",
+        element: <BranchInfoIndex />, 
+        
+      },
+      {
+        path: "bank/BankBranchInfo/Index/Create",
+        element: <BankInfoCreate />,
+      },
+      {
+        path: "bank/BankBranchInfo/Index/Edit/:id",
         element: <BankInfoEditById />,
       },
     ],

@@ -151,7 +151,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-black text-white w-full lg:py-4 py-0  fixed shadow-md">
+    <div className="bg-black text-white w-full lg:py-4 py-0 shadow-md">
       <div className="max-w-7xl mx-auto px-4">
         {/* Mobile Header */}
         <div className="flex justify-between items-center py-3 md:hidden">

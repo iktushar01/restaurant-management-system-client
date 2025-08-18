@@ -5,6 +5,8 @@ import HrDesignationIndex from "../Pages/HR_Pages/HrDesignation/HrDesignationInd
 import MainLayout from "../Layouts/MainLayout/MainLayout";
 import HrDesignationCreate from "../Pages/HR_Pages/HrDesignation/HrDesignationCreate";
 import HrDesignationEditById from "../Pages/HR_Pages/HrDesignation/HrDesignationEditById";
+import BankInfoIndex from "../Pages/HR_Pages/Bank/BankInfoIndex";
+import BankInfoCreate from "../Pages/HR_Pages/Bank/BankInfoCreate";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +21,9 @@ export const router = createBrowserRouter([
         path: "RestaurantDashboard/Index",
         element: <RestaurantDashboard />,
       },
+      //===================================//
+      //============= Hr Menu =============//
+      //===================================//
       {
         path: "hr/designation/Index",
         element: <HrDesignationIndex />,
@@ -28,8 +33,19 @@ export const router = createBrowserRouter([
         element: <HrDesignationCreate />,
       },
       {
-        path: "hr/designation/Index/Edit/:id", // ID needed
+        path: "hr/designation/Index/Edit/:id",
         element: <HrDesignationEditById />,
+      },
+       //===================================//
+      //============= Bank Menu =============//
+      //===================================//
+       {
+        path: "bank/bankinfo/Index",
+        element: <BankInfoIndex />,
+      },
+      {
+        path: "bank/bankinfo/Index/Create",
+        element: <BankInfoCreate />,
       },
     ],
   },

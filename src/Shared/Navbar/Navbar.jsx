@@ -98,7 +98,7 @@ const Navbar = () => {
       icon: <FiPieChart />,
       path: '/bank',
       subMenu: [
-        { name: 'Bank', path: '/bank' },
+        { name: 'Bank', path: '/bank/bankinfo/Index' },
         { name: 'Branch', path: '/bank/branch' },
         { name: 'Transactions', path: '/bank/transactions' }
       ]

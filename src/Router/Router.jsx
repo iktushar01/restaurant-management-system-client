@@ -11,6 +11,7 @@ import BankInfoEditById from "../Pages/Bank_pages/Bank/BankInfoEditById";
 import BranchInfoIndex from "../Pages/Bank_pages/Branch_Page/BranchInfoIndex";
 import BranchInfoCreate from "../Pages/Bank_pages/Branch_Page/BranchInfoCreate";
 import BranchInfoEditById from "../Pages/Bank_pages/Branch_Page/BranchInfoEditById";
+import BankAccountInfoIndex from "../Pages/Bank_pages/Transactions/BankAccountInfoIndex";
 
 export const router = createBrowserRouter([
   {
@@ -68,6 +69,11 @@ export const router = createBrowserRouter([
       {
         path: "bank/BankBranchInfo/Index/Edit/:id",
         element: <BranchInfoEditById />,
+      },
+       //===============================================//
+       {
+        path: "/bank/BankAccountInfo/Index",
+        element: <BankAccountInfoIndex />,
       },
     ],
   },

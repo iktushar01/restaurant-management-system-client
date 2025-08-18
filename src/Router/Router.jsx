@@ -7,6 +7,7 @@ import HrDesignationCreate from "../Pages/HR_Pages/HrDesignation/HrDesignationCr
 import HrDesignationEditById from "../Pages/HR_Pages/HrDesignation/HrDesignationEditById";
 import BankInfoIndex from "../Pages/HR_Pages/Bank/BankInfoIndex";
 import BankInfoCreate from "../Pages/HR_Pages/Bank/BankInfoCreate";
+import BankInfoEditById from "../Pages/HR_Pages/Bank/BankInfoEditById";
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
       {
         path: "bank/bankinfo/Index/Create",
         element: <BankInfoCreate />,
+      },
+      {
+        path: "bank/bankinfo/Index/Edit/:id",
+        element: <BankInfoEditById />,
       },
     ],
   },

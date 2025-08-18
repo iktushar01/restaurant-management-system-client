@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import FormInput from "../../../Shared/FormInput/FromInput";
 
-const BankInfoCreate = () => {
+const BankInfoEditById = () => {
   const {
     register,
     handleSubmit,
@@ -25,7 +25,7 @@ const BankInfoCreate = () => {
         >
           <button className="flex items-center px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 group-hover:-translate-x-1 cursor-pointer">
             <FiArrowLeft className="mr-2 text-gray-600 group-hover:text-gray-900 transition-colors duration-200 " />
-            Back to bank Info
+            Back to Bank Info
           </button>
         </Link>
       </div>
@@ -33,10 +33,10 @@ const BankInfoCreate = () => {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6 bg-gradient-to-r from-yellow-200 to-yellow-400 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-gray-800">
-            Add New Bank Info
+            Update Bank Info
           </h2>
           <p className="text-gray-700 mt-1">
-            Fill in the details below to create a new bank Info
+            Fill in the details below to Update bank info
           </p>
         </div>
 
@@ -49,7 +49,7 @@ const BankInfoCreate = () => {
                 placeholder="e.g., bangladesh bank"
                 name="bankName"
                 register={register}
-                rules={{ required: "bank name is required" }}
+                rules={{ required: "bank info name is required" }}
                 errors={errors}
               />
             </div>
@@ -58,7 +58,7 @@ const BankInfoCreate = () => {
             <div className="md:col-span-2">
               <FormInput
                 label="Description"
-                placeholder="e.g., this is main account"
+                placeholder="e.g., nice"
                 name="description"
                 register={register}
                 rules={{
@@ -81,7 +81,7 @@ const BankInfoCreate = () => {
               type="submit"
               className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
             >
-              Save Bank Info
+              Update Bank Info
             </button>
           </div>
         </form>
@@ -90,4 +90,4 @@ const BankInfoCreate = () => {
   );
 };
 
-export default BankInfoCreate;
+export default BankInfoEditById;

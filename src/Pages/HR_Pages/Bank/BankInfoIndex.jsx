@@ -6,7 +6,7 @@ import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
 
 const BankInfoIndex = () => {
   const designations = [
-    // { ID:1, bankName: "DBBL", description: "nice" },
+    { ID:1, bankName: "DBBL", description: "nice" },
   ];
 
   const columns = [
@@ -37,7 +37,7 @@ const BankInfoIndex = () => {
     className: "text-indigo-600 hover:text-indigo-900",
     render: (row) => (
       <Link
-        to={`/hr/designation/Index/Edit/${row.ID}`}
+        to={`/bank/bankinfo/Index/Edit/${row.ID}`}
         className="flex items-center space-x-1"
       >
         <FaEdit />

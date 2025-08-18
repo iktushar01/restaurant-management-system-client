@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import LoginPage from "../Authentication/LoginPage/LoginPage";
 import RestaurantDashboard from "../Layouts/RestaurantDashboard/RestaurantDashboard";
 import HrDesignationIndex from "../Pages/HR_Pages/HrDesignation/HrDesignationIndex";
@@ -11,8 +11,12 @@ export const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
-        path: "/RestaurantDashboard/Index",
-        element: <RestaurantDashboard />
+        index: true,
+        element: <Navigate to="/RestaurantDashboard/Index" replace />,
+      },
+      {
+        path: "RestaurantDashboard/Index",
+        element: <RestaurantDashboard />,
       },
       {
         path: "hr/designation/Index",
@@ -24,5 +28,4 @@ export const router = createBrowserRouter([
       },
     ],
   },
- 
 ]);

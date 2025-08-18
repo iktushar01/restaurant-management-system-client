@@ -6,7 +6,7 @@ import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
 
 const BankInfoIndex = () => {
   const designations = [
-    { ID:1, bankName: "DBBL", description: "nice" },
+    // { ID:1, bankName: "DBBL", description: "nice" },
   ];
 
   const columns = [
@@ -78,15 +78,15 @@ const BankInfoIndex = () => {
       {designations.length === 0 && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 md:p-12 text-center mt-8">
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            No designations found
+            No bank info found
           </h3>
           <p className="text-gray-500 mb-6">
-            Get started by creating a new designation
+            Get started by creating a new bank info
           </p>
           <Link to="Create">
             <button className="px-5 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 font-medium rounded-lg hover:from-amber-500 hover:to-yellow-600 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 inline-flex items-center">
               <FaPlus className="mr-2" />
-              Create Designation
+              Create Bank Info
             </button>
           </Link>
         </div>

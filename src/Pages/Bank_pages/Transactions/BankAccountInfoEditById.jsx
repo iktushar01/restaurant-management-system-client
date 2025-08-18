@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import FormInput from "../../../Shared/FormInput/FromInput";
 
-const BankAccountInfoCreate = () => {
+const BankAccountInfoEditById = () => {
   const {
     register,
     handleSubmit,
@@ -41,7 +41,7 @@ const BankAccountInfoCreate = () => {
           className="flex items-center group transition-all duration-200"
         >
           <button className="flex items-center px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 group-hover:-translate-x-1 cursor-pointer">
-            <FiArrowLeft className="mr-2 text-gray-600 group-hover:text-gray-900 transition-colors duration-200 " />
+            <FiArrowLeft className="mr-2 text-gray-600 group-hover:text-gray-900 transition-colors duration-200" />
             Back to Bank Accounts
           </button>
         </Link>
@@ -50,10 +50,10 @@ const BankAccountInfoCreate = () => {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6 bg-gradient-to-r from-yellow-200 to-yellow-400 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-gray-800">
-            Add New Bank Account
+            Edit Bank Account
           </h2>
           <p className="text-gray-700 mt-1">
-            Fill in the details below to create a new bank account
+            Update the details below to edit this bank account
           </p>
         </div>
 
@@ -161,10 +161,9 @@ const BankAccountInfoCreate = () => {
             </Link>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer flex items-center"
+              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
             >
-              
-              Create Account
+              Update Account
             </button>
           </div>
         </form>
@@ -173,4 +172,4 @@ const BankAccountInfoCreate = () => {
   );
 };
 
-export default BankAccountInfoCreate;
+export default BankAccountInfoEditById;

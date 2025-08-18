@@ -4,6 +4,7 @@ import RestaurantDashboard from "../Layouts/RestaurantDashboard/RestaurantDashbo
 import HrDesignationIndex from "../Pages/HR_Pages/HrDesignation/HrDesignationIndex";
 import MainLayout from "../Layouts/MainLayout/MainLayout";
 import HrDesignationCreate from "../Pages/HR_Pages/HrDesignation/HrDesignationCreate";
+import HrDesignationEditById from "../Pages/HR_Pages/HrDesignation/HrDesignationEditById";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: "hr/designation/Index/Create",
         element: <HrDesignationCreate />,
+      },
+      {
+        path: "hr/designation/Index/Edit/:id", // ID needed
+        element: <HrDesignationEditById />,
       },
     ],
   },

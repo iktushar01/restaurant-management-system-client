@@ -28,7 +28,10 @@ const ReusableTable = ({ columns, data, actions }) => {
 
           <tbody className="bg-white divide-y divide-gray-200">
             {data.map((row, rowIndex) => (
-              <tr key={rowIndex} className="hover:bg-gray-50 transition-colors duration-150">
+              <tr
+                key={rowIndex}
+                className="hover:bg-gray-50 transition-colors duration-150"
+              >
                 {columns.map((col, colIndex) => (
                   <td
                     key={colIndex}
@@ -45,16 +48,20 @@ const ReusableTable = ({ columns, data, actions }) => {
                 {actions && (
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex justify-end space-x-3">
-                      {actions.map((action, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => action.onClick(row)}
-                          className={`transition-colors duration-200 flex items-center ${action.className}`}
-                        >
-                          {action.icon && <action.icon className="mr-1.5" />}
-                          {action.label}
-                        </button>
-                      ))}
+                      {actions.map((action, idx) =>
+                        action.render ? (
+                          <div key={idx}>{action.render(row)}</div>
+                        ) : (
+                          <button
+                            key={idx}
+                            onClick={() => action.onClick(row)}
+                            className={`transition-colors duration-200 flex items-center ${action.className}`}
+                          >
+                            {action.icon && <action.icon className="mr-1.5" />}
+                            {action.label}
+                          </button>
+                        )
+                      )}
                     </div>
                   </td>
                 )}

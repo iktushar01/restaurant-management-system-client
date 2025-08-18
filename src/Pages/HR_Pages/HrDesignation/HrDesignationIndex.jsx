@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
 
+
 const HrDesignationIndex = () => {
   const designations = [
-    { name: "Admin", basic: "" },
-    { name: "General Manager", basic: "" },
-    { name: "Restaurant Walter", basic: "" },
-    { name: "Software Engineer", basic: "23432432.00" },
+    { ID:1, name: "Admin", basic: "" },
+    { ID:2, name: "General Manager", basic: "23432" },
+    { ID:3, name: "Restaurant Walter", basic: "" },
+    { ID:4, name: "Software Engineer", basic: "2343234" },
   ];
 
   const columns = [
@@ -30,11 +31,19 @@ const HrDesignationIndex = () => {
 
   const actions = [
     {
-      label: "Edit",
-      icon: FaEdit,
-      className: "text-indigo-600 hover:text-indigo-900",
-      onClick: (row) => console.log("Edit:", row),
-    },
+    label: "Edit",
+    icon: FaEdit,
+    className: "text-indigo-600 hover:text-indigo-900",
+    render: (row) => (
+      <Link
+        to={`/hr/designation/Index/Edit/${row.ID}`}
+        className="flex items-center space-x-1"
+      >
+        <FaEdit />
+        <span>Edit</span>
+      </Link>
+    ),
+  },
     {
       label: "Delete",
       icon: FaTrash,

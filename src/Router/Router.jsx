@@ -137,7 +137,7 @@ export const router = createBrowserRouter([
         element: <OtherIncomeIndexCreate />,
       },
       {
-        path: "income/OthersIncomeHead/Index/Edit/:id",
+        path: "income/OthersIncome/Edit/:id",
         element: <OthersIncomeHeadEditById />,
       },
     ],

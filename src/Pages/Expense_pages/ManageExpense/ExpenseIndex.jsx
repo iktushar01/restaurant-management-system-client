@@ -53,7 +53,7 @@ const ExpenseIndex = () => {
       className: "text-blue-600 hover:text-blue-900",
       render: (row) => (
         <Link
-          to={`/expense/ExpenseHead/Edit/${row.ID}`}
+          to={`/expense/Expense/Edit/${row.ID}`}
           className="flex items-center space-x-1"
         >
           <FaEdit className="inline mr-1" />

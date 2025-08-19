@@ -4,26 +4,24 @@ import { Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import FormInput from "../../../Shared/FormInput/FromInput";
 
-const ExpenseCreate = () => {
+const ExpenseEditById = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      headName: "Staff Bazar",
+      amount: "300.00",
+      date: "2022-11-06", // YYYY-MM-DD format for date input
+      note: "sagdf, hasgdas"
+    }
+  });
 
   const onSubmit = (data) => {
     console.log("Expense Form Data:", data);
     // Add your API call here
   };
-
-  // Sample data for dropdown (replace with API data)
-  const headNameOptions = [
-    { value: "STAFF_BAZAR", label: "Staff Bazar" },
-    { value: "OFFICE_SUPPLIES", label: "Office Supplies" },
-    { value: "UTILITIES", label: "Utilities" },
-    { value: "TRAVEL", label: "Travel" },
-    { value: "MAINTENANCE", label: "Maintenance" },
-  ];
 
   return (
     <div className="max-w-6xl min-h-screen mx-auto p-6">
@@ -42,38 +40,24 @@ const ExpenseCreate = () => {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6 bg-gradient-to-r from-yellow-200 to-yellow-400 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-gray-800">
-            Create New Expense
+            Edit Expense
           </h2>
           <p className="text-gray-700 mt-1">
-            Add new expense details
+            Update the expense details below
           </p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
           <div className="grid grid-cols-1 gap-6">
-            {/* Head Name Dropdown */}
+            {/* Head Name Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Head Name <span className="text-red-500">*</span>
-              </label>
-              <select
-                {...register("headName", { required: "Head name is required" })}
-                className={`w-full px-3 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300 ${
-                  errors.headName ? "border-red-500" : "border-gray-300"
-                }`}
-              >
-                <option value="">Select Head Name</option>
-                {headNameOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              {errors.headName && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.headName.message}
-                </p>
-              )}
+              <FormInput
+                label="Head Name"
+                name="headName"
+                register={register}
+                rules={{ required: "Head name is required" }}
+                errors={errors}
+              />
             </div>
 
             {/* Amount Input */}
@@ -83,14 +67,13 @@ const ExpenseCreate = () => {
                 name="amount"
                 type="number"
                 step="0.01"
-                placeholder="Enter amount"
                 register={register}
-                rules={{ 
+                rules={{
                   required: "Amount is required",
                   min: {
                     value: 0.01,
-                    message: "Amount must be greater than 0"
-                  }
+                    message: "Amount must be greater than 0",
+                  },
                 }}
                 errors={errors}
               />
@@ -113,11 +96,9 @@ const ExpenseCreate = () => {
               <FormInput
                 label="Note"
                 name="note"
-                placeholder="Enter expense details"
                 register={register}
-                rules={{ required: "Note is required" }}
-                errors={errors}
                 isTextArea={true}
+                errors={errors}
               />
             </div>
           </div>
@@ -133,7 +114,7 @@ const ExpenseCreate = () => {
               type="submit"
               className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
             >
-              Save
+              Save Changes
             </button>
           </div>
         </form>
@@ -142,4 +123,4 @@ const ExpenseCreate = () => {
   );
 };
 
-export default ExpenseCreate;
+export default ExpenseEditById;

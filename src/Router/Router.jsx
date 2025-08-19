@@ -26,6 +26,7 @@ import OtherIncomeIndexCreate from "../Pages/Income_pages/ManageIncome/OtherInco
 import DailyIncome from "../Pages/Income_pages/DayWiseIncome/DailyIncome";
 import DailyIncomeDetails from "../Pages/Income_pages/DayWiseIncome/DailyIncomeDetails";
 import ExpenseHeadIndex from "../Pages/Expense_pages/Add_Expense/ExpenseHeadIndex";
+import ExpenseHeadCreate from "../Pages/Expense_pages/Add_Expense/ExpenseHeadCreate";
 
 export const router = createBrowserRouter([
   {
@@ -157,15 +158,15 @@ export const router = createBrowserRouter([
       //============= Expense Menu =============//
       //===================================//
        {
-        path: "/expense/OthersIncomeHead/Index",
+        path: "/expense/ExpenseHead/Index",
         element: <ExpenseHeadIndex />,
       },
       {
-        path: "income/OthersIncomeHead/Index/Create",
-        element: <OthersIncomeHeadCreate />,
+        path: "expense/ExpenseHead/Create",
+        element: <ExpenseHeadCreate />,
       },
       {
-        path: "income/OthersIncomeHead/Index/Edit/:id",
+        path: "income/ExpenseHead/Index/Edit/:id",
         element: <OthersIncomeHeadEditById />,
       },
     ],

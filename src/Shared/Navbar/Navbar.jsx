@@ -88,7 +88,7 @@ const Navbar = () => {
       icon: <FiCreditCard />,
       path: '/expense',
       subMenu: [
-        { name: 'Add Expense Types', path: '/expense/OthersIncomeHead/Index' },
+        { name: 'Add Expense Types', path: '/expense/ExpenseHead/Index' },
         { name: 'Manage Expenses', path: '/expense/manage' },
         { name: 'Day Wise Expense', path: '/expense/daily' }
       ]

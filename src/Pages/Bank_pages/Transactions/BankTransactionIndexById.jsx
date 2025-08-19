@@ -58,11 +58,14 @@ const BankTransactionIndexById = () => {
     {
       header: "Actions",
       accessor: "actions",
-      render: () => (
+      render: (row) => (
         <div className="flex space-x-2">
-          <button className="text-blue-600 hover:text-blue-900">
+          <Link 
+            to={`Edit/${row.ID}`} 
+            className="text-blue-600 hover:text-blue-900"
+          >
             <FaEdit className="inline mr-1" /> Edit
-          </button>
+          </Link>
           <button className="text-red-600 hover:text-red-900">
             <FaTrash className="inline mr-1" /> Delete
           </button>

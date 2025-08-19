@@ -15,6 +15,8 @@ import BankAccountInfoIndex from "../Pages/Bank_pages/Transactions/BankAccountIn
 import BankAccountInfoCreate from "../Pages/Bank_pages/Transactions/BankAccountInfoCreate";
 import BankAccountInfoEditById from "../Pages/Bank_pages/Transactions/BankAccountInfoEditById";
 import BankTransactionIndexById from "../Pages/Bank_pages/Transactions/BankTransactionIndexById";
+import BankTransactionIndexByIdCreate from "../Pages/Bank_pages/Transactions/BankTransactionIndexByIdCreate";
+import BankTransactionIndexByIdEdit from "../Pages/Bank_pages/Transactions/BankTransactionIndexByIdEdit";
 
 export const router = createBrowserRouter([
   {
@@ -62,8 +64,7 @@ export const router = createBrowserRouter([
       //===============================================//
       {
         path: "bank/BankBranchInfo/Index",
-        element: <BranchInfoIndex />, 
-        
+        element: <BranchInfoIndex />,
       },
       {
         path: "bank/BankBranchInfo/Index/Create",
@@ -73,12 +74,12 @@ export const router = createBrowserRouter([
         path: "bank/BankBranchInfo/Index/Edit/:id",
         element: <BranchInfoEditById />,
       },
-       //===============================================//
-       {
+      //===============================================//
+      {
         path: "/bank/BankAccountInfo/Index",
         element: <BankAccountInfoIndex />,
       },
-       {
+      {
         path: "/bank/BankAccountInfo/Index/Create",
         element: <BankAccountInfoCreate />,
       },
@@ -90,7 +91,14 @@ export const router = createBrowserRouter([
         path: "bank/BankTransaction/Index/:id",
         element: <BankTransactionIndexById />,
       },
-
+      {
+        path: "bank/BankTransaction/Index/:id/Create",
+        element: <BankTransactionIndexByIdCreate />,
+      },
+      {
+        path: "bank/BankTransaction/Index/:id/Edit/:id",
+        element: <BankTransactionIndexByIdEdit />,
+      },
     ],
   },
 ]);

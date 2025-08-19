@@ -37,7 +37,7 @@ const OthersIncomeHeadIndex = () => {
     className: "text-indigo-600 hover:text-indigo-900",
     render: (row) => (
       <Link
-        to={`/bank/bankinfo/Index/Edit/${row.ID}`}
+        to={`/income/OthersIncomeHead/Index/Edit/${row.ID}`}
         className="flex items-center space-x-1"
       >
         <FaEdit />

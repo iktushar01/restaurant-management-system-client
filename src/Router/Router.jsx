@@ -20,6 +20,7 @@ import BankTransactionIndexByIdEdit from "../Pages/Bank_pages/Transactions/BankT
 import BankStatementsIndex from "../Pages/Bank_pages/Transactions/BankStatementsIndex";
 import OthersIncomeHeadIndex from "../Pages/Income_pages/AddIncome/OthersIncomeHeadIndex";
 import OthersIncomeHeadCreate from "../Pages/Income_pages/AddIncome/OthersIncomeHeadCreate";
+import OthersIncomeHeadEditById from "../Pages/Income_pages/AddIncome/OthersIncomeHeadEditById";
 
 export const router = createBrowserRouter([
   {
@@ -79,17 +80,18 @@ export const router = createBrowserRouter([
       },
       //===============================================//
       {
-        path: "/bank/BankAccountInfo/Index",
+        path: "bank/BankAccountInfo/Index",
         element: <BankAccountInfoIndex />,
       },
       {
-        path: "/bank/BankAccountInfo/Index/Create",
+        path: "bank/BankAccountInfo/Index/Create",
         element: <BankAccountInfoCreate />,
       },
       {
         path: "bank/BankAccountInfo/Index/Edit/:id",
         element: <BankAccountInfoEditById />,
       },
+      //=============================================//
       {
         path: "bank/BankTransaction/Index/:id",
         element: <BankTransactionIndexById />,
@@ -102,6 +104,7 @@ export const router = createBrowserRouter([
         path: "bank/BankTransaction/Index/:id/Edit/:id",
         element: <BankTransactionIndexByIdEdit />,
       },
+      //=============================================//
       {
         path: "bank/BankStatements/Index/:id",
         element: <BankStatementsIndex />,
@@ -111,12 +114,16 @@ export const router = createBrowserRouter([
       //============= Income Menu =============//
       //===================================//
       {
-        path: "/income/OthersIncomeHead/Index",
+        path: "income/OthersIncomeHead/Index",
         element: <OthersIncomeHeadIndex />,
       },
       {
-        path: "/income/OthersIncomeHead/Index/Create",
+        path: "income/OthersIncomeHead/Index/Create",
         element: <OthersIncomeHeadCreate />,
+      },
+      {
+        path: "income/OthersIncomeHead/Index/Edit/:id",
+        element: <OthersIncomeHeadEditById />,
       },
     ],
   },

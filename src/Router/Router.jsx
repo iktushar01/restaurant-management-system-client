@@ -31,6 +31,7 @@ import ExpenseHeadEditById from "../Pages/Expense_pages/Add_Expense/ExpenseHeadE
 import ExpenseIndex from "../Pages/Expense_pages/ManageExpense/ExpenseIndex";
 import ExpenseCreate from "../Pages/Expense_pages/ManageExpense/ExpenseCreate";
 import ExpenseEditById from "../Pages/Expense_pages/ManageExpense/ExpenseEditById";
+import DailyExpense from "../Pages/Expense_pages/DayWiseExpense/DailyExpense";
 
 export const router = createBrowserRouter([
   {
@@ -187,6 +188,16 @@ export const router = createBrowserRouter([
         element: <ExpenseEditById />,
       },
 
+      //=======================================
+      {
+        path: "expense/daily-expense",
+        element: <DailyExpense />,
+      },
+      {
+        path: "income/daily-income/details/12/08/2025",
+        //======= dynamic date need to added =======//
+        element: <DailyIncomeDetails />,
+      },
     ],
   },
 ]);

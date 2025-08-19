@@ -90,7 +90,7 @@ const Navbar = () => {
       subMenu: [
         { name: 'Add Expense Types', path: '/expense/ExpenseHead/Index' },
         { name: 'Manage Expenses', path: '/expense/manage' },
-        { name: 'Day Wise Expense', path: '/expense/daily' }
+        { name: 'Day Wise Expense', path: '/expense/daily-expense' }
       ]
     },
     {

@@ -25,6 +25,7 @@ import OtherIncomeIndex from "../Pages/Income_pages/ManageIncome/OtherIncomeInde
 import OtherIncomeIndexCreate from "../Pages/Income_pages/ManageIncome/OtherIncomeIndexCreate";
 import DailyIncome from "../Pages/Income_pages/DayWiseIncome/DailyIncome";
 import DailyIncomeDetails from "../Pages/Income_pages/DayWiseIncome/DailyIncomeDetails";
+import ExpenseHeadIndex from "../Pages/Expense_pages/Add_Expense/ExpenseHeadIndex";
 
 export const router = createBrowserRouter([
   {
@@ -151,6 +152,21 @@ export const router = createBrowserRouter([
         path: "income/daily-income/details/12/08/2025",
         //======= dynamic date need to added =======//
         element: <DailyIncomeDetails />,
+      },
+      //===================================//
+      //============= Expense Menu =============//
+      //===================================//
+       {
+        path: "/expense/OthersIncomeHead/Index",
+        element: <ExpenseHeadIndex />,
+      },
+      {
+        path: "income/OthersIncomeHead/Index/Create",
+        element: <OthersIncomeHeadCreate />,
+      },
+      {
+        path: "income/OthersIncomeHead/Index/Edit/:id",
+        element: <OthersIncomeHeadEditById />,
       },
     ],
   },

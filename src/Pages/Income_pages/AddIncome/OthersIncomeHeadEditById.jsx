@@ -40,12 +40,8 @@ const OthersIncomeHeadEditById = () => {
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6 bg-gradient-to-r from-yellow-200 to-yellow-400 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Others Income
-          </h2>
-          <p className="text-gray-700 mt-1">
-            Update the income details below
-          </p>
+          <h2 className="text-2xl font-bold text-gray-800">Others Income</h2>
+          <p className="text-gray-700 mt-1">Update the income details below</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
@@ -82,12 +78,12 @@ const OthersIncomeHeadEditById = () => {
                 type="number"
                 step="0.01"
                 register={register}
-                rules={{ 
+                rules={{
                   required: "Amount is required",
                   min: {
                     value: 0.01,
-                    message: "Amount must be greater than 0"
-                  }
+                    message: "Amount must be greater than 0",
+                  },
                 }}
                 errors={errors}
               />

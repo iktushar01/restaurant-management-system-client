@@ -73,30 +73,11 @@ const BankTransactionIndexById = () => {
 
   return (
     <div className="p-6 max-w-6xl min-h-screen mx-auto">
-      {/* Header Section */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 bg-gray-50 p-4 sm:p-6 rounded-xl">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-            Bank Transactions
-          </h1>
-          <p className="text-gray-500 text-sm sm:text-base mt-1">
-            Manage your organization's bank account information
-          </p>
-        </div>
-
-        <Link to="Create" className="w-full sm:w-auto">
-          <button className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer text-sm sm:text-base">
-            <FaPlus className="mr-2" />
-            Create New
-          </button>
-        </Link>
-      </div>
       {/* Account Details - Modern Version */}
       <div className="mt-6 bg-gray-50 border border-gray-100 rounded-xl shadow-xs overflow-hidden mb-6">
         <div className="px-5 py-4 border-b border-gray-100">
           <h3 className="font-semibold text-gray-800">Account Information</h3>
         </div>
-
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-5">
           <div className="flex items-center">
@@ -135,6 +116,25 @@ const BankTransactionIndexById = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Header Section */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 bg-gray-50 p-4 sm:p-6 rounded-xl">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            Bank Transactions
+          </h1>
+          <p className="text-gray-500 text-sm sm:text-base mt-1">
+            Manage your organization's bank account information
+          </p>
+        </div>
+
+        <Link to="Create" className="w-full sm:w-auto">
+          <button className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer text-sm sm:text-base">
+            <FaPlus className="mr-2" />
+            Create New
+          </button>
+        </Link>
       </div>
 
       {/* Transactions Table */}

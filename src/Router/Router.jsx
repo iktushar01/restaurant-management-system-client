@@ -19,6 +19,7 @@ import BankTransactionIndexByIdCreate from "../Pages/Bank_pages/Transactions/Ban
 import BankTransactionIndexByIdEdit from "../Pages/Bank_pages/Transactions/BankTransactionIndexByIdEdit";
 import BankStatementsIndex from "../Pages/Bank_pages/Transactions/BankStatementsIndex";
 import OthersIncomeHeadIndex from "../Pages/Income_pages/AddIncome/OthersIncomeHeadIndex";
+import OthersIncomeHeadCreate from "../Pages/Income_pages/AddIncome/OthersIncomeHeadCreate";
 
 export const router = createBrowserRouter([
   {
@@ -112,6 +113,10 @@ export const router = createBrowserRouter([
       {
         path: "/income/OthersIncomeHead/Index",
         element: <OthersIncomeHeadIndex />,
+      },
+      {
+        path: "/income/OthersIncomeHead/Index/Create",
+        element: <OthersIncomeHeadCreate />,
       },
     ],
   },

@@ -78,7 +78,7 @@ const Navbar = () => {
       icon: <FiDollarSign />,
       path: '/income',
       subMenu: [
-        { name: 'Add Income Types', path: '/income/types' },
+        { name: 'Add Income Types', path: '/income/OthersIncomeHead/Index' },
         { name: 'Manage Income', path: '/income/manage' },
         { name: 'Day Wise Income', path: '/income/daily' }
       ]
@@ -88,7 +88,7 @@ const Navbar = () => {
       icon: <FiCreditCard />,
       path: '/expense',
       subMenu: [
-        { name: 'Add Expense Types', path: '/expense/types' },
+        { name: 'Add Expense Types', path: '/expense/OthersIncomeHead/Index' },
         { name: 'Manage Expenses', path: '/expense/manage' },
         { name: 'Day Wise Expense', path: '/expense/daily' }
       ]

@@ -22,6 +22,7 @@ import OthersIncomeHeadIndex from "../Pages/Income_pages/AddIncome/OthersIncomeH
 import OthersIncomeHeadCreate from "../Pages/Income_pages/AddIncome/OthersIncomeHeadCreate";
 import OthersIncomeHeadEditById from "../Pages/Income_pages/AddIncome/OthersIncomeHeadEditById";
 import OtherIncomeIndex from "../Pages/Income_pages/ManageIncome/OtherIncomeIndex";
+import OtherIncomeIndexCreate from "../Pages/Income_pages/ManageIncome/OtherIncomeIndexCreate";
 
 export const router = createBrowserRouter([
   {
@@ -132,8 +133,8 @@ export const router = createBrowserRouter([
         element: <OtherIncomeIndex />,
       },
       {
-        path: "income/OthersIncomeHead/Index/Create",
-        element: <OthersIncomeHeadCreate />,
+        path: "income/OthersIncome/Index/Create",
+        element: <OtherIncomeIndexCreate />,
       },
       {
         path: "income/OthersIncomeHead/Index/Edit/:id",

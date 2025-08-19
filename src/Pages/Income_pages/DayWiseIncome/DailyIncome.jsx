@@ -9,12 +9,7 @@ const DailyIncome = () => {
       ID: 1,
       date: "12/08/2025",
       totalIncome: 34534.0,
-    },
-    {
-      ID: 2,
-      date: "06/11/2022",
-      totalIncome: 300.0,
-    },
+    }
   ];
 
   const columns = [
@@ -55,14 +50,6 @@ const DailyIncome = () => {
           <p className="text-gray-500 text-sm sm:text-base mt-1">
             View daily summary of other income
           </p>
-        </div>
-        <div className="flex space-x-3 w-full sm:w-auto">
-          <Link to="Create" className="w-full sm:w-auto">
-            <button className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer text-sm sm:text-base">
-              <FaPlus className="mr-2" />
-              Create New
-            </button>
-          </Link>
         </div>
       </div>
 

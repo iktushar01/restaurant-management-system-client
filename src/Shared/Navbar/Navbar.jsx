@@ -80,7 +80,7 @@ const Navbar = () => {
       subMenu: [
         { name: 'Add Income Types', path: '/income/OthersIncomeHead/Index' },
         { name: 'Manage Income', path: '/income/OthersIncome/Index' },
-        { name: 'Day Wise Income', path: '/income/daily' }
+        { name: 'Day Wise Income', path: '/income/daily-income' }
       ]
     },
     {

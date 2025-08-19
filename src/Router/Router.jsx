@@ -28,6 +28,7 @@ import DailyIncomeDetails from "../Pages/Income_pages/DayWiseIncome/DailyIncomeD
 import ExpenseHeadIndex from "../Pages/Expense_pages/Add_Expense/ExpenseHeadIndex";
 import ExpenseHeadCreate from "../Pages/Expense_pages/Add_Expense/ExpenseHeadCreate";
 import ExpenseHeadEditById from "../Pages/Expense_pages/Add_Expense/ExpenseHeadEditById";
+import ExpenseIndex from "../Pages/Expense_pages/ManageExpense/ExpenseIndex";
 
 export const router = createBrowserRouter([
   {
@@ -170,6 +171,20 @@ export const router = createBrowserRouter([
         path: "expense/ExpenseHead/Edit/:id",
         element: <ExpenseHeadEditById />,
       },
+      //========================================
+      {
+        path: "/expense/manage",
+        element: <ExpenseIndex />,
+      },
+      {
+        path: "expense/Expense/Create",
+        element: <ExpenseHeadCreate />,
+      },
+      {
+        path: "expense/Expense/Edit/:id",
+        element: <ExpenseHeadEditById />,
+      },
+
     ],
   },
 ]);

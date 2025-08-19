@@ -29,6 +29,7 @@ import ExpenseHeadIndex from "../Pages/Expense_pages/Add_Expense/ExpenseHeadInde
 import ExpenseHeadCreate from "../Pages/Expense_pages/Add_Expense/ExpenseHeadCreate";
 import ExpenseHeadEditById from "../Pages/Expense_pages/Add_Expense/ExpenseHeadEditById";
 import ExpenseIndex from "../Pages/Expense_pages/ManageExpense/ExpenseIndex";
+import ExpenseCreate from "../Pages/Expense_pages/ManageExpense/ExpenseCreate";
 
 export const router = createBrowserRouter([
   {
@@ -177,8 +178,8 @@ export const router = createBrowserRouter([
         element: <ExpenseIndex />,
       },
       {
-        path: "expense/Expense/Create",
-        element: <ExpenseHeadCreate />,
+        path: "expense/manage/Create",
+        element: <ExpenseCreate />,
       },
       {
         path: "expense/Expense/Edit/:id",

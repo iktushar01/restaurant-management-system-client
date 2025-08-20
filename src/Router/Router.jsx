@@ -36,6 +36,7 @@ import DailyExpenseDetails from "../Pages/Expense_pages/DayWiseExpense/DailyExpe
 import AddEarningHeadingIndex from "../Pages/HR_Pages/AddEarningHeading/AddEarningHeadingIndex";
 import AddEarningHeadingCreate from "../Pages/HR_Pages/AddEarningHeading/AddEarningHeadingCreate";
 import AddEarningHeadingEdit from "../Pages/HR_Pages/AddEarningHeading/AddEarningHeadingEdit";
+import PayRollDeductionHeadIndex from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadIndex";
 
 export const router = createBrowserRouter([
   {
@@ -66,7 +67,7 @@ export const router = createBrowserRouter([
         element: <HrDesignationEditById />,
       },
       //======================================//
-       {
+      {
         path: "/hr/earning-heading/Index",
         element: <AddEarningHeadingIndex />,
       },
@@ -77,6 +78,11 @@ export const router = createBrowserRouter([
       {
         path: "hr/earning-heading/Index/Edit/:id",
         element: <AddEarningHeadingEdit />,
+      },
+      //=====================================
+      {
+        path: "/hr/deduction-heading/Index",
+        element: <PayRollDeductionHeadIndex />,
       },
 
       //===================================//
@@ -180,7 +186,7 @@ export const router = createBrowserRouter([
       //===================================//
       //============= Expense Menu =============//
       //===================================//
-       {
+      {
         path: "/expense/ExpenseHead/Index",
         element: <ExpenseHeadIndex />,
       },

@@ -34,6 +34,7 @@ import ExpenseEditById from "../Pages/Expense_pages/ManageExpense/ExpenseEditByI
 import DailyExpense from "../Pages/Expense_pages/DayWiseExpense/DailyExpense";
 import DailyExpenseDetails from "../Pages/Expense_pages/DayWiseExpense/DailyExpenseDetails";
 import AddEarningHeadingIndex from "../Pages/HR_Pages/AddEarningHeading/AddEarningHeadingIndex";
+import AddEarningHeadingCreate from "../Pages/HR_Pages/AddEarningHeading/AddEarningHeadingCreate";
 
 export const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ export const router = createBrowserRouter([
        {
         path: "/hr/earning-heading/Index",
         element: <AddEarningHeadingIndex />,
+      },
+      {
+        path: "hr/earning-heading/Index/Create",
+        element: <AddEarningHeadingCreate />,
       },
 
       //===================================//

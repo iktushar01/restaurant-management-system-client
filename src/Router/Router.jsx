@@ -33,6 +33,7 @@ import ExpenseCreate from "../Pages/Expense_pages/ManageExpense/ExpenseCreate";
 import ExpenseEditById from "../Pages/Expense_pages/ManageExpense/ExpenseEditById";
 import DailyExpense from "../Pages/Expense_pages/DayWiseExpense/DailyExpense";
 import DailyExpenseDetails from "../Pages/Expense_pages/DayWiseExpense/DailyExpenseDetails";
+import AddEarningHeadingIndex from "../Pages/HR_Pages/AddEarningHeading/AddEarningHeadingIndex";
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +63,12 @@ export const router = createBrowserRouter([
         path: "hr/designation/Index/Edit/:id",
         element: <HrDesignationEditById />,
       },
+      //======================================//
+       {
+        path: "/hr/earning-heading/Index",
+        element: <AddEarningHeadingIndex />,
+      },
+
       //===================================//
       //============= Bank Menu =============//
       //===================================//

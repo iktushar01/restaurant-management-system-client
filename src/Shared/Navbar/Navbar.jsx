@@ -66,11 +66,11 @@ const Navbar = () => {
       path: '/hr',
       subMenu: [
         { name: 'Add Designation', path: '/hr/designation/Index' },
-        { name: 'Add Earning Heading', path: '/hr/earning-heading' },
-        { name: 'Add Deduction Heading', path: '/hr/deduction-heading' },
+        { name: 'Add Earning Heading', path: '/hr/earning-heading/Index' },
+        { name: 'Add Deduction Heading', path: '/hr/deduction-heading/Index' },
         { name: 'Employee Payroll', path: '/hr/payroll' },
-        { name: 'Employee Salary Payable', path: '/hr/salary-payable' },
-        { name: 'Grand Employee Salary Payable', path: '/hr/grand-salary' },
+        { name: 'Employee Salary Payable', path: '/hr/salary-payable/Index' },
+        { name: 'Grand Employee Salary Payable', path: '/hr/grand-salary/Index' },
       ]
     },
     {

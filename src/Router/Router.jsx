@@ -37,6 +37,7 @@ import AddEarningHeadingIndex from "../Pages/HR_Pages/AddEarningHeading/AddEarni
 import AddEarningHeadingCreate from "../Pages/HR_Pages/AddEarningHeading/AddEarningHeadingCreate";
 import AddEarningHeadingEdit from "../Pages/HR_Pages/AddEarningHeading/AddEarningHeadingEdit";
 import PayRollDeductionHeadIndex from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadIndex";
+import PayRollDeductionHeadCreate from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadCreate";
 
 export const router = createBrowserRouter([
   {
@@ -84,6 +85,11 @@ export const router = createBrowserRouter([
         path: "/hr/deduction-heading/Index",
         element: <PayRollDeductionHeadIndex />,
       },
+      {
+        path: "hr/deduction-heading/Index/Create",
+        element: <PayRollDeductionHeadCreate />,
+      },
+     
 
       //===================================//
       //============= Bank Menu =============//

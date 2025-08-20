@@ -23,7 +23,7 @@ const PayRollDeductionHeadIndex = () => {
       className: "text-indigo-600 hover:text-indigo-900",
       render: (row) => (
         <Link
-          to={`/hr/deduction-head/Edit/${row.ID}`}
+          to={`/hr/deduction-heading/Edit/${row.ID}`}
           className="flex items-center space-x-1"
         >
           <FaEdit />
@@ -85,4 +85,4 @@ const PayRollDeductionHeadIndex = () => {
   );
 };
 
-export default PayRollDeductionHeadIndex;F
+export default PayRollDeductionHeadIndex;

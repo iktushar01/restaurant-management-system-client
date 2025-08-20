@@ -36,7 +36,7 @@ const AddEarningHeadingIndex = () => {
       className: "text-indigo-600 hover:text-indigo-900",
       render: (row) => (
         <Link
-          to={`/hr/earning-head/edit/${row.ID}`}
+          to={`/hr/earning-heading/Index/Edit/${row.ID}`}
           className="flex items-center space-x-1"
         >
           <FaEdit />

@@ -39,6 +39,7 @@ import AddEarningHeadingEdit from "../Pages/HR_Pages/AddEarningHeading/AddEarnin
 import PayRollDeductionHeadIndex from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadIndex";
 import PayRollDeductionHeadCreate from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadCreate";
 import PayRollDeductionHeadEdit from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadEdit";
+import EmployeePayrollIndex from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollIndex";
 
 export const router = createBrowserRouter([
   {
@@ -93,6 +94,11 @@ export const router = createBrowserRouter([
       {
         path: "hr/deduction-heading/Edit/:id",
         element: <PayRollDeductionHeadEdit />,
+      },
+      //======================================
+       {
+        path: "/hr/HrEmployeePayroll/Index",
+        element: <EmployeePayrollIndex />,
       },
      
 

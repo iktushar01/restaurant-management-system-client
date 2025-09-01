@@ -40,6 +40,7 @@ import PayRollDeductionHeadIndex from "../Pages/HR_Pages/PayRollDeductionHead/Pa
 import PayRollDeductionHeadCreate from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadCreate";
 import PayRollDeductionHeadEdit from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadEdit";
 import EmployeePayrollIndex from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollIndex";
+import EmployeeSalaryPayableIndex from "../Pages/HR_Pages/EmployeeSalaryPayable/EmployeeSalaryPayableIndex";
 
 export const router = createBrowserRouter([
   {
@@ -100,7 +101,11 @@ export const router = createBrowserRouter([
         path: "/hr/HrEmployeePayroll/Index",
         element: <EmployeePayrollIndex />,
       },
-     
+     //======================================
+     {
+        path: "/hr/salary-payable/Index",
+        element: < EmployeeSalaryPayableIndex/>,
+      },
 
       //===================================//
       //============= Bank Menu =============//

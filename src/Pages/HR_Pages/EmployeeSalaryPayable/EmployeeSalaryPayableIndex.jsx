@@ -12,13 +12,6 @@ const EmployeeSalaryPayableIndex = () => {
       month: "January",
       year: 2025,
       netPayable: -1080.00,
-    },
-    {
-      ID: 2,
-      employeeName: "ADMIN",
-      month: "February",
-      year: 2025,
-      netPayable: -6846.00,
     }
   ];
 
@@ -73,15 +66,7 @@ const EmployeeSalaryPayableIndex = () => {
             View and manage employee salary payable records
           </p>
         </div>
-        <div>
-          
-          <Link to="create">
-            <button className="px-5 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 font-medium rounded-lg hover:from-amber-500 hover:to-yellow-600 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 inline-flex items-center">
-              <FaPlus className="mr-2" />
-              Add Record
-            </button>
-          </Link>
-        </div>
+       
       </div>
 
       {employeeSalaryData.length > 0 ? (

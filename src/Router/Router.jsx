@@ -42,6 +42,7 @@ import PayRollDeductionHeadEdit from "../Pages/HR_Pages/PayRollDeductionHead/Pay
 import EmployeePayrollIndex from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollIndex";
 import EmployeeSalaryPayableIndex from "../Pages/HR_Pages/EmployeeSalaryPayable/EmployeeSalaryPayableIndex";
 import GrandSalaryPayableIndex from "../Pages/HR_Pages/GrandSalaryPayable/GrandSalaryPayableIndex";
+import EmployeeSalaryPayableDetails from "../Pages/HR_Pages/EmployeeSalaryPayable/EmployeeSalaryPayableDetails";
 
 export const router = createBrowserRouter([
   {
@@ -107,6 +108,12 @@ export const router = createBrowserRouter([
         path: "/hr/salary-payable/Index",
         element: < EmployeeSalaryPayableIndex/>,
       },
+      {
+        path: "payroll/employee-salary/details/1",
+        //======= dynamic date need to added =======//
+        element: <EmployeeSalaryPayableDetails />,
+      },
+      //=====================================
      {
         path: "/hr/grand-salary/Index",
         element: < GrandSalaryPayableIndex/>,

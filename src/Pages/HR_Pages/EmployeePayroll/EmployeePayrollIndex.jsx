@@ -8,7 +8,10 @@ import {
   FaFileInvoiceDollar,
   FaUserCheck,
   FaUserSlash,
-  FaEye
+  FaMoneyBill ,
+  FaMinusCircle ,
+  FaWallet ,
+  FaCreditCard 
 } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
 
@@ -20,114 +23,105 @@ const EmployeePayrollIndex = () => {
       contactNo: "01827123671",
       status: "Active",
       access: true,
-      paid: true,
       earning: true,
       deduction: true,
       basic: true,
-      salaryPayment: true
+      salaryPayment: true,
     },
     {
       id: 2,
       name: "Amir Hossain",
       contactNo: "01827123671",
       status: "Active",
-      access: true,
-      paid: true,
       earning: true,
       deduction: true,
       basic: true,
-      salaryPayment: true
+      salaryPayment: true,
     },
     {
       id: 3,
       name: "Shawan",
       contactNo: "0182715990",
       status: "Retired",
-      access: true,
-      paid: false,
       earning: true,
       deduction: true,
       basic: true,
-      salaryPayment: true
+      salaryPayment: true,
     },
     {
       id: 4,
       name: "Roblul",
       contactNo: "01834249955",
       status: "Active",
-      access: true,
-      paid: true,
       earning: true,
       deduction: true,
       basic: true,
-      salaryPayment: true
+      salaryPayment: true,
     },
     {
       id: 5,
       name: "Safful",
       contactNo: "01222",
       status: "Active",
-      access: true,
-      paid: true,
       earning: true,
       deduction: true,
       basic: true,
-      salaryPayment: true
+      salaryPayment: true,
     },
     {
       id: 6,
       name: "payel",
       contactNo: "01979459837",
       status: "Active",
-      access: true,
-      paid: true,
       earning: true,
       deduction: true,
       basic: true,
-      salaryPayment: true
+      salaryPayment: true,
     },
     {
       id: 7,
       name: "nishi",
       contactNo: "12123454",
       status: "Active",
-      access: true,
-      paid: true,
       earning: true,
       deduction: true,
       basic: true,
-      salaryPayment: true
+      salaryPayment: true,
     },
     {
       id: 8,
       name: "py",
       contactNo: "5465465456",
       status: "Active",
-      access: true,
-      paid: true,
       earning: true,
       deduction: true,
       basic: true,
-      salaryPayment: true
-    }
+      salaryPayment: true,
+    },
   ]);
 
   const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this employee payroll record?")) {
-      setEmployees(employees.filter(emp => emp.id !== id));
+    if (
+      window.confirm(
+        "Are you sure you want to delete this employee payroll record?"
+      )
+    ) {
+      setEmployees(employees.filter((emp) => emp.id !== id));
     }
   };
 
   const toggleStatus = (id) => {
-    setEmployees(employees.map(emp => 
-      emp.id === id 
-        ? { 
-            ...emp, 
-            status: emp.status === "Active" ? "Inactive" : "Active",
-            access: emp.status === "Active" ? false : true
-          } 
-        : emp
-    ));
+    setEmployees(
+      employees.map((emp) =>
+        emp.id === id
+          ? {
+              ...emp,
+              status: emp.status === "Active" ? "Inactive" : "Active",
+              access: emp.status === "Active" ? false : true,
+            }
+          : emp
+      )
+    );
   };
 
   const columns = [
@@ -147,10 +141,10 @@ const EmployeePayrollIndex = () => {
       header: "Status",
       accessor: "status",
       render: (row) => (
-        <span 
+        <span
           className={`px-2 py-1 rounded-full text-xs font-medium ${
-            row.status === "Active" 
-              ? "bg-green-100 text-green-800" 
+            row.status === "Active"
+              ? "bg-green-100 text-green-800"
               : "bg-red-100 text-red-800"
           }`}
         >
@@ -163,23 +157,12 @@ const EmployeePayrollIndex = () => {
       accessor: "access",
       render: (row) => (
         <div className="flex justify-center">
-          <span className={`h-5 w-5 rounded-full flex items-center justify-center ${
-            row.access ? "bg-green-500" : "bg-gray-300"
-          }`}>
+          <span
+            className={`h-5 w-5 rounded-full flex items-center justify-center ${
+              row.access ? "bg-green-500" : "bg-gray-300"
+            }`}
+          >
             {row.access && <span className="text-white text-xs">✓</span>}
-          </span>
-        </div>
-      ),
-    },
-    {
-      header: "Pay(ed)",
-      accessor: "paid",
-      render: (row) => (
-        <div className="flex justify-center">
-          <span className={`h-5 w-5 rounded-full flex items-center justify-center ${
-            row.paid ? "bg-blue-500" : "bg-gray-300"
-          }`}>
-            {row.paid && <span className="text-white text-xs">✓</span>}
           </span>
         </div>
       ),
@@ -188,64 +171,72 @@ const EmployeePayrollIndex = () => {
       header: "Earning",
       accessor: "earning",
       render: (row) => (
-        <button 
-          className={`px-2 py-1 rounded text-xs ${
-            row.earning 
-              ? "bg-amber-100 text-amber-800 hover:bg-amber-200" 
+        <Link
+          to={`/hr/employee-payroll/earning/${row.id}`}
+          className={`flex items-center px-2 py-1 rounded text-xs transition-colors ${
+            row.earning
+              ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
               : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-          } transition-colors`}
-          onClick={() => console.log("Earning details for:", row.name)}
+          }`}
+          title="View Earning"
         >
-          Earning
-        </button>
+          <FaMoneyBill className="mr-1" />
+          <span className="hidden sm:inline">Earning</span>
+        </Link>
       ),
     },
     {
       header: "Deduction",
       accessor: "deduction",
       render: (row) => (
-        <button 
-          className={`px-2 py-1 rounded text-xs ${
-            row.deduction 
-              ? "bg-purple-100 text-purple-800 hover:bg-purple-200" 
+        <Link
+          to={`/hr/employee-payroll/deduction/${row.id}`}
+          className={`flex items-center px-2 py-1 rounded text-xs transition-colors ${
+            row.deduction
+              ? "bg-purple-100 text-purple-800 hover:bg-purple-200"
               : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-          } transition-colors`}
-          onClick={() => console.log("Deduction details for:", row.name)}
+          }`}
+          title="View Deduction"
         >
-          Deduction
-        </button>
+          <FaMinusCircle className="mr-1" />
+          <span className="hidden sm:inline">Deduction</span>
+        </Link>
       ),
     },
     {
       header: "Basic",
       accessor: "basic",
       render: (row) => (
-        <button 
-          className={`px-2 py-1 rounded text-xs ${
-            row.basic 
-              ? "bg-blue-100 text-blue-800 hover:bg-blue-200" 
+        <Link
+          to={`/hr/employee-payroll/basic/${row.id}`}
+          className={`flex items-center px-2 py-1 rounded text-xs transition-colors ${
+            row.basic
+              ? "bg-blue-100 text-blue-800 hover:bg-blue-200"
               : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-          } transition-colors`}
-          onClick={() => console.log("Basic salary for:", row.name)}
+          }`}
+          title="View Basic Salary"
         >
-          Basic
-        </button>
+          <FaWallet className="mr-1" />
+          <span className="hidden sm:inline">Basic</span>
+        </Link>
       ),
     },
     {
       header: "Salary Payment",
       accessor: "salaryPayment",
       render: (row) => (
-        <button 
-          className={`px-2 py-1 rounded text-xs ${
-            row.salaryPayment 
-              ? "bg-green-100 text-green-800 hover:bg-green-200" 
+        <Link
+          to={`/hr/employee-payroll/payment/${row.id}`}
+          className={`flex items-center px-2 py-1 rounded text-xs transition-colors ${
+            row.salaryPayment
+              ? "bg-green-100 text-green-800 hover:bg-green-200"
               : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-          } transition-colors`}
-          onClick={() => console.log("Salary payment for:", row.name)}
+          }`}
+          title="Salary Payment"
         >
-          Salary Payment
-        </button>
+          <FaCreditCard className="mr-1" />
+          <span className="hidden sm:inline">Salary Payment</span>
+        </Link>
       ),
     },
     {
@@ -253,7 +244,7 @@ const EmployeePayrollIndex = () => {
       accessor: "edit",
       render: (row) => (
         <Link
-          to={`/hr/employee-payroll/Edit/${row.id}`}
+          to={`/hr/employee-payroll/edit/${row.id}`}
           className="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors p-2"
           title="Edit"
         >
@@ -262,6 +253,7 @@ const EmployeePayrollIndex = () => {
         </Link>
       ),
     },
+
     {
       header: "Delete",
       accessor: "delete",
@@ -298,7 +290,7 @@ const EmployeePayrollIndex = () => {
               Create New
             </button>
           </Link>
-          
+
           <button className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-offset-2 cursor-pointer text-sm sm:text-base">
             <FaFileInvoiceDollar className="mr-2" />
             Process Payroll
@@ -315,13 +307,13 @@ const EmployeePayrollIndex = () => {
             </div>
             <div>
               <h3 className="text-2xl font-bold text-gray-800">
-                {employees.filter(emp => emp.status === "Active").length}
+                {employees.filter((emp) => emp.status === "Active").length}
               </h3>
               <p className="text-gray-600 text-sm">Active Employees</p>
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
           <div className="flex items-center">
             <div className="p-3 bg-amber-100 rounded-lg mr-4">
@@ -329,13 +321,13 @@ const EmployeePayrollIndex = () => {
             </div>
             <div>
               <h3 className="text-2xl font-bold text-gray-800">
-                {employees.filter(emp => emp.paid).length}
+                {employees.filter((emp) => emp.paid).length}
               </h3>
               <p className="text-gray-600 text-sm">Paid This Month</p>
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
           <div className="flex items-center">
             <div className="p-3 bg-green-100 rounded-lg mr-4">
@@ -349,7 +341,7 @@ const EmployeePayrollIndex = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
           <div className="flex items-center">
             <div className="p-3 bg-red-100 rounded-lg mr-4">
@@ -357,7 +349,7 @@ const EmployeePayrollIndex = () => {
             </div>
             <div>
               <h3 className="text-2xl font-bold text-gray-800">
-                {employees.filter(emp => emp.status !== "Active").length}
+                {employees.filter((emp) => emp.status !== "Active").length}
               </h3>
               <p className="text-gray-600 text-sm">Inactive Employees</p>
             </div>

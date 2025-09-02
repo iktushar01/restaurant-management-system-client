@@ -43,6 +43,7 @@ import EmployeePayrollIndex from "../Pages/HR_Pages/EmployeePayroll/EmployeePayr
 import EmployeeSalaryPayableIndex from "../Pages/HR_Pages/EmployeeSalaryPayable/EmployeeSalaryPayableIndex";
 import GrandSalaryPayableIndex from "../Pages/HR_Pages/GrandSalaryPayable/GrandSalaryPayableIndex";
 import EmployeeSalaryPayableDetails from "../Pages/HR_Pages/EmployeeSalaryPayable/EmployeeSalaryPayableDetails";
+import EmployeePayrollIndexCreate from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollIndexCreate";
 
 export const router = createBrowserRouter([
   {
@@ -102,6 +103,10 @@ export const router = createBrowserRouter([
        {
         path: "/hr/HrEmployeePayroll/Index",
         element: <EmployeePayrollIndex />,
+      },
+      {
+        path: "/hr/HrEmployeePayroll/Index/Create",
+        element: <EmployeePayrollIndexCreate />,
       },
      //======================================
      {

@@ -44,6 +44,7 @@ import EmployeeSalaryPayableIndex from "../Pages/HR_Pages/EmployeeSalaryPayable/
 import GrandSalaryPayableIndex from "../Pages/HR_Pages/GrandSalaryPayable/GrandSalaryPayableIndex";
 import EmployeeSalaryPayableDetails from "../Pages/HR_Pages/EmployeeSalaryPayable/EmployeeSalaryPayableDetails";
 import EmployeePayrollIndexCreate from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollIndexCreate";
+import EmployeePayrollEarningIndex from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollEarning/EmployeePayrollEarningIndex";
 
 export const router = createBrowserRouter([
   {
@@ -107,6 +108,11 @@ export const router = createBrowserRouter([
       {
         path: "/hr/HrEmployeePayroll/Index/Create",
         element: <EmployeePayrollIndexCreate />,
+      },
+      {
+        path: "/hr/employee-payroll/earning/1",
+        //======= dynamic id need to added =======//
+        element: <EmployeePayrollEarningIndex />,
       },
      //======================================
      {

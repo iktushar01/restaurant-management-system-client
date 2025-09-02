@@ -36,7 +36,7 @@ const EmployeePayrollIndexCreate = () => {
     <div className="max-w-6xl min-h-screen mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link
-          to="/hr/employee/Index"
+          to="/hr/HrEmployeePayroll/Index"
           className="flex items-center group transition-all duration-200"
         >
           <button className="flex items-center px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 group-hover:-translate-x-1 cursor-pointer">
@@ -352,7 +352,7 @@ const EmployeePayrollIndexCreate = () => {
 
           <div className="mt-8 flex justify-end space-x-3">
             <Link
-              to="/hr/employee/Index"
+              to="/hr/HrEmployeePayroll/Index"
               className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2"
             >
               Cancel

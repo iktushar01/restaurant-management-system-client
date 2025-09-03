@@ -63,6 +63,7 @@ import DailyReport from "../Pages/Report_pages/DailyReport";
 import EventManage from "../Pages/Events_Pages/EventManage";
 import EventManageCreate from "../Pages/Events_Pages/EventManageCreate";
 import EventManageEditById from "../Pages/Events_Pages/EventManageEditById";
+import TodayEventIndex from "../Pages/Events_Pages/TodayEventIndex";
 
 export const router = createBrowserRouter([
   {
@@ -91,6 +92,10 @@ export const router = createBrowserRouter([
       {
         path: "/events/edit/:id",
         element: <EventManageEditById />,
+      },
+      {
+        path: "/event/today",
+        element: <TodayEventIndex />,
       },
       //===================================//
       //============= Hr Menu =============//

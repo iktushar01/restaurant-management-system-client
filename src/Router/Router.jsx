@@ -60,6 +60,7 @@ import EmployeePayRollSalaryPaymentEditByID from "../Pages/HR_Pages/EmployeePayr
 import DuePages from "../Pages/Due_Pages/DuePages";
 import ReportPageIndex from "../Pages/Report_pages/ReportPageIndex";
 import DailyReport from "../Pages/Report_pages/DailyReport";
+import EventManage from "../Pages/Events_Pages/EventManage";
 
 export const router = createBrowserRouter([
   {
@@ -73,6 +74,13 @@ export const router = createBrowserRouter([
       {
         path: "RestaurantDashboard/Index",
         element: <RestaurantDashboard />,
+      },
+        //===================================//
+      //============= Event Menu =============//
+      //===================================//
+       {
+        path: "/event/manage",
+        element: <EventManage />,
       },
       //===================================//
       //============= Hr Menu =============//

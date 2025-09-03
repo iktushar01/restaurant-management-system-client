@@ -58,6 +58,7 @@ import EmployeePayRollSalaryPaymentIndex from "../Pages/HR_Pages/EmployeePayroll
 import EmployeePayRollSalaryPaymentCreateById from "../Pages/HR_Pages/EmployeePayroll/EmployeePayRollSalaryPayment/EmployeePayRollSalaryPaymentCreateById";
 import EmployeePayRollSalaryPaymentEditByID from "../Pages/HR_Pages/EmployeePayroll/EmployeePayRollSalaryPayment/EmployeePayRollSalaryPaymentEditByID";
 import DuePages from "../Pages/Due_Pages/DuePages";
+import ReportPageIndex from "../Pages/Report_pages/ReportPageIndex";
 
 export const router = createBrowserRouter([
   {
@@ -338,6 +339,11 @@ export const router = createBrowserRouter([
        {
         path: "/due/details",
         element: <DuePages />,
+      },
+      //=======================================
+      {
+        path: "/report/current",
+        element:<ReportPageIndex/>
       },
     ],
   },

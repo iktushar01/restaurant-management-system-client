@@ -1,6 +1,7 @@
 # Project Progress – DineFlow
 
 This document tracks the **design completion status** of different modules.  
+## ✅ [live preview](https://dineflow01.netlify.app/)
 
 ---
 

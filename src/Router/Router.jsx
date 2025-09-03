@@ -47,6 +47,7 @@ import EmployeePayrollIndexCreate from "../Pages/HR_Pages/EmployeePayroll/Employ
 import EmployeePayrollEarningIndex from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollEarning/EmployeePayrollEarningIndex";
 import EmployeePayrollEarningCreateByID from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollEarning/EmployeePayrollEarningCreateByID";
 import EmployeePayrollEarningIndexEditByID from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollEarning/EmployeePayrollEarningIndexEditByID";
+import EmployeePayrollIndexEditById from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollIndexEditById";
 
 export const router = createBrowserRouter([
   {
@@ -103,7 +104,7 @@ export const router = createBrowserRouter([
         element: <PayRollDeductionHeadEdit />,
       },
       //======================================
-       {
+      {
         path: "/hr/HrEmployeePayroll/Index",
         element: <EmployeePayrollIndex />,
       },
@@ -112,11 +113,15 @@ export const router = createBrowserRouter([
         element: <EmployeePayrollIndexCreate />,
       },
       {
+        path: "/hr/employee-payroll/edit/:id",
+        element: <EmployeePayrollIndexEditById />,
+      },
+      {
         path: "/hr/employee-payroll/earning/1",
         //======= dynamic id need to added =======//
         element: <EmployeePayrollEarningIndex />,
       },
-       {
+      {
         path: "/hr/employee-payroll/earning/1/Create",
         element: <EmployeePayrollEarningCreateByID />,
       },
@@ -124,10 +129,10 @@ export const router = createBrowserRouter([
         path: "/hr/employee-payroll/earning/1/edit/1",
         element: <EmployeePayrollEarningIndexEditByID />,
       },
-     //======================================
-     {
+      //======================================
+      {
         path: "/hr/salary-payable/Index",
-        element: < EmployeeSalaryPayableIndex/>,
+        element: <EmployeeSalaryPayableIndex />,
       },
       {
         path: "payroll/employee-salary/details/1",
@@ -135,9 +140,9 @@ export const router = createBrowserRouter([
         element: <EmployeeSalaryPayableDetails />,
       },
       //=====================================
-     {
+      {
         path: "/hr/grand-salary/Index",
-        element: < GrandSalaryPayableIndex/>,
+        element: <GrandSalaryPayableIndex />,
       },
 
       //===================================//

@@ -61,6 +61,7 @@ import DuePages from "../Pages/Due_Pages/DuePages";
 import ReportPageIndex from "../Pages/Report_pages/ReportPageIndex";
 import DailyReport from "../Pages/Report_pages/DailyReport";
 import EventManage from "../Pages/Events_Pages/EventManage";
+import EventManageCreate from "../Pages/Events_Pages/EventManageCreate";
 
 export const router = createBrowserRouter([
   {
@@ -81,6 +82,10 @@ export const router = createBrowserRouter([
        {
         path: "/event/manage",
         element: <EventManage />,
+      },
+      {
+        path: "/event/manage/Create",
+        element: <EventManageCreate />,
       },
       //===================================//
       //============= Hr Menu =============//

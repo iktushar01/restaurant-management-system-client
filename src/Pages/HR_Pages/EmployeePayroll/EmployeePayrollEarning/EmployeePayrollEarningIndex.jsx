@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import ReusableTable from "../../../../Shared/ReusableTable/ReusableTable";
 
 const EmployeePayrollEarningIndex = () => {
+  const navigate = useNavigate(); // Add this hook
+  
   // Sample data for demonstration
   const [earningData, setEarningData] = useState([
     {
@@ -96,7 +98,7 @@ const EmployeePayrollEarningIndex = () => {
       label: "Edit",
       icon: FaEdit,
       className: "text-indigo-600 hover:text-indigo-900",
-      onClick: (row) => console.log("Edit:", row),
+      onClick: (row) => navigate(`/hr/employee-payroll/earning/${row.id}/edit/${row.id}`) // Fixed: use navigate function
     },
     {
       label: "Delete",

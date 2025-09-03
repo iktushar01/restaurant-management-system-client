@@ -54,6 +54,9 @@ import EmployeePayRollEarningDeductionIndexCreateById from "../Pages/HR_Pages/Em
 import EmployeePayrollbasicIndex from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollbasic/EmployeePayrollbasicIndex";
 import EmployeePayrollbasicCreateById from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollbasic/EmployeePayrollbasicCreateById";
 import EmployeePayrollbasicEditById from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollbasic/EmployeePayrollbasicEditById";
+import EmployeePayRollSalaryPaymentIndex from "../Pages/HR_Pages/EmployeePayroll/EmployeePayRollSalaryPayment/EmployeePayRollSalaryPaymentIndex";
+import EmployeePayRollSalaryPaymentCreateById from "../Pages/HR_Pages/EmployeePayroll/EmployeePayRollSalaryPayment/EmployeePayRollSalaryPaymentCreateById";
+import EmployeePayRollSalaryPaymentEditByID from "../Pages/HR_Pages/EmployeePayroll/EmployeePayRollSalaryPayment/EmployeePayRollSalaryPaymentEditByID";
 
 export const router = createBrowserRouter([
   {
@@ -162,6 +165,20 @@ export const router = createBrowserRouter([
       {
         path: "/hr/employee-payroll/basic/1/edit",
         element: <EmployeePayrollbasicEditById />,
+      },
+      //======================================
+       {
+        path: "/hr/employee-payroll/payment/1",
+        //======= dynamic id need to added =======//
+        element: <EmployeePayRollSalaryPaymentIndex />,
+      },
+      {
+        path: "/hr/employee-payroll/payment/1/Create",
+        element: <EmployeePayRollSalaryPaymentCreateById />,
+      },
+      {
+        path: "/hr/employee-payroll/salary-payment/1/edit",
+        element: <EmployeePayRollSalaryPaymentEditByID />,
       },
       //======================================
       {

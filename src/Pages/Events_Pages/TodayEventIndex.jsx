@@ -149,7 +149,6 @@ const TodayEventIndex = () => {
             {currentDate && `Events scheduled for ${currentDate}`}
           </p>
         </div>
-      
       </div>
 
       {/* Today's Events Table */}

@@ -8,6 +8,7 @@ This document tracks the **design completion status** of different modules.
 
 ## ✅ Completed Designs
 
+- [Event](https://dineflow01.netlify.app/event/dashboard) – _Design Done_
 - [Hr](https://dineflow01.netlify.app/hr/designation/Index) – _Design Done_
 - [Income](https://dineflow01.netlify.app/income/OthersIncomeHead/Index) – _Design Done_
 - [Expense](https://dineflow01.netlify.app/expense/ExpenseHead/Index) – _Design Done_

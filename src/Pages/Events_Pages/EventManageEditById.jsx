@@ -3,20 +3,31 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
-const EventManageCreate = () => {
+const EventManageEditById = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
+    setValue,
   } = useForm();
+
+  // Pre-fill form with existing event data (in a real app, this would come from an API)
+  React.useEffect(() => {
+    setValue("title", "test event");
+    setValue("customerName", "tushar");
+    setValue("phone", "2342342234234");
+    setValue("date", "2025-09-04T00:00");
+    setValue("noOfPerson", 24);
+    setValue("menu", "sadfast");
+    setValue("description", "fastasd asf asfghdfnrt rt");
+    setValue("advanceAmount", "34534534.00");
+    setValue("themeColor", "red");
+  }, [setValue]);
 
   const onSubmit = (data) => {
     console.log("Event Form Data:", data);
     // Add your API call here
   };
-
-  const themeColor = watch("themeColor", "blue");
 
   return (
     <div className="max-w-7xl min-h-screen mx-auto p-6">
@@ -35,10 +46,10 @@ const EventManageCreate = () => {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6 bg-gradient-to-r from-yellow-200 to-yellow-400 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-gray-800">
-            Create New Event
+            Update Event
           </h2>
           <p className="text-gray-700 mt-1">
-            Fill in the details below to create a new event
+            Update the details of your event
           </p>
         </div>
 
@@ -51,7 +62,6 @@ const EventManageCreate = () => {
               </label>
               <input
                 type="text"
-                placeholder="e.g., Birthday Party"
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors duration-200"
                 {...register("title", { required: "Title is required" })}
               />
@@ -67,7 +77,6 @@ const EventManageCreate = () => {
               </label>
               <input
                 type="text"
-                placeholder="e.g., John Smith"
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors duration-200"
                 {...register("customerName", { required: "Customer name is required" })}
               />
@@ -83,7 +92,6 @@ const EventManageCreate = () => {
               </label>
               <input
                 type="tel"
-                placeholder="e.g., 123-456-7890"
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors duration-200"
                 {...register("phone", { 
                   required: "Phone number is required",
@@ -120,7 +128,6 @@ const EventManageCreate = () => {
               </label>
               <input
                 type="number"
-                placeholder="e.g., 50"
                 min="1"
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors duration-200"
                 {...register("noOfPerson", { 
@@ -147,7 +154,6 @@ const EventManageCreate = () => {
                 </div>
                 <input
                   type="number"
-                  placeholder="e.g., 500.00"
                   step="0.01"
                   min="0"
                   className="w-full pl-8 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors duration-200"
@@ -172,7 +178,6 @@ const EventManageCreate = () => {
               </label>
               <input
                 type="text"
-                placeholder="e.g., Buffet style"
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors duration-200"
                 {...register("menu")}
               />
@@ -202,7 +207,6 @@ const EventManageCreate = () => {
                 Description
               </label>
               <textarea
-                placeholder="Event description and special instructions..."
                 rows={4}
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors duration-200"
                 {...register("description")}
@@ -221,7 +225,7 @@ const EventManageCreate = () => {
               type="submit"
               className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
             >
-              Save Event
+              Save Changes
             </button>
           </div>
         </form>
@@ -230,4 +234,4 @@ const EventManageCreate = () => {
   );
 };
 
-export default EventManageCreate;
+export default EventManageEditById;

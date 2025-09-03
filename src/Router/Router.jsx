@@ -57,6 +57,7 @@ import EmployeePayrollbasicEditById from "../Pages/HR_Pages/EmployeePayroll/Empl
 import EmployeePayRollSalaryPaymentIndex from "../Pages/HR_Pages/EmployeePayroll/EmployeePayRollSalaryPayment/EmployeePayRollSalaryPaymentIndex";
 import EmployeePayRollSalaryPaymentCreateById from "../Pages/HR_Pages/EmployeePayroll/EmployeePayRollSalaryPayment/EmployeePayRollSalaryPaymentCreateById";
 import EmployeePayRollSalaryPaymentEditByID from "../Pages/HR_Pages/EmployeePayroll/EmployeePayRollSalaryPayment/EmployeePayRollSalaryPaymentEditByID";
+import DuePages from "../Pages/Due_Pages/DuePages";
 
 export const router = createBrowserRouter([
   {
@@ -332,6 +333,11 @@ export const router = createBrowserRouter([
         path: "expense/daily-expense/details/06/11/2022",
         //======= dynamic date need to added =======//
         element: <DailyExpenseDetails />,
+      },
+      //=======================================
+       {
+        path: "/due/details",
+        element: <DuePages />,
       },
     ],
   },

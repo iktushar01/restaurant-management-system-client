@@ -1,4 +1,4 @@
-HR (design half done)
+HR (design done)
 Income (design done)
 Expense (design done)
 Bank (design done)

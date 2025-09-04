@@ -85,10 +85,10 @@ export const router = createBrowserRouter([
       //===================================//
       //============= Order Menu =============//
       //===================================//
-      // {
-      //   path: "/RestaurantOrder/Orders",
-      //   element: <OrderPageIndex/>,
-      // },
+      {
+        path: "/RestaurantOrder/Orders",
+        element: <OrderPageIndex/>,
+      },
         //===================================//
       //============= Event Menu =============//
       //===================================//

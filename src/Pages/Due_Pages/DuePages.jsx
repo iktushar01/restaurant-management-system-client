@@ -144,29 +144,7 @@ const DuePages = () => {
     },
   ];
 
-  // Define actions for the ReusableTable
-  const actions = [
-    {
-      label: "Edit",
-      icon: FaEdit,
-      className: "text-indigo-600 hover:text-indigo-900",
-      render: (row) => (
-        <Link
-          to={`/due/edit/${row.id}`}
-          className="flex items-center space-x-1"
-        >
-          <FaEdit />
-          <span>Edit</span>
-        </Link>
-      ),
-    },
-    {
-      label: "Delete",
-      icon: FaTrash,
-      className: "text-rose-600 hover:text-rose-900",
-      onClick: (row) => handleDelete(row.id),
-    },
-  ];
+  
 
   return (
     <div className="p-6 max-w-7xl min-h-screen mx-auto">
@@ -211,7 +189,6 @@ const DuePages = () => {
       <ReusableTable 
         columns={columns} 
         data={filteredData.slice(0, entriesToShow)} 
-        actions={actions}
         containerClass="bg-white rounded-lg shadow overflow-hidden"
         tableClass="min-w-full divide-y divide-gray-200"
         theadClass="bg-gray-100"

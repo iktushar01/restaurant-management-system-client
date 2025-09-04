@@ -63,7 +63,7 @@ const LoginPage = () => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     className="block w-full pl-10 pr-3 py-3 bg-gray-900 border border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white placeholder-gray-400 sm:text-sm"
-                    placeholder="Enter your username"
+                    placeholder="Enter your username (user)"
                   />
                 </div>
               </div>
@@ -85,7 +85,7 @@ const LoginPage = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="block w-full pl-10 pr-3 py-3 bg-gray-900 border border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white placeholder-gray-400 sm:text-sm"
-                    placeholder="Enter your password"
+                    placeholder="Enter your password (123456)"
                   />
                 </div>
               </div>

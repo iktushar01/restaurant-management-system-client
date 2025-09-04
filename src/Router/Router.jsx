@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-// import LoginPage from "../Authentication/LoginPage/LoginPage";
+import LoginPage from "../Authentication/LoginPage/LoginPage";
 // import RestaurantDashboard from "../Layouts/RestaurantDashboard/RestaurantDashboard";
 import HrDesignationIndex from "../Pages/HR_Pages/HrDesignation/HrDesignationIndex";
 import MainLayout from "../Layouts/MainLayout/MainLayout";
@@ -71,12 +71,12 @@ import RestaurantDashboardIndex from "../Layouts/RestaurantDashboard/RestaurantD
 export const router = createBrowserRouter([
   {
     path: "/",
+    element: <LoginPage />,
+  },
+  {
+    path: "/",
     element: <MainLayout />,
     children: [
-      {
-        index: true,
-        element: <Navigate to="/RestaurantDashboard/Index" replace />,
-      },
       {
         path: "RestaurantDashboard/Index",
         element: <RestaurantDashboardIndex />,

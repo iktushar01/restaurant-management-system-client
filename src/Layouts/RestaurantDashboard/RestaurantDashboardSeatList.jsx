@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const RestaurantDashboardSeatList = () => {
   const layoutData = [
@@ -38,30 +38,40 @@ const RestaurantDashboardSeatList = () => {
   ];
 
   const [selectedSeat, setSelectedSeat] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleSeatClick = (seat) => {
     setSelectedSeat(seat.id === selectedSeat ? null : seat.id);
   };
 
   const getSeatClass = (seat) => {
-    let className = "flex items-center justify-center rounded-lg cursor-pointer transition-all duration-200 ";
+    let className = "flex items-center justify-center rounded cursor-pointer transition-all duration-200 ";
     
     if (selectedSeat === seat.id) {
-      className += "transform scale-105 shadow-lg ";
+      className += "transform scale-105 shadow-lg ring-2 ring-offset-2 ring-white ";
     }
     
     switch(seat.type) {
       case "kabin":
-        className += "bg-purple-600 text-white font-bold p-4 ";
+        className += "bg-purple-600 text-white font-bold ";
         break;
       case "box":
-        className += "bg-red-500 text-white font-medium p-3 ";
+        className += "bg-red-500 text-white font-medium ";
         break;
       case "takeaway":
-        className += "bg-green-500 text-white font-bold p-3 ";
+        className += "bg-green-500 text-white font-bold ";
         break;
       default:
-        className += "bg-blue-500 text-white p-2 ";
+        className += "bg-blue-500 text-white ";
     }
     
     return className;
@@ -85,36 +95,64 @@ const RestaurantDashboardSeatList = () => {
   const takeaway = layoutData.find(item => item.type === "takeaway");
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-md p-6">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Restaurant Seating Layout</h2>
+    <div className="bg-gray-100 p-2 md:p-4 flex justify-center">
+      <div className="w-full max-w-4xl bg-white rounded-xl shadow-md p-3 md:p-4">
+        <h2 className="text-lg md:text-xl font-bold text-center text-gray-800 mb-3 md:mb-4">Restaurant Seating Layout</h2>
         
-        <div className="layout-container bg-gray-50 p-6 rounded-lg">
-          {/* Kabin Section */}
-          <div className="mb-8 text-center">
-            <div className="text-xl font-semibold text-gray-700 mb-3">Kabin</div>
-            <div className="flex justify-center">
+        <div className="layout-container bg-gray-50 p-3 md:p-4 rounded-lg">
+          {/* Top Section - Kabin and Boxes */}
+          <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-3 md:gap-0">
+            {/* Kabin Section */}
+            <div className="text-center w-full md:w-auto">
+              <div className="text-xs md:text-sm font-semibold text-gray-700 mb-1">Kabin</div>
               <div 
-                className={getSeatClass(kabin)} 
-                style={{ minWidth: '120px' }}
+                className={getSeatClass(kabin) + " p-2 text-xs md:text-sm mx-auto md:mx-0"} 
+                style={{ minWidth: isMobile ? '70px' : '80px', minHeight: isMobile ? '35px' : '40px' }}
                 onClick={() => handleSeatClick(kabin)}
               >
                 {kabin.seatName}
               </div>
             </div>
+            
+            {/* Boxes Section */}
+            <div className="text-center w-full md:w-auto">
+              <div className="text-xs md:text-sm font-semibold text-gray-700 mb-1">Private Boxes</div>
+              <div className="flex flex-wrap justify-center gap-1 md:gap-2">
+                {boxes.map(box => (
+                  <div
+                    key={box.id}
+                    className={getSeatClass(box) + " p-1 md:p-2 text-xs"}
+                    style={{ 
+                      minWidth: isMobile ? '40px' : '45px', 
+                      minHeight: isMobile ? '40px' : '45px',
+                      flex: isMobile ? '1 0 21%' : 'none',
+                      maxWidth: isMobile ? '22%' : 'none'
+                    }}
+                    onClick={() => handleSeatClick(box)}
+                  >
+                    {box.seatName}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
           
-          {/* Tables Section */}
-          <div className="mb-8">
-            <div className="text-xl font-semibold text-gray-700 mb-3 text-center">Tables</div>
-            <div className="grid grid-cols-1 gap-4">
+          {/* Tables Section - Responsive grid */}
+          <div className="mb-4">
+            <div className="text-xs md:text-sm font-semibold text-gray-700 mb-2 text-center">Tables</div>
+            <div className="grid grid-cols-1 gap-2">
               {Object.entries(tableRows).map(([row, seats]) => (
-                <div key={row} className="flex justify-center space-x-3">
+                <div key={row} className="flex flex-wrap justify-center gap-1 md:gap-2">
                   {seats.map(seat => (
                     <div
                       key={seat.id}
-                      className={getSeatClass(seat)}
-                      style={{ minWidth: '50px', minHeight: '50px' }}
+                      className={getSeatClass(seat) + " p-1 text-xs"}
+                      style={{ 
+                        minWidth: isMobile ? '30px' : '35px', 
+                        minHeight: isMobile ? '30px' : '35px',
+                        flex: isMobile ? '1 0 15%' : 'none',
+                        maxWidth: isMobile ? '18%' : 'none'
+                      }}
                       onClick={() => handleSeatClick(seat)}
                     >
                       {seat.seatName}
@@ -125,36 +163,21 @@ const RestaurantDashboardSeatList = () => {
             </div>
           </div>
           
-          {/* Boxes Section */}
-          <div className="mb-8">
-            <div className="text-xl font-semibold text-gray-700 mb-3 text-center">Private Boxes</div>
-            <div className="flex justify-center space-x-4">
-              {boxes.map(box => (
-                <div
-                  key={box.id}
-                  className={getSeatClass(box)}
-                  style={{ minWidth: '70px', minHeight: '70px' }}
-                  onClick={() => handleSeatClick(box)}
-                >
-                  {box.seatName}
-                </div>
-              ))}
-            </div>
-          </div>
-          
           {/* Takeaway Section */}
-          <div className="flex justify-end mt-6">
+          <div className="flex justify-center mt-2">
             <div
-              className={getSeatClass(takeaway)}
-              style={{ minWidth: '120px' }}
+              className={getSeatClass(takeaway) + " p-2 text-xs md:text-sm"}
+              style={{ 
+                minWidth: isMobile ? '80px' : '90px', 
+                minHeight: isMobile ? '30px' : '35px' 
+              }}
               onClick={() => handleSeatClick(takeaway)}
             >
               {takeaway.seatName}
             </div>
           </div>
         </div>
-        
-        
+
       </div>
     </div>
   );

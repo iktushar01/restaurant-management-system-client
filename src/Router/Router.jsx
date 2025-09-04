@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import LoginPage from "../Authentication/LoginPage/LoginPage";
-import RestaurantDashboard from "../Layouts/RestaurantDashboard/RestaurantDashboard";
+// import LoginPage from "../Authentication/LoginPage/LoginPage";
+// import RestaurantDashboard from "../Layouts/RestaurantDashboard/RestaurantDashboard";
 import HrDesignationIndex from "../Pages/HR_Pages/HrDesignation/HrDesignationIndex";
 import MainLayout from "../Layouts/MainLayout/MainLayout";
 import HrDesignationCreate from "../Pages/HR_Pages/HrDesignation/HrDesignationCreate";
@@ -65,6 +65,8 @@ import EventManageCreate from "../Pages/Events_Pages/EventManageCreate";
 import EventManageEditById from "../Pages/Events_Pages/EventManageEditById";
 import TodayEventIndex from "../Pages/Events_Pages/TodayEventIndex";
 import EventDashBoard from "../Pages/Events_Pages/EventDashBoard";
+import OrderPageIndex from "../Pages/Order_Pages/OrderPageIndex";
+import RestaurantDashboardIndex from "../Layouts/RestaurantDashboard/RestaurantDashboardIndex";
 
 export const router = createBrowserRouter([
   {
@@ -77,8 +79,16 @@ export const router = createBrowserRouter([
       },
       {
         path: "RestaurantDashboard/Index",
-        element: <RestaurantDashboard />,
+        element: <RestaurantDashboardIndex />,
       },
+      
+      //===================================//
+      //============= Order Menu =============//
+      //===================================//
+      // {
+      //   path: "/RestaurantOrder/Orders",
+      //   element: <OrderPageIndex/>,
+      // },
         //===================================//
       //============= Event Menu =============//
       //===================================//

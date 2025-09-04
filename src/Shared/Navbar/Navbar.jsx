@@ -37,7 +37,7 @@ const Navbar = () => {
     {
       name: 'Order',
       icon: <FiShoppingBag />,
-      path: '/order'
+      path: '/RestaurantOrder/Orders'
     },
     {
       name: 'Event',

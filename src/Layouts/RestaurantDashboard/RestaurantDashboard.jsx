@@ -1,9 +1,58 @@
 import React from 'react';
+import { FaClipboardList, FaUtensils, FaTimesCircle, FaCheckCircle } from 'react-icons/fa';
 
 const RestaurantDashboard = () => {
     return (
-        <div>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo in rerum sunt, sint dolor eius placeat, voluptas nesciunt dolore mollitia quidem tempore ullam aspernatur adipisci voluptatum enim veniam laudantium nobis id. Tempore, ad sint similique vero ipsum iure, illum quod nulla ipsam sit quis id ipsa eaque sapiente esse quam voluptas doloribus quisquam nam! Nemo debitis inventore velit aspernatur rerum animi consequatur? Labore veritatis possimus nesciunt, quis sapiente deserunt, quisquam eius corporis dicta ut adipisci ipsam harum expedita quidem corrupti beatae. Amet in velit natus, optio fuga a. Totam sed quis libero illo cum expedita. Quibusdam rerum tempora, totam error, dolor enim ab labore ratione dicta accusantium vel repudiandae repellendus. Nesciunt impedit dolores nemo culpa debitis corporis rerum neque, atque voluptas molestias assumenda sed eaque dolore quisquam, voluptatum sunt. Sit, id? Consequatur nulla sit soluta vero sequi ipsam, rem corporis? Sapiente natus harum ea exercitationem possimus, consequatur dolorem, quas, distinctio temporibus iure dolor hic. Sunt assumenda fuga sequi repellendus earum quaerat repellat, esse, vel quos, atque maxime ut natus. Dicta numquam laborum delectus laudantium esse odio nulla voluptate quibusdam harum sit officia aliquid iusto aperiam quas atque illum exercitationem eveniet id accusantium, nemo sed. Itaque architecto nesciunt voluptas quia mollitia.</p>
+        <div className="bg-gray-50 p-4">
+           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
+            <div className='bg-white p-5 rounded-xl shadow-md border-l-4 border-blue-500'>
+               <div className='flex justify-between items-center'>
+                <div>
+                 <p className="text-3xl font-bold text-gray-800">12</p>
+                 <p className="text-gray-600">In Order</p>
+                </div>
+                <div className="bg-blue-100 p-3 rounded-full">
+                    <FaClipboardList className="text-blue-500 text-xl" />
+                </div>
+               </div>
+            </div>
+            
+            <div className='bg-white p-5 rounded-xl shadow-md border-l-4 border-green-500'>
+               <div className='flex justify-between items-center'>
+                <div>
+                 <p className="text-3xl font-bold text-gray-800">8</p>
+                 <p className="text-gray-600">Currently Served</p>
+                </div>
+                <div className="bg-green-100 p-3 rounded-full">
+                    <FaUtensils className="text-green-500 text-xl" />
+                </div>
+               </div>
+            </div>
+            
+            <div className='bg-white p-5 rounded-xl shadow-md border-l-4 border-red-500'>
+               <div className='flex justify-between items-center'>
+                <div>
+                 <p className="text-3xl font-bold text-gray-800">3</p>
+                 <p className="text-gray-600">Cancelled</p>
+                </div>
+                <div className="bg-red-100 p-3 rounded-full">
+                    <FaTimesCircle className="text-red-500 text-xl" />
+                </div>
+               </div>
+            </div>
+            
+            <div className='bg-white p-5 rounded-xl shadow-md border-l-4 border-purple-500'>
+               <div className='flex justify-between items-center'>
+                <div>
+                 <p className="text-3xl font-bold text-gray-800">15</p>
+                 <p className="text-gray-600">Completed</p>
+                </div>
+                <div className="bg-purple-100 p-3 rounded-full">
+                    <FaCheckCircle className="text-purple-500 text-xl" />
+                </div>
+               </div>
+            </div>
+           </div>
         </div>
     );
 };

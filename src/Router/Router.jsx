@@ -67,6 +67,8 @@ import TodayEventIndex from "../Pages/Events_Pages/TodayEventIndex";
 import EventDashBoard from "../Pages/Events_Pages/EventDashBoard";
 import OrderPageIndex from "../Pages/Order_Pages/OrderPageIndex";
 import RestaurantDashboardIndex from "../Layouts/RestaurantDashboard/RestaurantDashboardIndex";
+import WorkPeriodDashBoard from "../Layouts/WorkPeriodDashBoard/WorkPeriodDashBoard";
+import WorkPeriodPage from "../Pages/Settings_Pages/WorkPeriodPage/WorkPeriodPage";
 
 export const router = createBrowserRouter([
   {
@@ -391,4 +393,15 @@ export const router = createBrowserRouter([
 
     ],
   },
+  {
+     path: "/WorkPeriod",
+    element: <WorkPeriodDashBoard />,
+    children: [
+      {
+        path: "/WorkPeriod/Index",
+        element: <WorkPeriodPage />,
+      },
+    ]
+  }
+
 ]);

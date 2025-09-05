@@ -123,7 +123,7 @@ const Navbar = () => {
     {
       name: 'Settings',
       icon: <FiSettings />,
-      path: '/settings'
+      path: '/WorkPeriod/Index'
     }
   ];
 

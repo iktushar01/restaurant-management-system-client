@@ -1,68 +1,200 @@
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { 
+  FaChevronLeft, 
+  FaChevronRight, 
+  FaUtensils, 
+  FaHamburger, 
+  FaList, 
+  FaStore, 
+  FaUserTie, 
+  FaBoxes, 
+  FaBuilding, 
+  FaMoneyBill,
+  FaCashRegister,
+  FaChair,
+  FaTable,
+  FaReceipt,
+  FaWarehouse,
+  FaBoxOpen,
+  FaCubes,
+  FaClipboardList
+} from 'react-icons/fa';
 
 const WorkPeriodDashBoardNavbar = () => {
-  const [activeItem, setActiveItem] = useState('Work Period');
   const [isCollapsed, setIsCollapsed] = useState(false);
-  
+  const [expandedSections, setExpandedSections] = useState({
+    'Dine': false,
+    'Inventory': false
+  });
+
+  const toggleSection = (section) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
   const menuItems = [
-    'Work Period',
-    'Foods',
-    'Food Category',
-    'Dine',
-    'Walter',
-    'Inventory',
-    'Property',
-    'Charges'
+    { 
+      name: 'Work Period', 
+      path: '/work-period', 
+      icon: <FaCashRegister className="w-5 h-5" />
+    },
+    { 
+      name: 'Foods', 
+      path: '/foods', 
+      icon: <FaHamburger className="w-5 h-5" />
+    },
+    { 
+      name: 'Food Category', 
+      path: '/food-category', 
+      icon: <FaList className="w-5 h-5" />
+    },
+    { 
+      name: 'Dine', 
+      path: '/dine',
+      icon: <FaUtensils className="w-5 h-5" />,
+      subRoutes: [
+        { name: 'Tables', path: '/dine/tables', icon: <FaTable className="w-4 h-4" /> },
+        { name: 'Orders', path: '/dine/orders', icon: <FaReceipt className="w-4 h-4" /> },
+        { name: 'Dining Areas', path: '/dine/areas', icon: <FaChair className="w-4 h-4" /> }
+      ]
+    },
+    { 
+      name: 'Walter', 
+      path: '/walter', 
+      icon: <FaUserTie className="w-5 h-5" />
+    },
+    { 
+      name: 'Inventory', 
+      path: '/inventory',
+      icon: <FaBoxes className="w-5 h-5" />,
+      subRoutes: [
+        { name: 'Stock', path: '/inventory/stock', icon: <FaWarehouse className="w-4 h-4" /> },
+        { name: 'Suppliers', path: '/inventory/suppliers', icon: <FaBuilding className="w-4 h-4" /> },
+        { name: 'Purchases', path: '/inventory/purchases', icon: <FaClipboardList className="w-4 h-4" /> },
+        { name: 'Items', path: '/inventory/items', icon: <FaBoxOpen className="w-4 h-4" /> },
+        { name: 'Categories', path: '/inventory/categories', icon: <FaCubes className="w-4 h-4" /> }
+      ]
+    },
+    { 
+      name: 'Property', 
+      path: '/property', 
+      icon: <FaBuilding className="w-5 h-5" />
+    },
+    { 
+      name: 'Charges', 
+      path: '/charges', 
+      icon: <FaMoneyBill className="w-5 h-5" />
+    }
   ];
 
   return (
-    <div className={`flex flex-col h-screen bg-gray-900 text-white ${isCollapsed ? 'w-20' : 'w-64'} fixed left-0 top-14 z-50 transition-all duration-300`}>
+    <div className={`flex flex-col h-screen bg-gray-900 text-white ${isCollapsed ? 'w-20' : 'w-64'} fixed left-0 top-16 z-40 transition-all duration-300`}>
       {/* Logo section with toggle button */}
       <div className="p-4 border-b border-gray-700 flex items-center justify-between">
         {!isCollapsed && <h1 className="text-xl font-bold">DineFlow</h1>}
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-1 rounded hover:bg-gray-800"
+          className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
+          aria-label={isCollapsed ? "Expand menu" : "Collapse menu"}
         >
           {isCollapsed ? (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <FaChevronRight className="w-4 h-4" />
           ) : (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
+            <FaChevronLeft className="w-4 h-4" />
           )}
         </button>
       </div>
       
       {/* Navigation items */}
-      <nav className="flex-1 overflow-y-auto pt-5">
+      <nav className="flex-1 overflow-y-auto pt-5 pb-4">
         <ul className="space-y-1 px-2">
           {menuItems.map((item) => (
-            <li key={item}>
-              <button
-                onClick={() => setActiveItem(item)}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center ${
-                  activeItem === item 
-                    ? 'bg-blue-600 text-white' 
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                }`}
-              >
-                {/* Icon placeholder - you can add actual icons here */}
-                <span className="mr-3">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                </span>
-                {!isCollapsed && <span>{item}</span>}
-              </button>
+            <li key={item.name}>
+              {item.subRoutes ? (
+                <>
+                  <button
+                    onClick={() => toggleSection(item.name)}
+                    className={`w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center justify-between ${
+                      expandedSections[item.name] || window.location.pathname.includes(item.path)
+                        ? 'bg-blue-700 text-white' 
+                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      <span className="mr-3 text-blue-400">
+                        {item.icon}
+                      </span>
+                      {!isCollapsed && <span>{item.name}</span>}
+                    </div>
+                    {!isCollapsed && (
+                      <span className={`transform transition-transform ${expandedSections[item.name] ? 'rotate-90' : ''}`}>
+                        <FaChevronRight className="w-3 h-3" />
+                      </span>
+                    )}
+                  </button>
+                  
+                  {/* Sub-routes */}
+                  {!isCollapsed && expandedSections[item.name] && (
+                    <ul className="ml-6 mt-1 space-y-1 border-l border-gray-700 pl-2">
+                      {item.subRoutes.map((subItem) => (
+                        <li key={subItem.name}>
+                          <NavLink
+                            to={subItem.path}
+                            className={({ isActive }) => 
+                              `flex items-center px-3 py-2 rounded-lg transition-colors text-sm ${
+                                isActive 
+                                  ? 'text-blue-300 bg-blue-900/30' 
+                                  : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                              }`
+                            }
+                          >
+                            <span className="mr-2">{subItem.icon}</span>
+                            {subItem.name}
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              ) : (
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) => 
+                    `flex items-center px-4 py-3 rounded-lg transition-colors ${
+                      isActive 
+                        ? 'bg-blue-600 text-white' 
+                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                    }`
+                  }
+                >
+                  <span className="mr-3 text-blue-400">
+                    {item.icon}
+                  </span>
+                  {!isCollapsed && <span>{item.name}</span>}
+                </NavLink>
+              )}
             </li>
           ))}
         </ul>
       </nav>
       
-   
+      {/* User section at bottom */}
+      {!isCollapsed && (
+        <div className="p-4 border-t border-gray-700">
+          <div className="flex items-center">
+            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+              <span className="text-sm font-semibold">JD</span>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm font-medium">John Doe</p>
+              <p className="text-xs text-gray-400">Manager</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -5,10 +5,17 @@ import WorkPeriodDashBoardNavbar from "./WorkPeriodDashBoardNavbar";
 
 const WorkPeriodDashBoard = () => {
   return (
-    <div>
+    <div className="flex flex-col h-screen">
       <WorkPeriodDashBoardHeader />
-      <WorkPeriodDashBoardNavbar />
-      <Outlet />
+      
+      <div className="flex flex-1 overflow-hidden">
+        <WorkPeriodDashBoardNavbar />
+        
+        {/* Main content area */}
+        <main className="flex-1 overflow-y-auto ">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

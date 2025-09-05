@@ -51,7 +51,7 @@ const WorkPeriodDashBoardHeader = () => {
   };
 
   return (
-    <header className="h-16 bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg sticky top-0 z-50">
+    <header className="h-16 bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg ">
       <div className="flex justify-between items-center h-full px-4 sm:px-6 lg:px-8 w-full mx-auto">
         <div className="flex items-center">
           {/* Logo/Brand */}

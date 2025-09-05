@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaChevronDown, FaUser, FaSignOutAlt, FaClock, FaHome } from "react-icons/fa";
+import { FaChevronDown, FaUser, FaSignOutAlt, FaClock, FaHome, FaUtensils } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const WorkPeriodDashBoardHeader = () => {
@@ -51,23 +51,27 @@ const WorkPeriodDashBoardHeader = () => {
   };
 
   return (
-    <header className="h-14 bg-blue-400 shadow-md sticky top-0 z-50">
+    <header className="h-16 bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg sticky top-0 z-50">
       <div className="flex justify-between items-center h-full px-4 sm:px-6 lg:px-8 w-full mx-auto">
         <div className="flex items-center">
-          
+          {/* Logo/Brand */}
+          <div className="flex items-center">
+            <FaUtensils className="text-white text-2xl hidden sm:block" />
+            <span className="ml-2 text-white font-bold text-xl hidden sm:block">RestaurantPro</span>
+          </div>
           
           <Link 
             to="/RestaurantDashboard/Index" 
-            className="ml-6 flex items-center text-black font-medium hover:text-blue-800 transition-colors"
+            className="ml-6 flex items-center text-white font-medium hover:text-blue-200 transition-colors"
           >
-            <FaHome className="mr-1" />
-            <span className="hidden sm:inline">Home</span>
+            <FaHome className="mr-1 text-2xl" />
+            <span className="hidden sm:inline">Dashboard</span>
           </Link>
         </div>
 
         <div className="flex items-center space-x-4 sm:space-x-6">
           {/* Time display - adjusts for different screen sizes */}
-          <div className="flex items-center text-black font-medium bg-blue-500/30 px-3 py-1 rounded-md">
+          <div className="flex items-center text-white font-medium bg-blue-600/40 px-3 py-2 rounded-lg backdrop-blur-sm">
             <FaClock className="mr-2" />
             <span className="tabular-nums text-sm sm:text-base">
               {formatTime(currentTime)}
@@ -78,14 +82,14 @@ const WorkPeriodDashBoardHeader = () => {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={toggleDropdown}
-              className="flex items-center text-black font-medium focus:outline-none hover:text-blue-800 transition-colors bg-blue-500/30 px-3 py-1 rounded-md"
+              className="flex items-center text-white font-medium focus:outline-none hover:bg-blue-600 transition-all bg-blue-600/40 px-3 py-2 rounded-lg backdrop-blur-sm"
               aria-label="User menu"
             >
+              <div className="bg-blue-700 rounded-full p-1 mr-2">
+                <FaUser className="text-white text-sm" />
+              </div>
               <span className="hidden sm:inline truncate max-w-[120px]">
                 {username}
-              </span>
-              <span className="sm:hidden">
-                <FaUser />
               </span>
               <FaChevronDown
                 className={`ml-1 sm:ml-2 transition-transform ${
@@ -96,19 +100,23 @@ const WorkPeriodDashBoardHeader = () => {
             </button>
 
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200 overflow-hidden">
+                <div className="px-4 py-2 border-b border-gray-100 bg-gray-50">
+                  <p className="text-xs text-gray-500">Signed in as</p>
+                  <p className="text-sm font-medium text-gray-800 truncate">{username}</p>
+                </div>
                 <a
                   href="#profile"
-                  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
                 >
-                  <FaUser className="mr-2" />
+                  <FaUser className="mr-3 text-blue-500" />
                   Profile
                 </a>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
                 >
-                  <FaSignOutAlt className="mr-2" />
+                  <FaSignOutAlt className="mr-3 text-blue-500" />
                   Logout
                 </button>
               </div>

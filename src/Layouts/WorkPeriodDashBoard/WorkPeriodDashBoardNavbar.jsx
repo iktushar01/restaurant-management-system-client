@@ -84,7 +84,7 @@ const WorkPeriodDashBoardNavbar = () => {
     },
     { 
       name: 'Charges', 
-      path: '/charges', 
+      path: '/WorkPeriod/Settings/Update', 
       icon: <FaMoneyBill className="w-5 h-5" />
     }
   ];

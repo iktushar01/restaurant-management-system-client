@@ -69,6 +69,7 @@ import OrderPageIndex from "../Pages/Order_Pages/OrderPageIndex";
 import RestaurantDashboardIndex from "../Layouts/RestaurantDashboard/RestaurantDashboardIndex";
 import WorkPeriodDashBoard from "../Layouts/WorkPeriodDashBoard/WorkPeriodDashBoard";
 import WorkPeriodPage from "../Pages/Settings_Pages/WorkPeriodPage/WorkPeriodPage";
+import ChangesPage from "../Pages/Settings_Pages/ChangesPage/ChangesPage";
 
 export const router = createBrowserRouter([
   {
@@ -401,6 +402,12 @@ export const router = createBrowserRouter([
         path: "/WorkPeriod/Index",
         element: <WorkPeriodPage />,
       },
+      {
+        path: "/WorkPeriod/Settings/Update",
+        element: <ChangesPage />,
+      },
+      
+
     ]
   }
 

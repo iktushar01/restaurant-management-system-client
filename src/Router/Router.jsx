@@ -70,6 +70,7 @@ import RestaurantDashboardIndex from "../Layouts/RestaurantDashboard/RestaurantD
 import WorkPeriodDashBoard from "../Layouts/WorkPeriodDashBoard/WorkPeriodDashBoard";
 import WorkPeriodPage from "../Pages/Settings_Pages/WorkPeriodPage/WorkPeriodPage";
 import ChangesPage from "../Pages/Settings_Pages/ChangesPage/ChangesPage";
+import PropertyInformation from "../Pages/Settings_Pages/PropertyInformation/PropertyInformation";
 
 export const router = createBrowserRouter([
   {
@@ -405,6 +406,10 @@ export const router = createBrowserRouter([
       {
         path: "/WorkPeriod/Settings/Update",
         element: <ChangesPage />,
+      },
+      {
+        path: "/WorkPeriod/PropertyInformation/Edit/1",
+        element: <PropertyInformation />,
       },
       
 

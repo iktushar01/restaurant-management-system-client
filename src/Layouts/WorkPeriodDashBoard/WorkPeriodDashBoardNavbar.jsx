@@ -79,7 +79,7 @@ const WorkPeriodDashBoardNavbar = () => {
     },
     { 
       name: 'Property', 
-      path: '/property', 
+      path: '/WorkPeriod/PropertyInformation/Edit/1', 
       icon: <FaBuilding className="w-5 h-5" />
     },
     { 

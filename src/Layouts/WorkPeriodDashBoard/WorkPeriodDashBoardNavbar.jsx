@@ -61,8 +61,8 @@ const WorkPeriodDashBoardNavbar = () => {
       ]
     },
     { 
-      name: 'Walter', 
-      path: '/walter', 
+      name: 'Waiter', 
+      path: '/WorkPeriod/RestaurantDineWaiter/Index', 
       icon: <FaUserTie className="w-5 h-5" />
     },
     { 

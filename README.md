@@ -24,6 +24,10 @@ This document tracks the **design completion status** of different modules.
 # Work Period Dashboard
 
 - [WorkPeriod](https://dineflow01.netlify.app/WorkPeriod/Index) – _Design Done_
+- [Food](https://dineflow01.netlify.app/WorkPeriod/foods/index) – 🚧 **In Progress**
+- [Food Category](https://dineflow01.netlify.app/WorkPeriod/foodCategory/index) – _Design Done_
+- [Dine](https://dineflow01.netlify.app/WorkPeriod/dine/location) – _Design Done_
+- [waiter](https://dineflow01.netlify.app/WorkPeriod/RestaurantDineWaiter/Index) – _Design Done_
 - [Property](https://dineflow01.netlify.app/WorkPeriod/PropertyInformation/Edit/1) – _Design Done_
 - [Changes](https://dineflow01.netlify.app/WorkPeriod/Settings/Update) – _Design Done_
 

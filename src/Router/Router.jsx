@@ -94,6 +94,7 @@ import InventoryStockLocationIndex from "../Pages/Settings_Pages/InventoryPages/
 import InventoryStockLocationCreate from "../Pages/Settings_Pages/InventoryPages/InventoryStockLocation/InventoryStockLocationCreate";
 import InventoryStockLocationEditById from "../Pages/Settings_Pages/InventoryPages/InventoryStockLocation/InventoryStockLocationEditById";
 import BrandsIndex from "../Pages/Settings_Pages/BrandsPage/BrandsIndex";
+import BrandsCreate from "../Pages/Settings_Pages/BrandsPage/BrandsCreate";
 
 export const router = createBrowserRouter([
   {
@@ -540,6 +541,10 @@ export const router = createBrowserRouter([
       {
         path:"/WorkPeriod/inventory/brands",
         element: <BrandsIndex/>
+      },
+      {
+        path:"/WorkPeriod/inventory/brands/create",
+        element: <BrandsCreate/>
       },
     ],
   },

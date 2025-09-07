@@ -41,7 +41,7 @@ const WorkPeriodDashBoardNavbar = () => {
     },
     { 
       name: 'Foods', 
-      path: '/foods', 
+      path: '/WorkPeriod/foods/index', 
       icon: <FaHamburger className="w-5 h-5" />
     },
     { 

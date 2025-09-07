@@ -78,6 +78,7 @@ import DineLocationIndexCreate from "../Pages/Settings_Pages/DinePage/DineLocati
 import DineTableIndex from "../Pages/Settings_Pages/DinePage/DineTable/DineTableIndex";
 import DineTableIndexCreate from "../Pages/Settings_Pages/DinePage/DineTable/DineTableIndexCreate";
 import DineTableIndexEditById from "../Pages/Settings_Pages/DinePage/DineTable/DineTableIndexEditById";
+import FoodPageIndex from "../Pages/Settings_Pages/FoodPages/FoodPageIndex";
 
 export const router = createBrowserRouter([
   {
@@ -92,18 +93,18 @@ export const router = createBrowserRouter([
         path: "RestaurantDashboard/Index",
         element: <RestaurantDashboardIndex />,
       },
-      
+
       //===================================//
       //============= Order Menu =============//
       //===================================//
       {
         path: "/RestaurantOrder/Orders",
-        element: <OrderPageIndex/>,
+        element: <OrderPageIndex />,
       },
-        //===================================//
+      //===================================//
       //============= Event Menu =============//
       //===================================//
-       {
+      {
         path: "/event/manage",
         element: <EventManage />,
       },
@@ -120,8 +121,8 @@ export const router = createBrowserRouter([
         element: <TodayEventIndex />,
       },
       {
-        path:"/event/dashboard",
-        element:<EventDashBoard/>
+        path: "/event/dashboard",
+        element: <EventDashBoard />,
       },
       //===================================//
       //============= Hr Menu =============//
@@ -194,7 +195,7 @@ export const router = createBrowserRouter([
       //======================================
       {
         path: "/hr/employee-payroll/deduction/1",
-        element: <EmployeePayRollEarningDeductionIndex/>,
+        element: <EmployeePayRollEarningDeductionIndex />,
       },
       {
         path: "/hr/employee-payroll/deduction/1/Create",
@@ -202,10 +203,10 @@ export const router = createBrowserRouter([
       },
       {
         path: "/hr/employee-payroll/deduction/1/edit/1",
-        element: <EmployeePayRollEarningDeductionIndexEditById/>,
+        element: <EmployeePayRollEarningDeductionIndexEditById />,
       },
       //======================================
-       {
+      {
         path: "/hr/employee-payroll/basic/1",
         //======= dynamic id need to added =======//
         element: <EmployeePayrollbasicIndex />,
@@ -219,7 +220,7 @@ export const router = createBrowserRouter([
         element: <EmployeePayrollbasicEditById />,
       },
       //======================================
-       {
+      {
         path: "/hr/employee-payroll/payment/1",
         //======= dynamic id need to added =======//
         element: <EmployeePayRollSalaryPaymentIndex />,
@@ -386,26 +387,33 @@ export const router = createBrowserRouter([
         element: <DailyExpenseDetails />,
       },
       //=======================================
-       {
+      {
         path: "/due/details",
         element: <DuePages />,
       },
       //=======================================
       {
         path: "/report/current",
-        element:<ReportPageIndex/>
+        element: <ReportPageIndex />,
       },
-       {
+      {
         path: "/report/daily",
-        element:<DailyReport/>
+        element: <DailyReport />,
       },
-
     ],
   },
+  //=================================
   {
-     path: "/WorkPeriod",
+    path: "/WorkPeriod",
     element: <WorkPeriodDashBoard />,
     children: [
+      //=========================================
+      {
+        path: "/WorkPeriod/foods/index",
+        element: <FoodPageIndex />,
+      },
+      
+      //=========================================
       {
         path: "/WorkPeriod/Index",
         element: <WorkPeriodPage />,
@@ -421,40 +429,38 @@ export const router = createBrowserRouter([
       //============================
       {
         path: "/WorkPeriod/RestaurantDineWaiter/Index",
-        element: <WaiterPageIndex/>
+        element: <WaiterPageIndex />,
       },
       {
         path: "/WorkPeriod/RestaurantDineWaiter/Index/create",
-        element: <WaiterPageCreate/>
+        element: <WaiterPageCreate />,
       },
       //==================================
       {
         path: "/WorkPeriod/dine/location",
-        element: <DineLocationIndex/>
+        element: <DineLocationIndex />,
       },
       {
         path: "/WorkPeriod/dine/location/create",
-        element: <DineLocationIndexCreate/>
+        element: <DineLocationIndexCreate />,
       },
       {
         path: "/WorkPeriod/dine/location/edit/:id",
-        element: <DineLocationIndexCreate/>
+        element: <DineLocationIndexCreate />,
       },
       //===============================
       {
         path: "/WorkPeriod/dine/tables",
-        element: <DineTableIndex/>
+        element: <DineTableIndex />,
       },
       {
         path: "/WorkPeriod/dine/tables/create",
-        element: <DineTableIndexCreate/>
+        element: <DineTableIndexCreate />,
       },
       {
         path: "/WorkPeriod/dine/tables/edit/:id",
-        element: <DineTableIndexEditById/>
-      }
-
-    ]
-  }
-
+        element: <DineTableIndexEditById />,
+      },
+    ],
+  },
 ]);

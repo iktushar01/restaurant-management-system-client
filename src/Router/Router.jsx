@@ -101,6 +101,7 @@ import ItemsPagesCreate from "../Pages/Settings_Pages/ItemsPages/ItemsPagesCreat
 import ItemsPagesEditByID from "../Pages/Settings_Pages/ItemsPages/ItemsPagesEditByID";
 import SubCategoryIndex from "../Pages/Settings_Pages/SubCategory/SubCategoryIndex";
 import SubCategoryCreate from "../Pages/Settings_Pages/SubCategory/SubCategoryCreate";
+import SubCategoryEditByID from "../Pages/Settings_Pages/SubCategory/SubCategoryEditByID";
 
 export const router = createBrowserRouter([
   {
@@ -577,6 +578,10 @@ export const router = createBrowserRouter([
       {
         path:"/WorkPeriod/inventory/sub-category/create",
         element: <SubCategoryCreate/>
+      },
+      {
+        path:"/WorkPeriod/inventory/sub-category/edit/:id",
+        element: <SubCategoryEditByID/>
       },
     ],
   },

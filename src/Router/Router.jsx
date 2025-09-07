@@ -85,6 +85,7 @@ import FoodCategoryPageIndex from "../Pages/Settings_Pages/FoodCategoryPages/Foo
 import FoodCategoryPageCreate from "../Pages/Settings_Pages/FoodCategoryPages/FoodCategoryPageCreate";
 import FoodCategoryPageEditById from "../Pages/Settings_Pages/FoodCategoryPages/FoodCategoryPageEditById";
 import InventoryVendorsIndex from "../Pages/Settings_Pages/InventoryPages/InventoryVendors/InventoryVendorsIndex";
+import InventoryVendorsCreate from "../Pages/Settings_Pages/InventoryPages/InventoryVendors/InventoryVendorsCreate";
 
 export const router = createBrowserRouter([
   {
@@ -492,6 +493,10 @@ export const router = createBrowserRouter([
       {
         path: "/WorkPeriod/inventory/vendors",
         element: <InventoryVendorsIndex/>
+      },
+      {
+        path: "/WorkPeriod/inventory/vendors/create",
+        element: <InventoryVendorsCreate/>
       }
     ],
   },

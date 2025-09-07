@@ -82,6 +82,7 @@ import FoodPageIndex from "../Pages/Settings_Pages/FoodPages/FoodPageIndex";
 import FoodPageCreate from "../Pages/Settings_Pages/FoodPages/FoodPageCreate";
 import FoodPageEditByID from "../Pages/Settings_Pages/FoodPages/FoodPageEditByID";
 import FoodCategoryPageIndex from "../Pages/Settings_Pages/FoodCategoryPages/FoodCategoryPageIndex";
+import FoodCategoryPageCreate from "../Pages/Settings_Pages/FoodCategoryPages/FoodCategoryPageCreate";
 
 export const router = createBrowserRouter([
   {
@@ -428,6 +429,11 @@ export const router = createBrowserRouter([
         path: "/WorkPeriod/foodCategory/index",
         element: <FoodCategoryPageIndex/>
       },
+      {
+        path: "/WorkPeriod/foodCategory/index/create",
+        element: <FoodCategoryPageCreate/>
+      },
+      
       
       //=========================================
       {

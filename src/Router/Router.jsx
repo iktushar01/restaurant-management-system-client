@@ -433,6 +433,10 @@ export const router = createBrowserRouter([
         path: "/WorkPeriod/dine/location/create",
         element: <DineLocationIndexCreate/>
       },
+      {
+        path: "/WorkPeriod/dine/location/edit/:id",
+        element: <DineLocationIndexCreate/>
+      },
 
     ]
   }

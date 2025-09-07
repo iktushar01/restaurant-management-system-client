@@ -88,6 +88,8 @@ import InventoryVendorsIndex from "../Pages/Settings_Pages/InventoryPages/Invent
 import InventoryVendorsCreate from "../Pages/Settings_Pages/InventoryPages/InventoryVendors/InventoryVendorsCreate";
 import InventoryVendorsEditById from "../Pages/Settings_Pages/InventoryPages/InventoryVendors/InventoryVendorsEditById";
 import InventoryUnitsIndex from "../Pages/Settings_Pages/InventoryPages/InventoryUnits/InventoryUnitsIndex";
+import InventoryUnitsCreate from "../Pages/Settings_Pages/InventoryPages/InventoryUnits/InventoryUnitsCreate";
+import InventoryUnitsEditById from "../Pages/Settings_Pages/InventoryPages/InventoryUnits/InventoryUnitsEditById";
 
 export const router = createBrowserRouter([
   {
@@ -508,6 +510,14 @@ export const router = createBrowserRouter([
       {
         path: "/WorkPeriod/inventory/units",
         element:<InventoryUnitsIndex/>
+      },
+        {
+        path: "/WorkPeriod/inventory/units/create",
+        element:<InventoryUnitsCreate/>
+      },
+      {
+        path: "/WorkPeriod/inventory/units/edit/:id",
+        element:<InventoryUnitsEditById/>
       }
     ],
   },

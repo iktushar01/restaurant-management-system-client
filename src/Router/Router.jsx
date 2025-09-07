@@ -97,6 +97,7 @@ import BrandsIndex from "../Pages/Settings_Pages/BrandsPage/BrandsIndex";
 import BrandsCreate from "../Pages/Settings_Pages/BrandsPage/BrandsCreate";
 import BrandsEditById from "../Pages/Settings_Pages/BrandsPage/BrandsEditById";
 import ItemsPagesIndex from "../Pages/Settings_Pages/ItemsPages/ItemsPagesIndex";
+import ItemsPagesCreate from "../Pages/Settings_Pages/ItemsPages/ItemsPagesCreate";
 
 export const router = createBrowserRouter([
   {
@@ -556,6 +557,10 @@ export const router = createBrowserRouter([
       {
         path:"/WorkPeriod/inventory/items",
         element: <ItemsPagesIndex/>
+      },
+      {
+        path:"/WorkPeriod/inventory/items/create",
+        element: <ItemsPagesCreate/>
       },
     ],
   },

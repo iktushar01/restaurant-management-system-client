@@ -74,6 +74,7 @@ import PropertyInformation from "../Pages/Settings_Pages/PropertyInformation/Pro
 import WaiterPageIndex from "../Pages/Settings_Pages/Waiter_Pages/WaiterPageIndex";
 import WaiterPageCreate from "../Pages/Settings_Pages/Waiter_Pages/WaiterPageCreate";
 import DineLocationIndex from "../Pages/Settings_Pages/DinePage/DineLocation/DineLocationIndex";
+import DineLocationIndexCreate from "../Pages/Settings_Pages/DinePage/DineLocation/DineLocationIndexCreate";
 
 export const router = createBrowserRouter([
   {
@@ -427,6 +428,10 @@ export const router = createBrowserRouter([
       {
         path: "/WorkPeriod/dine/location",
         element: <DineLocationIndex/>
+      },
+      {
+        path: "/WorkPeriod/dine/location/create",
+        element: <DineLocationIndexCreate/>
       },
 
     ]

@@ -53,10 +53,13 @@ const DineLocationIndex = () => {
       icon: FaEdit,
       className: "text-indigo-600 hover:text-indigo-900",
       render: (row) => (
-        <button className="flex items-center space-x-1 text-indigo-600 hover:text-indigo-900">
+        <Link 
+          to={`edit/${row.id}`}
+          className="flex items-center space-x-1 text-indigo-600 hover:text-indigo-900"
+        >
           <FaEdit />
           <span>Edit</span>
-        </button>
+        </Link>
       ),
     },
     {

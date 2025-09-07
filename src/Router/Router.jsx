@@ -73,6 +73,7 @@ import ChangesPage from "../Pages/Settings_Pages/ChangesPage/ChangesPage";
 import PropertyInformation from "../Pages/Settings_Pages/PropertyInformation/PropertyInformation";
 import WaiterPageIndex from "../Pages/Settings_Pages/Waiter_Pages/WaiterPageIndex";
 import WaiterPageCreate from "../Pages/Settings_Pages/Waiter_Pages/WaiterPageCreate";
+import DineLocationIndex from "../Pages/Settings_Pages/DinePage/DineLocation/DineLocationIndex";
 
 export const router = createBrowserRouter([
   {
@@ -421,7 +422,12 @@ export const router = createBrowserRouter([
       {
         path: "/WorkPeriod/RestaurantDineWaiter/Index/create",
         element: <WaiterPageCreate/>
-      }
+      },
+      //==================================
+      {
+        path: "/WorkPeriod/dine/location",
+        element: <DineLocationIndex/>
+      },
 
     ]
   }

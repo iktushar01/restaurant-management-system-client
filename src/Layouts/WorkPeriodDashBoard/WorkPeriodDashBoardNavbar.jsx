@@ -13,7 +13,6 @@ import {
   FaCashRegister,
   FaChair,
   FaTable,
-  FaReceipt,
   FaWarehouse,
   FaBoxOpen,
   FaCubes,
@@ -55,9 +54,8 @@ const WorkPeriodDashBoardNavbar = () => {
       path: '/dine',
       icon: <FaUtensils className="w-5 h-5" />,
       subRoutes: [
-        { name: 'Tables', path: '/dine/tables', icon: <FaTable className="w-4 h-4" /> },
-        { name: 'Orders', path: '/dine/orders', icon: <FaReceipt className="w-4 h-4" /> },
-        { name: 'Dining Areas', path: '/dine/areas', icon: <FaChair className="w-4 h-4" /> }
+        { name: 'Dining Location', path: '/WorkPeriod/dine/location', icon: <FaChair className="w-4 h-4" /> },
+        { name: 'Tables', path: '/WorkPeriod/dine/tables', icon: <FaTable className="w-4 h-4" /> },
       ]
     },
     { 

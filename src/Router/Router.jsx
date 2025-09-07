@@ -75,6 +75,9 @@ import WaiterPageIndex from "../Pages/Settings_Pages/Waiter_Pages/WaiterPageInde
 import WaiterPageCreate from "../Pages/Settings_Pages/Waiter_Pages/WaiterPageCreate";
 import DineLocationIndex from "../Pages/Settings_Pages/DinePage/DineLocation/DineLocationIndex";
 import DineLocationIndexCreate from "../Pages/Settings_Pages/DinePage/DineLocation/DineLocationIndexCreate";
+import DineTableIndex from "../Pages/Settings_Pages/DinePage/DineTable/DineTableIndex";
+import DineTableIndexCreate from "../Pages/Settings_Pages/DinePage/DineTable/DineTableIndexCreate";
+import DineTableIndexEditById from "../Pages/Settings_Pages/DinePage/DineTable/DineTableIndexEditById";
 
 export const router = createBrowserRouter([
   {
@@ -437,6 +440,19 @@ export const router = createBrowserRouter([
         path: "/WorkPeriod/dine/location/edit/:id",
         element: <DineLocationIndexCreate/>
       },
+      //===============================
+      {
+        path: "/WorkPeriod/dine/tables",
+        element: <DineTableIndex/>
+      },
+      {
+        path: "/WorkPeriod/dine/tables/create",
+        element: <DineTableIndexCreate/>
+      },
+      {
+        path: "/WorkPeriod/dine/tables/edit/:id",
+        element: <DineTableIndexEditById/>
+      }
 
     ]
   }

@@ -1,98 +1,143 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { 
-  FaChevronLeft, 
-  FaChevronRight, 
-  FaUtensils, 
-  FaHamburger, 
-  FaList, 
-  FaUserTie, 
-  FaBoxes, 
-  FaBuilding, 
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaUtensils,
+  FaHamburger,
+  FaList,
+  FaUserTie,
+  FaBoxes,
+  FaBuilding,
   FaMoneyBill,
   FaCashRegister,
   FaChair,
   FaTable,
   FaWarehouse,
-  FaBoxOpen,
-  FaCubes,
-  FaClipboardList
-} from 'react-icons/fa';
+  FaSitemap,
+  FaTags,
+  FaBalanceScale,
+  FaMapMarkerAlt,
+  FaClipboardList,
+  FaTruck,
+} from "react-icons/fa";
 
 const WorkPeriodDashBoardNavbar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
-    'Dine': false,
-    'Inventory': false
+    Dine: false,
+    Inventory: false,
   });
 
   const toggleSection = (section) => {
-    setExpandedSections(prev => ({
+    setExpandedSections((prev) => ({
       ...prev,
-      [section]: !prev[section]
+      [section]: !prev[section],
     }));
   };
 
   const menuItems = [
-    { 
-      name: 'Work Period', 
-      path: '/WorkPeriod/Index', 
-      icon: <FaCashRegister className="w-5 h-5" />
+    {
+      name: "Work Period",
+      path: "/WorkPeriod/Index",
+      icon: <FaCashRegister className="w-5 h-5" />,
     },
-    { 
-      name: 'Foods', 
-      path: '/WorkPeriod/foods/index', 
-      icon: <FaHamburger className="w-5 h-5" />
+    {
+      name: "Foods",
+      path: "/WorkPeriod/foods/index",
+      icon: <FaHamburger className="w-5 h-5" />,
     },
-    { 
-      name: 'Food Category', 
-      path: '/WorkPeriod/foodCategory/index', 
-      icon: <FaList className="w-5 h-5" />
+    {
+      name: "Food Category",
+      path: "/WorkPeriod/foodCategory/index",
+      icon: <FaList className="w-5 h-5" />,
     },
-    { 
-      name: 'Dine', 
-      path: '/dine',
+    {
+      name: "Dine",
+      path: "/dine",
       icon: <FaUtensils className="w-5 h-5" />,
       subRoutes: [
-        { name: 'Dining Location', path: '/WorkPeriod/dine/location', icon: <FaChair className="w-4 h-4" /> },
-        { name: 'Tables', path: '/WorkPeriod/dine/tables', icon: <FaTable className="w-4 h-4" /> },
-      ]
+        {
+          name: "Dining Location",
+          path: "/WorkPeriod/dine/location",
+          icon: <FaChair className="w-4 h-4" />,
+        },
+        {
+          name: "Tables",
+          path: "/WorkPeriod/dine/tables",
+          icon: <FaTable className="w-4 h-4" />,
+        },
+      ],
     },
-    { 
-      name: 'Waiter', 
-      path: '/WorkPeriod/RestaurantDineWaiter/Index', 
-      icon: <FaUserTie className="w-5 h-5" />
+    {
+      name: "Waiter",
+      path: "/WorkPeriod/RestaurantDineWaiter/Index",
+      icon: <FaUserTie className="w-5 h-5" />,
     },
-    { 
-      name: 'Inventory', 
-      path: '/inventory',
+    {
+      name: "Inventory",
+      path: "/inventory",
       icon: <FaBoxes className="w-5 h-5" />,
       subRoutes: [
-        { name: 'Stock', path: '/inventory/stock', icon: <FaWarehouse className="w-4 h-4" /> },
-        { name: 'Suppliers', path: '/inventory/suppliers', icon: <FaBuilding className="w-4 h-4" /> },
-        { name: 'Purchases', path: '/inventory/purchases', icon: <FaClipboardList className="w-4 h-4" /> },
-        { name: 'Items', path: '/inventory/items', icon: <FaBoxOpen className="w-4 h-4" /> },
-        { name: 'Categories', path: '/inventory/categories', icon: <FaCubes className="w-4 h-4" /> }
-      ]
+        {
+          name: "Category",
+          path: "/WorkPeriod/inventory/category",
+          icon: <FaWarehouse className="w-4 h-4" />,
+        },
+        {
+          name: "Sub Category",
+          path: "/WorkPeriod/inventory/sub-category",
+          icon: <FaSitemap className="w-4 h-4" />,
+        },
+        {
+          name: "Items",
+          path: "/WorkPeriod/inventory/items",
+          icon: <FaClipboardList className="w-4 h-4" />,
+        },
+        {
+          name: "Brands",
+          path: "/WorkPeriod/inventory/brands",
+          icon: <FaTags className="w-4 h-4" />,
+        },
+        {
+          name: "Stock Locations",
+          path: "/WorkPeriod/inventory/stock-locations",
+          icon: <FaMapMarkerAlt className="w-4 h-4" />,
+        },
+        {
+          name: "Units",
+          path: "/WorkPeriod/inventory/units",
+          icon: <FaBalanceScale className="w-4 h-4" />,
+        },
+        {
+          name: "Vendors",
+          path: "/WorkPeriod/inventory/vendors",
+          icon: <FaTruck className="w-4 h-4" />,
+        },
+      ],
     },
-    { 
-      name: 'Property', 
-      path: '/WorkPeriod/PropertyInformation/Edit/1', 
-      icon: <FaBuilding className="w-5 h-5" />
+    {
+      name: "Property",
+      path: "/WorkPeriod/PropertyInformation/Edit/1",
+      icon: <FaBuilding className="w-5 h-5" />,
     },
-    { 
-      name: 'Charges', 
-      path: '/WorkPeriod/Settings/Update', 
-      icon: <FaMoneyBill className="w-5 h-5" />
-    }
+    {
+      name: "Charges",
+      path: "/WorkPeriod/Settings/Update",
+      icon: <FaMoneyBill className="w-5 h-5" />,
+    },
   ];
 
   return (
-    <div className={`flex flex-col h-screen bg-gray-900 text-white ${isCollapsed ? 'w-20' : 'w-64'}  transition-all duration-300`}>
+    <div
+      className={`flex flex-col h-screen bg-gray-900 text-white ${
+        isCollapsed ? "w-20" : "w-64"
+      }  transition-all duration-300`}
+    >
       {/* Logo section with toggle button */}
       <div className="p-4 border-b border-gray-700 flex items-center justify-between">
         {!isCollapsed && <h1 className="text-xl font-bold">DineFlow</h1>}
-        <button 
+        <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
           aria-label={isCollapsed ? "Expand menu" : "Collapse menu"}
@@ -104,7 +149,7 @@ const WorkPeriodDashBoardNavbar = () => {
           )}
         </button>
       </div>
-      
+
       {/* Navigation items */}
       <nav className="flex-1 overflow-y-auto pt-5 pb-4">
         <ul className="space-y-1 px-2">
@@ -115,24 +160,27 @@ const WorkPeriodDashBoardNavbar = () => {
                   <button
                     onClick={() => toggleSection(item.name)}
                     className={`w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center justify-between ${
-                      expandedSections[item.name] || window.location.pathname.includes(item.path)
-                        ? 'bg-blue-700 text-white' 
-                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                      expandedSections[item.name] ||
+                      window.location.pathname.includes(item.path)
+                        ? "bg-blue-700 text-white"
+                        : "text-gray-300 hover:bg-gray-800 hover:text-white"
                     }`}
                   >
                     <div className="flex items-center">
-                      <span className="mr-3 text-blue-400">
-                        {item.icon}
-                      </span>
+                      <span className="mr-3 text-blue-400">{item.icon}</span>
                       {!isCollapsed && <span>{item.name}</span>}
                     </div>
                     {!isCollapsed && (
-                      <span className={`transform transition-transform ${expandedSections[item.name] ? 'rotate-90' : ''}`}>
+                      <span
+                        className={`transform transition-transform ${
+                          expandedSections[item.name] ? "rotate-90" : ""
+                        }`}
+                      >
                         <FaChevronRight className="w-3 h-3" />
                       </span>
                     )}
                   </button>
-                  
+
                   {/* Sub-routes */}
                   {!isCollapsed && expandedSections[item.name] && (
                     <ul className="ml-6 mt-1 space-y-1 border-l border-gray-700 pl-2">
@@ -140,11 +188,11 @@ const WorkPeriodDashBoardNavbar = () => {
                         <li key={subItem.name}>
                           <NavLink
                             to={subItem.path}
-                            className={({ isActive }) => 
+                            className={({ isActive }) =>
                               `flex items-center px-3 py-2 rounded-lg transition-colors text-sm ${
-                                isActive 
-                                  ? 'text-blue-300 bg-blue-900/30' 
-                                  : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                                isActive
+                                  ? "text-blue-300 bg-blue-900/30"
+                                  : "text-gray-400 hover:text-white hover:bg-gray-800"
                               }`
                             }
                           >
@@ -159,17 +207,15 @@ const WorkPeriodDashBoardNavbar = () => {
               ) : (
                 <NavLink
                   to={item.path}
-                  className={({ isActive }) => 
+                  className={({ isActive }) =>
                     `flex items-center px-4 py-3 rounded-lg transition-colors ${
-                      isActive 
-                        ? 'bg-blue-600 text-white' 
-                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                      isActive
+                        ? "bg-blue-600 text-white"
+                        : "text-gray-300 hover:bg-gray-800 hover:text-white"
                     }`
                   }
                 >
-                  <span className="mr-3 text-blue-400">
-                    {item.icon}
-                  </span>
+                  <span className="mr-3 text-blue-400">{item.icon}</span>
                   {!isCollapsed && <span>{item.name}</span>}
                 </NavLink>
               )}
@@ -177,8 +223,6 @@ const WorkPeriodDashBoardNavbar = () => {
           ))}
         </ul>
       </nav>
-      
-      
     </div>
   );
 };

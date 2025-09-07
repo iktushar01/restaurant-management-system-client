@@ -96,6 +96,7 @@ import InventoryStockLocationEditById from "../Pages/Settings_Pages/InventoryPag
 import BrandsIndex from "../Pages/Settings_Pages/BrandsPage/BrandsIndex";
 import BrandsCreate from "../Pages/Settings_Pages/BrandsPage/BrandsCreate";
 import BrandsEditById from "../Pages/Settings_Pages/BrandsPage/BrandsEditById";
+import ItemsPagesIndex from "../Pages/Settings_Pages/ItemsPages/ItemsPagesIndex";
 
 export const router = createBrowserRouter([
   {
@@ -550,6 +551,11 @@ export const router = createBrowserRouter([
       {
         path:"/WorkPeriod/inventory/brands/edit/:id",
         element: <BrandsEditById/>
+      },
+      //=============================
+      {
+        path:"/WorkPeriod/inventory/items",
+        element: <ItemsPagesIndex/>
       },
     ],
   },

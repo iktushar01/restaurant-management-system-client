@@ -104,6 +104,7 @@ import SubCategoryCreate from "../Pages/Settings_Pages/SubCategory/SubCategoryCr
 import SubCategoryEditByID from "../Pages/Settings_Pages/SubCategory/SubCategoryEditByID";
 import CategoryPagesIndex from "../Pages/Settings_Pages/CategoryPages/CategoryPagesIndex";
 import CategoryPagesCreate from "../Pages/Settings_Pages/CategoryPages/CategoryPagesCreate";
+import PurchaseDetails from "../Pages/Inventory_pages/PurchaseDetails/PurchaseDetails";
 
 export const router = createBrowserRouter([
   {
@@ -125,6 +126,13 @@ export const router = createBrowserRouter([
       {
         path: "/RestaurantOrder/Orders",
         element: <OrderPageIndex />,
+      },
+      //===================================//
+      //============= Inventory Menu =============//
+      //===================================//
+      {
+        path:"/inventory/purchase-details",
+        element:<PurchaseDetails/>
       },
       //===================================//
       //============= Event Menu =============//

@@ -46,7 +46,7 @@ const WorkPeriodDashBoardNavbar = () => {
     },
     { 
       name: 'Food Category', 
-      path: '/food-category', 
+      path: '/WorkPeriod/foodCategory/index', 
       icon: <FaList className="w-5 h-5" />
     },
     { 

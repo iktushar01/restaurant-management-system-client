@@ -81,6 +81,7 @@ import DineTableIndexEditById from "../Pages/Settings_Pages/DinePage/DineTable/D
 import FoodPageIndex from "../Pages/Settings_Pages/FoodPages/FoodPageIndex";
 import FoodPageCreate from "../Pages/Settings_Pages/FoodPages/FoodPageCreate";
 import FoodPageEditByID from "../Pages/Settings_Pages/FoodPages/FoodPageEditByID";
+import FoodCategoryPageIndex from "../Pages/Settings_Pages/FoodCategoryPages/FoodCategoryPageIndex";
 
 export const router = createBrowserRouter([
   {
@@ -421,6 +422,11 @@ export const router = createBrowserRouter([
       {
         path: "/WorkPeriod/foods/index/edit/:id",
         element:<FoodPageEditByID/>
+      },
+      //=========================================
+      {
+        path: "/WorkPeriod/foodCategory/index",
+        element: <FoodCategoryPageIndex/>
       },
       
       //=========================================

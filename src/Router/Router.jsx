@@ -111,6 +111,7 @@ import InventoryHomeCashback from "../Pages/Inventory_pages/InventoryHome/Invent
 import InventoryHomeStockIn from "../Pages/Inventory_pages/InventoryHome/InventoryHomeStockIn";
 import InventoryHomeMoveStock from "../Pages/Inventory_pages/InventoryHome/InventoryHomeMoveStock";
 import InventoryHomeLocation from "../Pages/Inventory_pages/InventoryHome/InventoryHomeLocation";
+import InventoryHomeLocateById from "../Pages/Inventory_pages/InventoryHome/InventoryHomeLocateById";
 
 export const router = createBrowserRouter([
   {
@@ -163,6 +164,10 @@ export const router = createBrowserRouter([
       {
         path:"/inventory/move-stock",
         element:<InventoryHomeMoveStock/>
+      },
+      {
+        path:"/inventory/locate/:id",
+        element:<InventoryHomeLocateById/>
       },
       //===================================//
       //============= Event Menu =============//

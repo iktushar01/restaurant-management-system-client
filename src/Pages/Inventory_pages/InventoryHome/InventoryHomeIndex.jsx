@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { 
-  FaMoneyBillWave, 
-  FaCoins, 
-  FaBoxOpen, 
-  FaExchangeAlt, 
-  FaMapMarkerAlt, 
+import {
+  FaMoneyBillWave,
+  FaCoins,
+  FaBoxOpen,
+  FaExchangeAlt,
+  FaMapMarkerAlt,
   FaFilePdf,
   FaEye,
-  FaSignOutAlt
+  FaSignOutAlt,
 } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
 
@@ -19,43 +19,47 @@ const InventoryHomeIndex = () => {
   const navigate = useNavigate();
 
   const inventoryItems = [
-    { 
-      id: 1, 
-      category: "Raw Materials", 
-      subCategory: "Meat", 
-      brand: "", 
-      item: "Chicken (20.00)", 
-      unit: "KG" 
+    {
+      id: 1,
+      category: "Raw Materials",
+      subCategory: "Meat",
+      brand: "",
+      item: "Chicken (20.00)",
+      unit: "KG",
     },
-    { 
-      id: 2, 
-      category: "Raw Materials", 
-      subCategory: "Meat", 
-      brand: "", 
-      item: "Beef (20.00)", 
-      unit: "KG" 
+    {
+      id: 2,
+      category: "Raw Materials",
+      subCategory: "Meat",
+      brand: "",
+      item: "Beef (20.00)",
+      unit: "KG",
     },
-    { 
-      id: 3, 
-      category: "Raw Materials", 
-      subCategory: "Meat", 
-      brand: "", 
-      item: "Mutton (20.00)", 
-      unit: "KG" 
+    {
+      id: 3,
+      category: "Raw Materials",
+      subCategory: "Meat",
+      brand: "",
+      item: "Mutton (20.00)",
+      unit: "KG",
     },
   ];
 
-  const filteredItems = inventoryItems.filter((item) =>
-    item.item.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.subCategory.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.unit.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredItems = inventoryItems.filter(
+    (item) =>
+      item.item.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.subCategory.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.unit.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredItems.length / entriesToShow);
   const startIndex = (currentPage - 1) * entriesToShow;
-  const paginatedItems = filteredItems.slice(startIndex, startIndex + entriesToShow);
+  const paginatedItems = filteredItems.slice(
+    startIndex,
+    startIndex + entriesToShow
+  );
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -155,41 +159,39 @@ const InventoryHomeIndex = () => {
             Pay
           </button>
         </Link>
-        
+
         <Link to="/inventory/cashback">
           <button className="w-full flex flex-col items-center justify-center px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-offset-2">
             <FaCoins className="text-xl mb-1" />
             Cashback
           </button>
         </Link>
-        
+
         <Link to="/inventory/stock-in">
           <button className="w-full flex flex-col items-center justify-center px-4 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-medium rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2">
             <FaBoxOpen className="text-xl mb-1" />
             Stock In
           </button>
         </Link>
-        
+
         <Link to="/inventory/move-stock">
           <button className="w-full flex flex-col items-center justify-center px-4 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-medium rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2">
             <FaExchangeAlt className="text-xl mb-1" />
             Move Stock
           </button>
         </Link>
-        
+
         <Link to="/inventory/location">
           <button className="w-full flex flex-col items-center justify-center px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-offset-2">
             <FaMapMarkerAlt className="text-xl mb-1" />
             Location
           </button>
         </Link>
-        
-        <Link to="/inventory/pdf">
-          <button className="w-full flex flex-col items-center justify-center px-4 py-3 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-medium rounded-lg hover:from-indigo-600 hover:to-indigo-700 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2">
-            <FaFilePdf className="text-xl mb-1" />
-            PDF
-          </button>
-        </Link>
+
+        <button className="w-full flex flex-col items-center justify-center px-4 py-3 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-medium rounded-lg hover:from-indigo-600 hover:to-indigo-700 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2">
+          <FaFilePdf className="text-xl mb-1" />
+          PDF
+        </button>
       </div>
 
       {/* Search and entries filter */}
@@ -211,7 +213,7 @@ const InventoryHomeIndex = () => {
           </select>
           <span className="ml-2 text-gray-700">entries</span>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <span className="text-gray-700">Search:</span>
           <div className="relative">
@@ -234,20 +236,30 @@ const InventoryHomeIndex = () => {
       {/* Table info and pagination */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 text-sm text-gray-700">
         <div>
-          Showing {filteredItems.length > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, filteredItems.length)} of {filteredItems.length} entries
+          Showing {filteredItems.length > 0 ? startIndex + 1 : 0} to{" "}
+          {Math.min(startIndex + entriesToShow, filteredItems.length)} of{" "}
+          {filteredItems.length} entries
         </div>
         <div className="flex space-x-2 mt-2 md:mt-0">
-          <button 
+          <button
             onClick={handlePreviousPage}
             disabled={currentPage === 1}
-            className={`px-3 py-1 border border-gray-300 rounded-md ${currentPage === 1 ? 'bg-gray-100 text-gray-400' : 'bg-gray-50 hover:bg-gray-100'}`}
+            className={`px-3 py-1 border border-gray-300 rounded-md ${
+              currentPage === 1
+                ? "bg-gray-100 text-gray-400"
+                : "bg-gray-50 hover:bg-gray-100"
+            }`}
           >
             Previous
           </button>
-          <button 
+          <button
             onClick={handleNextPage}
             disabled={currentPage === totalPages || totalPages === 0}
-            className={`px-3 py-1 border border-gray-300 rounded-md ${currentPage === totalPages || totalPages === 0 ? 'bg-gray-100 text-gray-400' : 'bg-gray-50 hover:bg-gray-100'}`}
+            className={`px-3 py-1 border border-gray-300 rounded-md ${
+              currentPage === totalPages || totalPages === 0
+                ? "bg-gray-100 text-gray-400"
+                : "bg-gray-50 hover:bg-gray-100"
+            }`}
           >
             Next
           </button>

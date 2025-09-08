@@ -53,7 +53,7 @@ const WaiterPageIndex = () => {
       className: "text-indigo-600 hover:text-indigo-900",
       render: (row) => (
         <Link
-          to={`/waiters/edit/${row.ID}`}
+          to={`/WorkPeriod/waiters/edit/${row.ID}`}
           className="flex items-center space-x-1"
         >
           <FaEdit />

@@ -114,6 +114,7 @@ import InventoryHomeLocation from "../Pages/Inventory_pages/InventoryHome/Invent
 import InventoryHomeLocateById from "../Pages/Inventory_pages/InventoryHome/InventoryHomeLocateById";
 import InventoryHomeStockOut from "../Pages/Inventory_pages/InventoryHome/InventoryHomeStockOut";
 import InventoryPurchase from "../Pages/Inventory_pages/InventoryPurchase/InventoryPurchase";
+import WaiterPageEditByID from "../Pages/Settings_Pages/Waiter_Pages/WaiterPageEditByID";
 
 export const router = createBrowserRouter([
   {
@@ -534,6 +535,10 @@ export const router = createBrowserRouter([
       {
         path: "/WorkPeriod/RestaurantDineWaiter/Index/create",
         element: <WaiterPageCreate />,
+      },
+      {
+        path:"/WorkPeriod/waiters/edit/:id",
+        element:<WaiterPageEditByID/>
       },
       //==================================
       {

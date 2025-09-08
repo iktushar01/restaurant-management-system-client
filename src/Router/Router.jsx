@@ -105,6 +105,7 @@ import SubCategoryEditByID from "../Pages/Settings_Pages/SubCategory/SubCategory
 import CategoryPagesIndex from "../Pages/Settings_Pages/CategoryPages/CategoryPagesIndex";
 import CategoryPagesCreate from "../Pages/Settings_Pages/CategoryPages/CategoryPagesCreate";
 import PurchaseDetails from "../Pages/Inventory_pages/PurchaseDetails/PurchaseDetails";
+import InventoryHomeIndex from "../Pages/Inventory_pages/InventoryHome/InventoryHomeIndex";
 
 export const router = createBrowserRouter([
   {
@@ -133,6 +134,10 @@ export const router = createBrowserRouter([
       {
         path:"/inventory/purchase-details",
         element:<PurchaseDetails/>
+      },
+       {
+        path:"/inventory",
+        element:<InventoryHomeIndex/>
       },
       //===================================//
       //============= Event Menu =============//

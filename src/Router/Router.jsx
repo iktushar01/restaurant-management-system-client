@@ -108,6 +108,7 @@ import PurchaseDetails from "../Pages/Inventory_pages/PurchaseDetails/PurchaseDe
 import InventoryHomeIndex from "../Pages/Inventory_pages/InventoryHome/InventoryHomeIndex";
 import InventoryHomePay from "../Pages/Inventory_pages/InventoryHome/InventoryHomePay";
 import InventoryHomeCashback from "../Pages/Inventory_pages/InventoryHome/InventoryHomeCashback";
+import InventoryHomeStockIn from "../Pages/Inventory_pages/InventoryHome/InventoryHomeStockIn";
 
 export const router = createBrowserRouter([
   {
@@ -148,6 +149,10 @@ export const router = createBrowserRouter([
       {
         path:"/inventory/cashback",
         element:<InventoryHomeCashback/>
+      },
+      {
+        path:"/inventory/stock-in",
+        element:<InventoryHomeStockIn/>
       },
       //===================================//
       //============= Event Menu =============//

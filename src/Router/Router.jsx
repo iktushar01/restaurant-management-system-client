@@ -113,6 +113,7 @@ import InventoryHomeMoveStock from "../Pages/Inventory_pages/InventoryHome/Inven
 import InventoryHomeLocation from "../Pages/Inventory_pages/InventoryHome/InventoryHomeLocation";
 import InventoryHomeLocateById from "../Pages/Inventory_pages/InventoryHome/InventoryHomeLocateById";
 import InventoryHomeStockOut from "../Pages/Inventory_pages/InventoryHome/InventoryHomeStockOut";
+import InventoryPurchase from "../Pages/Inventory_pages/InventoryPurchase/InventoryPurchase";
 
 export const router = createBrowserRouter([
   {
@@ -173,6 +174,11 @@ export const router = createBrowserRouter([
       {
         path:"/inventory/stock-out/:id",
         element:<InventoryHomeStockOut/>
+      },
+      //============================
+      {
+        path: "/inventory/purchase",
+        element: <InventoryPurchase/>
       },
       //===================================//
       //============= Event Menu =============//

@@ -112,6 +112,7 @@ import InventoryHomeStockIn from "../Pages/Inventory_pages/InventoryHome/Invento
 import InventoryHomeMoveStock from "../Pages/Inventory_pages/InventoryHome/InventoryHomeMoveStock";
 import InventoryHomeLocation from "../Pages/Inventory_pages/InventoryHome/InventoryHomeLocation";
 import InventoryHomeLocateById from "../Pages/Inventory_pages/InventoryHome/InventoryHomeLocateById";
+import InventoryHomeStockOut from "../Pages/Inventory_pages/InventoryHome/InventoryHomeStockOut";
 
 export const router = createBrowserRouter([
   {
@@ -168,6 +169,10 @@ export const router = createBrowserRouter([
       {
         path:"/inventory/locate/:id",
         element:<InventoryHomeLocateById/>
+      },
+      {
+        path:"/inventory/stock-out/:id",
+        element:<InventoryHomeStockOut/>
       },
       //===================================//
       //============= Event Menu =============//

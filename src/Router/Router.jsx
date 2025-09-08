@@ -110,6 +110,7 @@ import InventoryHomePay from "../Pages/Inventory_pages/InventoryHome/InventoryHo
 import InventoryHomeCashback from "../Pages/Inventory_pages/InventoryHome/InventoryHomeCashback";
 import InventoryHomeStockIn from "../Pages/Inventory_pages/InventoryHome/InventoryHomeStockIn";
 import InventoryHomeMoveStock from "../Pages/Inventory_pages/InventoryHome/InventoryHomeMoveStock";
+import InventoryHomeLocation from "../Pages/Inventory_pages/InventoryHome/InventoryHomeLocation";
 
 export const router = createBrowserRouter([
   {
@@ -154,6 +155,10 @@ export const router = createBrowserRouter([
       {
         path:"/inventory/stock-in",
         element:<InventoryHomeStockIn/>
+      },
+      {
+        path:"/inventory/location",
+        element:<InventoryHomeLocation/>
       },
       {
         path:"/inventory/move-stock",

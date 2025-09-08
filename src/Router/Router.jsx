@@ -107,6 +107,7 @@ import CategoryPagesCreate from "../Pages/Settings_Pages/CategoryPages/CategoryP
 import PurchaseDetails from "../Pages/Inventory_pages/PurchaseDetails/PurchaseDetails";
 import InventoryHomeIndex from "../Pages/Inventory_pages/InventoryHome/InventoryHomeIndex";
 import InventoryHomePay from "../Pages/Inventory_pages/InventoryHome/InventoryHomePay";
+import InventoryHomeCashback from "../Pages/Inventory_pages/InventoryHome/InventoryHomeCashback";
 
 export const router = createBrowserRouter([
   {
@@ -143,6 +144,10 @@ export const router = createBrowserRouter([
       {
         path:"/inventory/pay",
         element:<InventoryHomePay/>
+      },
+      {
+        path:"/inventory/cashback",
+        element:<InventoryHomeCashback/>
       },
       //===================================//
       //============= Event Menu =============//

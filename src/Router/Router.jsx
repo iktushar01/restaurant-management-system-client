@@ -115,6 +115,7 @@ import InventoryHomeLocateById from "../Pages/Inventory_pages/InventoryHome/Inve
 import InventoryHomeStockOut from "../Pages/Inventory_pages/InventoryHome/InventoryHomeStockOut";
 import InventoryPurchase from "../Pages/Inventory_pages/InventoryPurchase/InventoryPurchase";
 import WaiterPageEditByID from "../Pages/Settings_Pages/Waiter_Pages/WaiterPageEditByID";
+import FoodPageRecipeAdd from "../Pages/Settings_Pages/FoodPages/FoodPageRecipeAdd";
 
 export const router = createBrowserRouter([
   {
@@ -500,6 +501,12 @@ export const router = createBrowserRouter([
         path: "/WorkPeriod/foods/index/edit/:id",
         element:<FoodPageEditByID/>
       },
+       {
+        path: "/WorkPeriod/foods/index/recipe/:id",
+        element:<FoodPageRecipeAdd/>
+      },
+      
+
       //=========================================
       {
         path: "/WorkPeriod/foodCategory/index",

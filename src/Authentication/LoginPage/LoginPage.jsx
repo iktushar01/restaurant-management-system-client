@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaLock, FaArrowRight } from 'react-icons/fa';
+import { FaUser, FaLock, FaArrowRight, FaInfoCircle } from 'react-icons/fa';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -99,6 +99,27 @@ const LoginPage = () => {
                 <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-200" />
               </button>
             </form>
+
+            {/* Demo Credentials Card */}
+            <div className="mt-6 bg-gradient-to-r from-blue-900 to-blue-800 border border-blue-400 border-opacity-50 rounded-lg p-4 shadow-lg">
+              <div className="flex items-start space-x-3">
+                <FaInfoCircle className="h-5 w-5 text-blue-300 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="text-sm font-semibold text-blue-200 mb-2">Demo Credentials</h3>
+                  <div className="space-y-1.5 text-sm">
+                    <div className="flex items-center">
+                      <span className="text-blue-300 font-medium w-24">Username:</span>
+                      <span className="text-white font-mono bg-blue-950 bg-opacity-50 px-2 py-1 rounded">user</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-blue-300 font-medium w-24">Password:</span>
+                      <span className="text-white font-mono bg-blue-950 bg-opacity-50 px-2 py-1 rounded">123456</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-blue-300 mt-2 italic">Use these credentials to explore the demo</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

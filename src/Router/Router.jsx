@@ -33,9 +33,7 @@ import ExpenseCreate from "../Pages/Expense_pages/ManageExpense/ExpenseCreate";
 import ExpenseEditById from "../Pages/Expense_pages/ManageExpense/ExpenseEditById";
 import DailyExpense from "../Pages/Expense_pages/DayWiseExpense/DailyExpense";
 import DailyExpenseDetails from "../Pages/Expense_pages/DayWiseExpense/DailyExpenseDetails";
-import AddEarningHeadingIndex from "../Pages/HR_Pages/AddEarningHeading/AddEarningHeadingIndex";
-import AddEarningHeadingCreate from "../Pages/HR_Pages/AddEarningHeading/AddEarningHeadingCreate";
-import AddEarningHeadingEdit from "../Pages/HR_Pages/AddEarningHeading/AddEarningHeadingEdit";
+import EarningHeadingIndex from "../Pages/HR_Pages/AddEarningHeading/EarningHeadingIndex";
 import PayRollDeductionHeadIndex from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadIndex";
 import PayRollDeductionHeadCreate from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadCreate";
 import PayRollDeductionHeadEdit from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadEdit";
@@ -223,15 +221,7 @@ export const router = createBrowserRouter([
       //======================================//
       {
         path: "/hr/earning-heading/Index",
-        element: <AddEarningHeadingIndex />,
-      },
-      {
-        path: "hr/earning-heading/Index/Create",
-        element: <AddEarningHeadingCreate />,
-      },
-      {
-        path: "hr/earning-heading/Index/Edit/:id",
-        element: <AddEarningHeadingEdit />,
+        element: <EarningHeadingIndex />,
       },
       //=====================================
       {

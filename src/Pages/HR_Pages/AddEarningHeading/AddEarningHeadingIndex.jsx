@@ -1,9 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
+import ReusableModal from "../../../Shared/ReusableModal/ReusableModal";
+import FormInput from "../../../Shared/FormInput/FromInput";
 
-const AddEarningHeadingIndex = () => {
+const EarningHeadingIndex = () => {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedEarningHead, setSelectedEarningHead] = useState(null);
+
+  const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm();
+
   // Corrected data structure for earning heads
   const earningHeads = [
     { ID: 1, name: "Basic Salary", description: "Basic monthly compensation" },
@@ -29,26 +37,55 @@ const AddEarningHeadingIndex = () => {
     },
   ];
 
+  const handleCreateModalClose = () => {
+    setIsCreateModalOpen(false);
+    reset();
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+    setSelectedEarningHead(null);
+    reset();
+  };
+
+  const handleEdit = (row) => {
+    setSelectedEarningHead(row);
+    setValue("earningHeadName", row.name);
+    setValue("description", row.description);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDelete = (row) => {
+    if (window.confirm(`Are you sure you want to delete "${row.name}"?`)) {
+      console.log("Delete:", row);
+      // Add your delete API call here
+    }
+  };
+
+  const onSubmitCreate = (data) => {
+    console.log("Create Earning Head:", data);
+    // Add your create API call here
+    handleCreateModalClose();
+  };
+
+  const onSubmitEdit = (data) => {
+    console.log("Edit Earning Head:", { ...data, id: selectedEarningHead.ID });
+    // Add your update API call here
+    handleEditModalClose();
+  };
+
   const actions = [
     {
       label: "Edit",
       icon: FaEdit,
-      className: "text-indigo-600 hover:text-indigo-900",
-      render: (row) => (
-        <Link
-          to={`/hr/earning-heading/Index/Edit/${row.ID}`}
-          className="flex items-center space-x-1"
-        >
-          <FaEdit />
-          <span>Edit</span>
-        </Link>
-      ),
+      className: "text-indigo-600 hover:text-indigo-900 cursor-pointer",
+      onClick: handleEdit,
     },
     {
       label: "Delete",
       icon: FaTrash,
-      className: "text-rose-600 hover:text-rose-900",
-      onClick: (row) => console.log("Delete:", row),
+      className: "text-rose-600 hover:text-rose-900 cursor-pointer",
+      onClick: handleDelete,
     },
   ];
 
@@ -63,12 +100,13 @@ const AddEarningHeadingIndex = () => {
             Manage your organization's earning heads
           </p>
         </div>
-        <Link to="Create" className="w-full sm:w-auto">
-          <button className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer text-sm sm:text-base">
-            <FaPlus className="mr-2" />
-            Create New
-          </button>
-        </Link>
+        <button 
+          onClick={() => setIsCreateModalOpen(true)}
+          className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer text-sm sm:text-base"
+        >
+          <FaPlus className="mr-2" />
+          Create New
+        </button>
       </div>
 
       {/* ✅ Reusable Table */}
@@ -82,16 +120,89 @@ const AddEarningHeadingIndex = () => {
           <p className="text-gray-500 mb-6">
             Get started by creating a new earning head
           </p>
-          <Link to="Create">
-            <button className="px-5 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 font-medium rounded-lg hover:from-amber-500 hover:to-yellow-600 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 inline-flex items-center">
-              <FaPlus className="mr-2" />
-              Create Earning Head
-            </button>
-          </Link>
+          <button 
+            onClick={() => setIsCreateModalOpen(true)}
+            className="px-5 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 font-medium rounded-lg hover:from-amber-500 hover:to-yellow-600 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 inline-flex items-center"
+          >
+            <FaPlus className="mr-2" />
+            Create Earning Head
+          </button>
         </div>
       )}
+
+      {/* Create Modal */}
+      <ReusableModal
+        isOpen={isCreateModalOpen}
+        onClose={handleCreateModalClose}
+        title="Add Earning Head"
+        subtitle="Fill in the details below to create a new earning head"
+        size="md"
+        footer={
+          <div className="flex justify-end space-x-3">
+            <button
+              onClick={handleCreateModalClose}
+              className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSubmit(onSubmitCreate)}
+              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
+            >
+              Submit
+            </button>
+          </div>
+        }
+      >
+        <form onSubmit={handleSubmit(onSubmitCreate)}>
+          <FormInput
+            label="Earning Head Name"
+            placeholder="e.g., Basic Salary, Overtime Pay, etc."
+            name="earningHeadName"
+            register={register}
+            rules={{ required: "Earning Head name is required" }}
+            errors={errors}
+          />
+        </form>
+      </ReusableModal>
+
+      {/* Edit Modal */}
+      <ReusableModal
+        isOpen={isEditModalOpen}
+        onClose={handleEditModalClose}
+        title="Edit Earning Head"
+        subtitle="Update the details of the earning head"
+        size="md"
+        footer={
+          <div className="flex justify-end space-x-3">
+            <button
+              onClick={handleEditModalClose}
+              className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSubmit(onSubmitEdit)}
+              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
+            >
+              Update Earning Head
+            </button>
+          </div>
+        }
+      >
+        <form onSubmit={handleSubmit(onSubmitEdit)}>
+          <FormInput
+            label="Earning Head Name"
+            placeholder="Enter earning head name"
+            name="earningHeadName"
+            register={register}
+            rules={{ required: "Earning head name is required" }}
+            errors={errors}
+          />
+        </form>
+      </ReusableModal>
     </div>
   );
 };
 
-export default AddEarningHeadingIndex;
+export default EarningHeadingIndex;

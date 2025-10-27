@@ -3,8 +3,6 @@ import LoginPage from "../Authentication/LoginPage/LoginPage";
 // import RestaurantDashboard from "../Layouts/RestaurantDashboard/RestaurantDashboard";
 import HrDesignationIndex from "../Pages/HR_Pages/HrDesignation/HrDesignationIndex";
 import MainLayout from "../Layouts/MainLayout/MainLayout";
-import HrDesignationCreate from "../Pages/HR_Pages/HrDesignation/HrDesignationCreate";
-import HrDesignationEditById from "../Pages/HR_Pages/HrDesignation/HrDesignationEditById";
 import BankInfoIndex from "../Pages/Bank_pages/Bank/BankInfoIndex";
 import BankInfoCreate from "../Pages/Bank_pages/Bank/BankInfoCreate";
 import BankInfoEditById from "../Pages/Bank_pages/Bank/BankInfoEditById";
@@ -35,8 +33,6 @@ import DailyExpense from "../Pages/Expense_pages/DayWiseExpense/DailyExpense";
 import DailyExpenseDetails from "../Pages/Expense_pages/DayWiseExpense/DailyExpenseDetails";
 import EarningHeadingIndex from "../Pages/HR_Pages/AddEarningHeading/EarningHeadingIndex";
 import PayRollDeductionHeadIndex from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadIndex";
-import PayRollDeductionHeadCreate from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadCreate";
-import PayRollDeductionHeadEdit from "../Pages/HR_Pages/PayRollDeductionHead/PayRollDeductionHeadEdit";
 import EmployeePayrollIndex from "../Pages/HR_Pages/EmployeePayroll/EmployeePayrollIndex";
 import EmployeeSalaryPayableIndex from "../Pages/HR_Pages/EmployeeSalaryPayable/EmployeeSalaryPayableIndex";
 import GrandSalaryPayableIndex from "../Pages/HR_Pages/GrandSalaryPayable/GrandSalaryPayableIndex";
@@ -210,14 +206,6 @@ export const router = createBrowserRouter([
         path: "hr/designation/Index",
         element: <HrDesignationIndex />,
       },
-      {
-        path: "hr/designation/Index/Create",
-        element: <HrDesignationCreate />,
-      },
-      {
-        path: "hr/designation/Index/Edit/:id",
-        element: <HrDesignationEditById />,
-      },
       //======================================//
       {
         path: "/hr/earning-heading/Index",
@@ -227,14 +215,6 @@ export const router = createBrowserRouter([
       {
         path: "/hr/deduction-heading/Index",
         element: <PayRollDeductionHeadIndex />,
-      },
-      {
-        path: "hr/deduction-heading/Index/Create",
-        element: <PayRollDeductionHeadCreate />,
-      },
-      {
-        path: "hr/deduction-heading/Edit/:id",
-        element: <PayRollDeductionHeadEdit />,
       },
       //======================================
       {

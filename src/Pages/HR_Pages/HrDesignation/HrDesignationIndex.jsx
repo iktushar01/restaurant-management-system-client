@@ -1,15 +1,24 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
-
+import ReusableModal from "../../../Shared/ReusableModal/ReusableModal";
+import ReusableButton from "../../../Shared/ReusableButton/ReusableButton";
+import PageBanner from "../../../Shared/PageBanner/PageBanner";
+import FormInput from "../../../Shared/FormInput/FromInput";
 
 const HrDesignationIndex = () => {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedDesignation, setSelectedDesignation] = useState(null);
+
+  const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm();
+
   const designations = [
-    { ID:1, name: "Admin", basic: "" },
-    { ID:2, name: "General Manager", basic: "23432" },
-    { ID:3, name: "Restaurant Walter", basic: "" },
-    { ID:4, name: "Software Engineer", basic: "2343234" },
+    { ID: 1, name: "Admin", basic: "" },
+    { ID: 2, name: "General Manager", basic: "23432" },
+    { ID: 3, name: "Restaurant Walter", basic: "" },
+    { ID: 4, name: "Software Engineer", basic: "2343234" },
   ];
 
   const columns = [
@@ -29,49 +38,75 @@ const HrDesignationIndex = () => {
     },
   ];
 
+  const handleCreateModalClose = () => {
+    setIsCreateModalOpen(false);
+    reset();
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+    setSelectedDesignation(null);
+    reset();
+  };
+
+  const handleEdit = (row) => {
+    setSelectedDesignation(row);
+    setValue("designation", row.name);
+    setValue("basicSalary", row.basic);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDelete = (row) => {
+    if (window.confirm(`Are you sure you want to delete "${row.name}"?`)) {
+      console.log("Delete:", row);
+      // Add your delete API call here
+    }
+  };
+
+  const onSubmitCreate = (data) => {
+    console.log("Create Designation:", data);
+    // Add your create API call here
+    handleCreateModalClose();
+  };
+
+  const onSubmitEdit = (data) => {
+    console.log("Edit Designation:", { ...data, id: selectedDesignation.ID });
+    // Add your update API call here
+    handleEditModalClose();
+  };
+
   const actions = [
     {
-    label: "Edit",
-    icon: FaEdit,
-    className: "text-indigo-600 hover:text-indigo-900",
-    render: (row) => (
-      <Link
-        to={`/hr/designation/Index/Edit/${row.ID}`}
-        className="flex items-center space-x-1"
-      >
-        <FaEdit />
-        <span>Edit</span>
-      </Link>
-    ),
-  },
+      label: "Edit",
+      icon: FaEdit,
+      className: "text-indigo-600 hover:text-indigo-900 cursor-pointer",
+      onClick: handleEdit,
+    },
     {
       label: "Delete",
       icon: FaTrash,
-      className: "text-rose-600 hover:text-rose-900",
-      onClick: (row) => console.log("Delete:", row),
+      className: "text-rose-600 hover:text-rose-900 cursor-pointer",
+      onClick: handleDelete,
     },
   ];
 
   return (
     <div className="p-6 max-w-6xl min-h-screen mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 bg-gray-50 sm:bg-gray-100 p-4 sm:p-6 rounded-xl">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-            Designations
-          </h1>
-          <p className="text-gray-500 text-sm sm:text-base mt-1">
-            Manage your organization's designations
-          </p>
-        </div>
-        <Link to="Create" className="w-full sm:w-auto">
-          <button className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer text-sm sm:text-base">
-            <FaPlus className="mr-2" />
-            Create New
-          </button>
-        </Link>
-      </div>
+      <PageBanner
+        title="Designations"
+        subtitle="Manage your organization's designations"
+        bgColor="from-blue-50 to-blue-100"
+      >
+        <ReusableButton
+          onClick={() => setIsCreateModalOpen(true)}
+          icon={FaPlus}
+          iconPosition="left"
+          variant="primary"
+        >
+          Create New
+        </ReusableButton>
+      </PageBanner>
 
-      {/* ✅ Reusable Table */}
       <ReusableTable columns={columns} data={designations} actions={actions} />
 
       {designations.length === 0 && (
@@ -82,14 +117,115 @@ const HrDesignationIndex = () => {
           <p className="text-gray-500 mb-6">
             Get started by creating a new designation
           </p>
-          <Link to="Create">
-            <button className="px-5 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 font-medium rounded-lg hover:from-amber-500 hover:to-yellow-600 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 inline-flex items-center">
-              <FaPlus className="mr-2" />
-              Create Designation
-            </button>
-          </Link>
+          <ReusableButton
+            onClick={() => setIsCreateModalOpen(true)}
+            icon={FaPlus}
+            variant="primary"
+          >
+            Create Designation
+          </ReusableButton>
         </div>
       )}
+
+      {/* Create Modal */}
+      <ReusableModal
+        isOpen={isCreateModalOpen}
+        onClose={handleCreateModalClose}
+        title="Add New Designation"
+        subtitle="Fill in the details below to create a new designation"
+        size="md"
+        footer={
+          <div className="flex justify-end space-x-3">
+            <ReusableButton
+              onClick={handleCreateModalClose}
+              variant="outline"
+            >
+              Cancel
+            </ReusableButton>
+            <ReusableButton
+              onClick={handleSubmit(onSubmitCreate)}
+              variant="primary"
+            >
+              Save Designation
+            </ReusableButton>
+          </div>
+        }
+      >
+        <form onSubmit={handleSubmit(onSubmitCreate)}>
+          <div className="grid grid-cols-1 gap-6">
+            <FormInput
+              label="Designation"
+              placeholder="e.g., Senior Software Engineer"
+              name="designation"
+              register={register}
+              rules={{ required: "Designation name is required" }}
+              errors={errors}
+            />
+            <FormInput
+              label="Basic Salary"
+              placeholder="e.g., 50000"
+              type="number"
+              name="basicSalary"
+              register={register}
+              rules={{
+                required: "Basic Salary is required",
+                min: { value: 0, message: "Salary must be positive" },
+              }}
+              errors={errors}
+            />
+          </div>
+        </form>
+      </ReusableModal>
+
+      {/* Edit Modal */}
+      <ReusableModal
+        isOpen={isEditModalOpen}
+        onClose={handleEditModalClose}
+        title="Update Designation"
+        subtitle="Update the designation details"
+        size="md"
+        footer={
+          <div className="flex justify-end space-x-3">
+            <ReusableButton
+              onClick={handleEditModalClose}
+              variant="outline"
+            >
+              Cancel
+            </ReusableButton>
+            <ReusableButton
+              onClick={handleSubmit(onSubmitEdit)}
+              variant="primary"
+            >
+              Update Designation
+            </ReusableButton>
+          </div>
+        }
+      >
+        <form onSubmit={handleSubmit(onSubmitEdit)}>
+          <div className="grid grid-cols-1 gap-6">
+            <FormInput
+              label="Designation"
+              placeholder="e.g., Senior Software Engineer"
+              name="designation"
+              register={register}
+              rules={{ required: "Designation name is required" }}
+              errors={errors}
+            />
+            <FormInput
+              label="Basic Salary"
+              placeholder="e.g., 50000"
+              type="number"
+              name="basicSalary"
+              register={register}
+              rules={{
+                required: "Basic Salary is required",
+                min: { value: 0, message: "Salary must be positive" },
+              }}
+              errors={errors}
+            />
+          </div>
+        </form>
+      </ReusableModal>
     </div>
   );
 };

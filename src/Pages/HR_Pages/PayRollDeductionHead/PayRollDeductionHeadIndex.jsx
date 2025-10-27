@@ -1,69 +1,101 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
+import ReusableModal from "../../../Shared/ReusableModal/ReusableModal";
+import ReusableButton from "../../../Shared/ReusableButton/ReusableButton";
+import PageBanner from "../../../Shared/PageBanner/PageBanner";
+import FormInput from "../../../Shared/FormInput/FromInput";
 
 const PayRollDeductionHeadIndex = () => {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedDeductionHead, setSelectedDeductionHead] = useState(null);
+
+  const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm();
+
   const deductionHeads = [
-    { ID: 1, name: "adfasdf" },
-    // Add more deduction heads as needed
+    { ID: 1, name: "Tax Deduction" },
+    { ID: 2, name: "PF Deduction" },
+    { ID: 3, name: "Loan Deduction" },
   ];
 
   const columns = [
     {
-      header: "Earning_Head_Name",
+      header: "Deduction Head Name",
       accessor: "name",
     },
   ];
+
+  const handleCreateModalClose = () => {
+    setIsCreateModalOpen(false);
+    reset();
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+    setSelectedDeductionHead(null);
+    reset();
+  };
+
+  const handleEdit = (row) => {
+    setSelectedDeductionHead(row);
+    setValue("deductionHeadName", row.name);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDelete = (row) => {
+    if (window.confirm(`Are you sure you want to delete "${row.name}"?`)) {
+      console.log("Delete:", row);
+      // Add your delete API call here
+    }
+  };
+
+  const onSubmitCreate = (data) => {
+    console.log("Create Deduction Head:", data);
+    // Add your create API call here
+    handleCreateModalClose();
+  };
+
+  const onSubmitEdit = (data) => {
+    console.log("Edit Deduction Head:", { ...data, id: selectedDeductionHead.ID });
+    // Add your update API call here
+    handleEditModalClose();
+  };
 
   const actions = [
     {
       label: "Edit",
       icon: FaEdit,
-      className: "text-indigo-600 hover:text-indigo-900",
-      render: (row) => (
-        <Link
-          to={`/hr/deduction-heading/Edit/${row.ID}`}
-          className="flex items-center space-x-1"
-        >
-          <FaEdit />
-          <span>Edit</span>
-        </Link>
-      ),
+      className: "text-indigo-600 hover:text-indigo-900 cursor-pointer",
+      onClick: handleEdit,
     },
     {
       label: "Delete",
       icon: FaTrash,
-      className: "text-rose-600 hover:text-rose-900",
-      onClick: (row) => console.log("Delete:", row),
+      className: "text-rose-600 hover:text-rose-900 cursor-pointer",
+      onClick: handleDelete,
     },
   ];
 
   return (
     <div className="p-6 max-w-6xl min-h-screen mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 bg-gray-50 sm:bg-gray-100 p-4 sm:p-6 rounded-xl">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-            Deduction Head
-          </h1>
-          <p className="text-gray-500 text-sm sm:text-base mt-1">
-            Manage your organization's deduction heads
-          </p>
-        </div>
-        <Link to="Create" className="w-full sm:w-auto">
-          <button className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer text-sm sm:text-base">
-            <FaPlus className="mr-2" />
-            Create New
-          </button>
-        </Link>
-      </div>
+      <PageBanner
+        title="Deduction Head"
+        subtitle="Manage your organization's deduction heads"
+        bgColor="from-purple-50 to-purple-100"
+      >
+        <ReusableButton
+          onClick={() => setIsCreateModalOpen(true)}
+          icon={FaPlus}
+          iconPosition="left"
+          variant="primary"
+        >
+          Create New
+        </ReusableButton>
+      </PageBanner>
 
-      {/* ✅ Reusable Table */}
-      <ReusableTable 
-        columns={columns} 
-        data={deductionHeads} 
-        actions={actions} 
-      />
+      <ReusableTable columns={columns} data={deductionHeads} actions={actions} />
 
       {deductionHeads.length === 0 && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 md:p-12 text-center mt-8">
@@ -73,14 +105,87 @@ const PayRollDeductionHeadIndex = () => {
           <p className="text-gray-500 mb-6">
             Get started by creating a new deduction head
           </p>
-          <Link to="Create">
-            <button className="px-5 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 font-medium rounded-lg hover:from-amber-500 hover:to-yellow-600 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 inline-flex items-center">
-              <FaPlus className="mr-2" />
-              Create Deduction Head
-            </button>
-          </Link>
+          <ReusableButton
+            onClick={() => setIsCreateModalOpen(true)}
+            icon={FaPlus}
+            variant="primary"
+          >
+            Create Deduction Head
+          </ReusableButton>
         </div>
       )}
+
+      {/* Create Modal */}
+      <ReusableModal
+        isOpen={isCreateModalOpen}
+        onClose={handleCreateModalClose}
+        title="Add Deduction Head"
+        subtitle="Fill in the details below to create a new deduction head"
+        size="md"
+        footer={
+          <div className="flex justify-end space-x-3">
+            <ReusableButton
+              onClick={handleCreateModalClose}
+              variant="outline"
+            >
+              Cancel
+            </ReusableButton>
+            <ReusableButton
+              onClick={handleSubmit(onSubmitCreate)}
+              variant="primary"
+            >
+              Submit
+            </ReusableButton>
+          </div>
+        }
+      >
+        <form onSubmit={handleSubmit(onSubmitCreate)}>
+          <FormInput
+            label="Deduction Head Name"
+            placeholder="Enter deduction head name"
+            name="deductionHeadName"
+            register={register}
+            rules={{ required: "Deduction head name is required" }}
+            errors={errors}
+          />
+        </form>
+      </ReusableModal>
+
+      {/* Edit Modal */}
+      <ReusableModal
+        isOpen={isEditModalOpen}
+        onClose={handleEditModalClose}
+        title="Edit Deduction Head"
+        subtitle="Update the details of the deduction head"
+        size="md"
+        footer={
+          <div className="flex justify-end space-x-3">
+            <ReusableButton
+              onClick={handleEditModalClose}
+              variant="outline"
+            >
+              Cancel
+            </ReusableButton>
+            <ReusableButton
+              onClick={handleSubmit(onSubmitEdit)}
+              variant="primary"
+            >
+              Update Deduction Head
+            </ReusableButton>
+          </div>
+        }
+      >
+        <form onSubmit={handleSubmit(onSubmitEdit)}>
+          <FormInput
+            label="Deduction Head Name"
+            placeholder="Enter deduction head name"
+            name="deductionHeadName"
+            register={register}
+            rules={{ required: "Deduction head name is required" }}
+            errors={errors}
+          />
+        </form>
+      </ReusableModal>
     </div>
   );
 };

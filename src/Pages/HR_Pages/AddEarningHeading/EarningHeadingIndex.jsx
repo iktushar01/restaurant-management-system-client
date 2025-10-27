@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
 import ReusableModal from "../../../Shared/ReusableModal/ReusableModal";
+import ReusableButton from "../../../Shared/ReusableButton/ReusableButton";
+import PageBanner from "../../../Shared/PageBanner/PageBanner";
 import FormInput from "../../../Shared/FormInput/FromInput";
 
 const EarningHeadingIndex = () => {
@@ -91,23 +93,20 @@ const EarningHeadingIndex = () => {
 
   return (
     <div className="p-6 max-w-6xl min-h-screen mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 bg-gray-50 sm:bg-gray-100 p-4 sm:p-6 rounded-xl">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-            Earning Head
-          </h1>
-          <p className="text-gray-500 text-sm sm:text-base mt-1">
-            Manage your organization's earning heads
-          </p>
-        </div>
-        <button 
+      <PageBanner
+        title="Earning Head"
+        subtitle="Manage your organization's earning heads"
+        bgColor="from-amber-50 to-amber-100"
+      >
+        <ReusableButton
           onClick={() => setIsCreateModalOpen(true)}
-          className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer text-sm sm:text-base"
+          icon={FaPlus}
+          iconPosition="left"
+          variant="primary"
         >
-          <FaPlus className="mr-2" />
           Create New
-        </button>
-      </div>
+        </ReusableButton>
+      </PageBanner>
 
       {/* ✅ Reusable Table */}
       <ReusableTable columns={columns} data={earningHeads} actions={actions} />
@@ -120,13 +119,13 @@ const EarningHeadingIndex = () => {
           <p className="text-gray-500 mb-6">
             Get started by creating a new earning head
           </p>
-          <button 
+          <ReusableButton
             onClick={() => setIsCreateModalOpen(true)}
-            className="px-5 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 font-medium rounded-lg hover:from-amber-500 hover:to-yellow-600 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 inline-flex items-center"
+            icon={FaPlus}
+            variant="primary"
           >
-            <FaPlus className="mr-2" />
             Create Earning Head
-          </button>
+          </ReusableButton>
         </div>
       )}
 
@@ -139,18 +138,18 @@ const EarningHeadingIndex = () => {
         size="md"
         footer={
           <div className="flex justify-end space-x-3">
-            <button
+            <ReusableButton
               onClick={handleCreateModalClose}
-              className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2"
+              variant="outline"
             >
               Cancel
-            </button>
-            <button
+            </ReusableButton>
+            <ReusableButton
               onClick={handleSubmit(onSubmitCreate)}
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
+              variant="primary"
             >
               Submit
-            </button>
+            </ReusableButton>
           </div>
         }
       >
@@ -175,18 +174,18 @@ const EarningHeadingIndex = () => {
         size="md"
         footer={
           <div className="flex justify-end space-x-3">
-            <button
+            <ReusableButton
               onClick={handleEditModalClose}
-              className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2"
+              variant="outline"
             >
               Cancel
-            </button>
-            <button
+            </ReusableButton>
+            <ReusableButton
               onClick={handleSubmit(onSubmitEdit)}
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
+              variant="primary"
             >
               Update Earning Head
-            </button>
+            </ReusableButton>
           </div>
         }
       >

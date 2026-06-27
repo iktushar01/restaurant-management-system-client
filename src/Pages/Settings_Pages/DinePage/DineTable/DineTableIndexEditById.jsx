@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
-import { dineTableService } from "../../../services/dineTableService";
-import { dineLocationService } from "../../../services/dineLocationService";
+import { dineTableService } from "../../../../services/dineTableService";
+import { dineLocationService } from "../../../../services/dineLocationService";
 
 const STATUS_TO_API = { Vacant: "AVAILABLE", Occupied: "OCCUPIED", Reserved: "RESERVED" };
 const STATUS_FROM_API = { AVAILABLE: "Vacant", OCCUPIED: "Occupied", RESERVED: "Reserved" };

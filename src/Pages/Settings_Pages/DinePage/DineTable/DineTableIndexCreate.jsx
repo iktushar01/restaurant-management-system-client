@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
-import { dineTableService } from "../../../services/dineTableService";
-import { dineLocationService } from "../../../services/dineLocationService";
+import { dineTableService } from "../../../../services/dineTableService";
+import { dineLocationService } from "../../../../services/dineLocationService";
 
 const DineTableIndexCreate = () => {
   const navigate = useNavigate();

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
-import { dineLocationService } from "../../../services/dineLocationService";
+import { dineLocationService } from "../../../../services/dineLocationService";
 
 const DineLocationIndexEditByID = () => {
   const { id } = useParams();

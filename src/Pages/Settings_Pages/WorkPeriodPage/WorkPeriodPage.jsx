@@ -74,7 +74,7 @@ const WorkPeriodPage = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 bg-card p-4 sm:p-6 rounded-xl shadow-sm border border-border">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground flex items-center">
-            <FaClock className="mr-3 text-amber-500" />
+            <FaClock className="mr-3 text-primary" />
             Recent Work Periods
           </h1>
           <p className="text-muted-foreground text-sm sm:text-base mt-1">
@@ -99,7 +99,7 @@ const WorkPeriodPage = () => {
 
       {!loading && workPeriods.length === 0 && (
         <div className="bg-card rounded-xl shadow-sm border border-border p-12 text-center mt-8">
-          <FaClock className="text-amber-500 text-3xl mx-auto mb-4" />
+          <FaClock className="text-primary text-3xl mx-auto mb-4" />
           <h3 className="text-lg font-medium text-foreground mb-2">No work periods found</h3>
           <button onClick={handleStart} className="px-5 py-2.5 bg-amber-500 text-primary-foreground font-medium rounded-lg inline-flex items-center mt-4">
             <FaPlus className="mr-2" /> Start Work Period

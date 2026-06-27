@@ -83,7 +83,7 @@ const InventoryHomeIndex = () => {
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
         <Link to="/inventory/pay">
-          <button className="w-full flex flex-col items-center justify-center px-4 py-3 bg-gradient-to-r bg-primary text-primary-foreground text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm">
+          <button className="w-full flex flex-col items-center justify-center px-4 py-3 bg-gradient-to-r bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm">
             <FaMoneyBillWave className="text-xl mb-1" /> Pay
           </button>
         </Link>
@@ -98,7 +98,7 @@ const InventoryHomeIndex = () => {
           </button>
         </Link>
         <Link to="/inventory/move-stock">
-          <button className="w-full flex flex-col items-center justify-center px-4 py-3 bg-gradient-to-r bg-primary text-primary-foreground text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm">
+          <button className="w-full flex flex-col items-center justify-center px-4 py-3 bg-gradient-to-r bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm">
             <FaExchangeAlt className="text-xl mb-1" /> Move Stock
           </button>
         </Link>
@@ -108,7 +108,7 @@ const InventoryHomeIndex = () => {
           </button>
         </Link>
         <Link to="/inventory/purchase">
-          <button className="w-full flex flex-col items-center justify-center px-4 py-3 bg-gradient-to-r bg-primary text-primary-foreground text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm">
+          <button className="w-full flex flex-col items-center justify-center px-4 py-3 bg-gradient-to-r bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm">
             <FaFilePdf className="text-xl mb-1" /> Purchase
           </button>
         </Link>

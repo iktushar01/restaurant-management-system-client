@@ -18,7 +18,6 @@ const InventoryStockLocationIndex = () => {
   );
 
   const handleDeleteLocation = async (id) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this stock location?" });
     if (!ok) return;
     try {
@@ -27,7 +26,6 @@ const InventoryStockLocationIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete");
       }
-    }
   };
 
   const columns = [

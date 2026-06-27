@@ -34,7 +34,6 @@ const WaiterPageIndex = () => {
   useEffect(() => { fetchWaiters(); }, [fetchWaiters]);
 
   const handleDeleteWaiter = async (id) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this waiter?" });
     if (!ok) return;
     try {
@@ -43,7 +42,6 @@ const WaiterPageIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete waiter");
       }
-    }
   };
 
   const columns = [

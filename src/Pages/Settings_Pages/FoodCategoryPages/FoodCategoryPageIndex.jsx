@@ -42,7 +42,6 @@ const FoodCategoryPageIndex = () => {
   const startIndex = totalEntries > 0 ? (currentPage - 1) * entriesToShow : 0;
 
   const handleDeleteCategory = async (id) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this category?" });
     if (!ok) return;
     try {
@@ -51,7 +50,6 @@ const FoodCategoryPageIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete category");
       }
-    }
   };
 
   const columns = [

@@ -51,7 +51,6 @@ const PayRollDeductionHeadIndex = () => {
   };
 
   const handleDelete = async (row) => {
-    {
     const ok = await confirm({ description: `Are you sure you want to delete "${row.name}"?` });
     if (!ok) return;
     try {
@@ -60,7 +59,6 @@ const PayRollDeductionHeadIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete deduction head");
       }
-    }
   };
 
   const onSubmitCreate = async (data) => {

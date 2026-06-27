@@ -61,7 +61,6 @@ const EarningHeadingIndex = () => {
   };
 
   const handleDelete = async (row) => {
-    {
     const ok = await confirm({ description: `Are you sure you want to delete "${row.name}"?` });
     if (!ok) return;
     try {
@@ -70,7 +69,6 @@ const EarningHeadingIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete earning head");
       }
-    }
   };
 
   const onSubmitCreate = async (data) => {

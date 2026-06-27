@@ -99,7 +99,7 @@ const FoodPageRecipeAdd = () => {
         {/* Raw Materials */}
         <div className="col-span-1 bg-card rounded-xl shadow-md p-5">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-foreground">
-            <FaShoppingBasket className="text-cyan-500" /> Raw Materials
+            <FaShoppingBasket className="text-primary" /> Raw Materials
           </h2>
           <div className="space-y-3">
             {loading ? (
@@ -107,14 +107,14 @@ const FoodPageRecipeAdd = () => {
             ) : rawMaterials.length === 0 ? (
               <p className="text-muted-foreground text-center py-4">No inventory items found</p>
             ) : rawMaterials.map((item) => (
-              <div key={item.id} className="flex justify-between items-center p-3 bg-muted/40 rounded-lg border border-gray-100 hover:bg-cyan-50 transition-colors">
+              <div key={item.id} className="flex justify-between items-center p-3 bg-muted/40 rounded-lg border border-border hover:bg-primary/5 transition-colors">
                 <div>
                   <h3 className="font-medium text-foreground">{item.name}</h3>
                   <p className="text-sm text-muted-foreground">{item.unit} • ৳ {item.price}</p>
                 </div>
                 <button
                   onClick={() => addItem(item)}
-                  className="bg-cyan-500 text-primary-foreground p-2 rounded-full hover:bg-cyan-600 transition-colors shadow-sm hover:shadow-md"
+                  className="bg-primary text-primary-foreground p-2 rounded-full hover:bg-primary/90 transition-colors shadow-sm hover:shadow-md"
                 >
                   <FaPlus />
                 </button>
@@ -132,14 +132,14 @@ const FoodPageRecipeAdd = () => {
             </h2>
             {selectedItems.length === 0 ? (
               <div className="text-center py-8 bg-muted/40 rounded-lg">
-                <FaShoppingBasket className="text-gray-300 text-4xl mx-auto mb-3" />
+                <FaShoppingBasket className="text-muted-foreground text-4xl mx-auto mb-3" />
                 <p className="text-muted-foreground">No ingredients selected. Add items from the raw materials list.</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b-2 border-gray-100">
+                    <tr className="border-b-2 border-border">
                       <th className="text-left p-3 font-medium text-muted-foreground">Item</th>
                       <th className="text-left p-3 font-medium text-muted-foreground">Quantity</th>
                       <th className="text-left p-3 font-medium text-muted-foreground">Unit</th>
@@ -149,13 +149,13 @@ const FoodPageRecipeAdd = () => {
                   </thead>
                   <tbody>
                     {selectedItems.map((item) => (
-                      <tr key={item.id} className="border-b border-gray-100 hover:bg-primary/5 transition-colors">
+                      <tr key={item.id} className="border-b border-border hover:bg-primary/5 transition-colors">
                         <td className="p-3 font-medium">{item.name}</td>
                         <td className="p-3">
                           <div className="flex items-center">
                             <button 
                               onClick={() => adjustQuantity(item.id, -1)}
-                              className="bg-gray-200 hover:bg-gray-300 p-1 rounded-l transition-colors"
+                              className="bg-muted hover:bg-muted/80 p-1 rounded-l transition-colors"
                             >
                               <FaMinus size={10} />
                             </button>
@@ -168,7 +168,7 @@ const FoodPageRecipeAdd = () => {
                             />
                             <button 
                               onClick={() => adjustQuantity(item.id, 1)}
-                              className="bg-gray-200 hover:bg-gray-300 p-1 rounded-r transition-colors"
+                              className="bg-muted hover:bg-muted/80 p-1 rounded-r transition-colors"
                             >
                               <FaPlus size={10} />
                             </button>
@@ -196,7 +196,7 @@ const FoodPageRecipeAdd = () => {
           {/* Pricing */}
           <div className="bg-card rounded-xl shadow-md p-5">
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-foreground">
-              <FaCoins className="text-yellow-500" /> Pricing & Profitability
+              <FaCoins className="text-primary" /> Pricing & Profitability
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-4">
@@ -208,7 +208,7 @@ const FoodPageRecipeAdd = () => {
                     <span className="absolute left-3 top-2 text-muted-foreground">৳</span>
                     <input
                       type="number"
-                      className="pl-8 w-full border border-border p-2 rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300"
+                      className="pl-8 w-full border border-border p-2 rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring"
                       value={otherCost}
                       onChange={(e) => setOtherCost(e.target.value)}
                     />
@@ -223,7 +223,7 @@ const FoodPageRecipeAdd = () => {
                     <span className="absolute left-3 top-2 text-muted-foreground">৳</span>
                     <input
                       type="number"
-                      className="pl-8 w-full border border-border p-2 rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300"
+                      className="pl-8 w-full border border-border p-2 rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring"
                       value={salePrice}
                       onChange={(e) => setSalePrice(Number(e.target.value))}
                     />
@@ -231,7 +231,7 @@ const FoodPageRecipeAdd = () => {
                 </div>
               </div>
               
-              <div className="bg-primary/5 p-4 rounded-lg border border-blue-100">
+              <div className="bg-primary/5 p-4 rounded-lg border border-border">
                 <div className="flex justify-between items-center py-2 border-b border-border">
                   <span className="text-muted-foreground">Total Item Cost</span>
                   <span className="font-medium">৳ {totalItemCost.toFixed(2)}</span>

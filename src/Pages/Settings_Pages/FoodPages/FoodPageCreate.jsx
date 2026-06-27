@@ -304,7 +304,7 @@ const FoodPageCreate = () => {
                   <input
                     type="checkbox"
                     id="package"
-                    className="h-4 w-4 text-amber-500 focus-visible:ring-ring border-border rounded"
+                    className="h-4 w-4 text-primary focus-visible:ring-ring border-border rounded"
                     {...register("package")}
                   />
                   <label htmlFor="package" className="ml-2 block text-sm text-foreground">
@@ -317,7 +317,7 @@ const FoodPageCreate = () => {
                     type="checkbox"
                     id="availability"
                     defaultChecked
-                    className="h-4 w-4 text-amber-500 focus-visible:ring-ring border-border rounded"
+                    className="h-4 w-4 text-primary focus-visible:ring-ring border-border rounded"
                     {...register("availability")}
                   />
                   <label htmlFor="availability" className="ml-2 block text-sm text-foreground">
@@ -329,7 +329,7 @@ const FoodPageCreate = () => {
                   <input
                     type="checkbox"
                     id="vatApplicable"
-                    className="h-4 w-4 text-amber-500 focus-visible:ring-ring border-border rounded"
+                    className="h-4 w-4 text-primary focus-visible:ring-ring border-border rounded"
                     {...register("vatApplicable")}
                   />
                   <label htmlFor="vatApplicable" className="ml-2 block text-sm text-foreground">

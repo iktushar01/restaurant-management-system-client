@@ -259,7 +259,7 @@ const FoodMenuTable = ({ onAddItem }) => {
           <div className="col-span-full text-center py-12 text-muted-foreground">Loading menu...</div>
         ) : filteredItems.length === 0 ? (
           <div className="col-span-full text-center py-12 bg-muted/40 rounded-2xl">
-            <div className="w-24 h-24 mx-auto bg-gray-200 rounded-full flex items-center justify-center mb-4">
+            <div className="w-24 h-24 mx-auto bg-muted rounded-full flex items-center justify-center mb-4">
               <FaSearch className="text-4xl text-muted-foreground" />
             </div>
             <h3 className="text-xl font-semibold text-foreground mb-2">No items found</h3>
@@ -275,7 +275,7 @@ const FoodMenuTable = ({ onAddItem }) => {
           filteredItems.map((food) => (
             <div
               key={food.id}
-              className="bg-card rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col"
+              className="bg-card rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border border-border flex flex-col"
             >
               {/* Food Image */}
               <div className="relative h-40 overflow-hidden">
@@ -297,13 +297,13 @@ const FoodMenuTable = ({ onAddItem }) => {
                 <h3 className="font-semibold text-foreground mb-1 line-clamp-1">{food.name}</h3>
                 <p className="text-sm text-muted-foreground mb-3 line-clamp-1">{food.category}</p>
                 <div className="flex justify-between items-center mt-4">
-                  <span className="text-lg font-bold text-blue-600">
+                  <span className="text-lg font-bold text-primary">
                     ฿{food.price.toFixed(2)}
                   </span>
                   <button
                     id={`add-btn-${food.id}`}
                     onClick={() => handleAddItem(food)}
-                    className="px-3 py-2 bg-gradient-to-r bg-primary text-primary-foreground text-primary-foreground rounded-full text-sm hover:bg-primary/90 transition-all flex items-center shadow-md hover:shadow-lg"
+                    className="px-3 py-2 bg-gradient-to-r bg-primary text-primary-foreground rounded-full text-sm hover:bg-primary/90 transition-all flex items-center shadow-md hover:shadow-lg"
                   >
                     <FaPlus/>
                   </button>

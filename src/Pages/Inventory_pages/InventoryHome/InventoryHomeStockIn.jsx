@@ -62,7 +62,7 @@ const InventoryHomeStockIn = () => {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-foreground mb-1">Item</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300 outline-none"
+              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none"
                 {...register("itemId", { required: "Item is required" })}>
                 <option value="">--Select Item--</option>
                 {items.map((item) => (
@@ -74,7 +74,7 @@ const InventoryHomeStockIn = () => {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Stock Location</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300 outline-none"
+              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none"
                 {...register("locationId", { required: "Stock location is required" })}>
                 <option value="">--Select Location--</option>
                 {stockLocations.map((loc) => (
@@ -86,14 +86,14 @@ const InventoryHomeStockIn = () => {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Quantity</label>
-              <input type="number" step="0.01" min="0.01" className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300 outline-none"
+              <input type="number" step="0.01" min="0.01" className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none"
                 {...register("quantity", { required: "Quantity is required", min: { value: 0.01, message: "Must be greater than 0" } })} />
               {errors.quantity && <p className="mt-1 text-sm text-destructive">{errors.quantity.message}</p>}
             </div>
 
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-foreground mb-1">Note</label>
-              <textarea className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300 outline-none" rows={3} placeholder="Optional note" {...register("note")} />
+              <textarea className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none" rows={3} placeholder="Optional note" {...register("note")} />
             </div>
           </div>
 

@@ -313,7 +313,7 @@ const PropertyInformation = () => {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="flex items-center px-6 py-3 bg-gradient-to-r bg-primary text-primary-foreground text-primary-foreground font-medium rounded-xl hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-60"
+                    className="flex items-center px-6 py-3 bg-gradient-to-r bg-primary text-primary-foreground font-medium rounded-xl hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-60"
                   >
                     <FiSave className="mr-2" />
                     {submitting ? 'Saving...' : 'Update Information'}

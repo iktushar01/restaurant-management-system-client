@@ -36,7 +36,6 @@ const DineTableIndex = () => {
   const startIndex = totalEntries > 0 ? (currentPage - 1) * entriesToShow : 0;
 
   const handleDeleteTable = async (id) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this table?" });
     if (!ok) return;
     try {
@@ -45,7 +44,6 @@ const DineTableIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete table");
       }
-    }
   };
 
   const columns = [
@@ -73,8 +71,8 @@ const DineTableIndex = () => {
           row.status === "Vacant" 
             ? "bg-success/10 text-success" 
             : row.status === "Occupied" 
-            ? "bg-destructive/10 text-red-800" 
-            : "bg-yellow-100 text-yellow-800"
+            ? "bg-destructive/10 text-destructive" 
+            : "bg-primary/10 text-primary-foreground"
         }`}>
           {row.status}
         </span>

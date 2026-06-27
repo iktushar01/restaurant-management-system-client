@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
 import { toast } from "sonner";
 import { orderService } from "../../services/orderService";
 
@@ -49,7 +48,7 @@ const OrderSelectionTable = ({ selectedItems, setSelectedItems, orderDetails, on
         })),
       });
 
-      toast.error("Order placed successfully!");
+      toast.success("Order placed successfully!");
       setSelectedItems([]);
       onOrderPlaced?.();
     } catch (err) {
@@ -64,7 +63,7 @@ const OrderSelectionTable = ({ selectedItems, setSelectedItems, orderDetails, on
       toast.error("No items to print!");
       return;
     }
-    toast.error("KOT printed successfully!");
+    toast.success("KOT printed successfully!");
   };
 
   return (
@@ -127,10 +126,10 @@ const OrderSelectionTable = ({ selectedItems, setSelectedItems, orderDetails, on
         <div className="flex justify-between items-center mb-6">
           <div className="text-lg">
             <span className="text-muted-foreground">Total:</span>
-            <span className="ml-2 font-bold text-xl text-blue-600">฿{totalPrice.toFixed(2)}</span>
+            <span className="ml-2 font-bold text-xl text-primary">฿{totalPrice.toFixed(2)}</span>
           </div>
           <div className="flex space-x-3">
-            <button onClick={handlePrintKOT} className="px-5 py-2.5 bg-gray-600 text-primary-foreground rounded-lg hover:bg-gray-700 font-medium">Print KOT</button>
+            <button onClick={handlePrintKOT} className="px-5 py-2.5 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 font-medium">Print KOT</button>
             <button onClick={handlePlaceOrder} disabled={submitting} className="px-5 py-2.5 bg-blue-600 text-primary-foreground rounded-lg hover:bg-blue-700 font-medium disabled:opacity-60">
               {submitting ? "Placing..." : "Place Order"}
             </button>

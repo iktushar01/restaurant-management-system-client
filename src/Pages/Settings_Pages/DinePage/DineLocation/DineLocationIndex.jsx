@@ -36,7 +36,6 @@ const DineLocationIndex = () => {
   const startIndex = totalEntries > 0 ? (currentPage - 1) * entriesToShow : 0;
 
   const handleDeleteLocation = async (id) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this location?" });
     if (!ok) return;
     try {
@@ -45,7 +44,6 @@ const DineLocationIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete location");
       }
-    }
   };
 
   const columns = [

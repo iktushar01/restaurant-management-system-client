@@ -25,7 +25,6 @@ const EmployeePayRollEarningDeductionIndex = () => {
   );
 
   const handleDelete = async (recordId) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this deduction record?" });
     if (!ok) return;
     try {
@@ -34,7 +33,6 @@ const EmployeePayRollEarningDeductionIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete deduction record");
       }
-    }
   };
 
   const columns = [

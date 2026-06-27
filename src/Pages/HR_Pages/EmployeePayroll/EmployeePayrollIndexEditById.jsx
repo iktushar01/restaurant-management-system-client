@@ -219,7 +219,7 @@ const EmployeePayrollIndexEditById = () => {
                   id="isSoftwareUser"
                   {...register("isSoftwareUser")}
                   onChange={handleSoftwareUserToggle}
-                  className="h-4 w-4 text-amber-500 focus-visible:ring-ring border-border rounded"
+                  className="h-4 w-4 text-primary focus-visible:ring-ring border-border rounded"
                 />
                 <label
                   htmlFor="isSoftwareUser"

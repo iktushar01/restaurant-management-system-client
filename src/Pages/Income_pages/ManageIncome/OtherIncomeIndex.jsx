@@ -18,7 +18,6 @@ const OtherIncomeIndex = () => {
   );
 
   const handleDelete = async (id) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this income record?" });
     if (!ok) return;
     try {
@@ -27,7 +26,6 @@ const OtherIncomeIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete");
       }
-    }
   };
 
   const columns = [

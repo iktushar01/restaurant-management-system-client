@@ -355,7 +355,7 @@ const FoodPageEditByID = () => {
                   <input
                     type="checkbox"
                     id="package"
-                    className="h-4 w-4 text-amber-500 focus-visible:ring-ring border-border rounded"
+                    className="h-4 w-4 text-primary focus-visible:ring-ring border-border rounded"
                     {...register("package")}
                   />
                   <label
@@ -370,7 +370,7 @@ const FoodPageEditByID = () => {
                   <input
                     type="checkbox"
                     id="availability"
-                    className="h-4 w-4 text-amber-500 focus-visible:ring-ring border-border rounded"
+                    className="h-4 w-4 text-primary focus-visible:ring-ring border-border rounded"
                     {...register("availability")}
                   />
                   <label
@@ -385,7 +385,7 @@ const FoodPageEditByID = () => {
                   <input
                     type="checkbox"
                     id="vatApplicable"
-                    className="h-4 w-4 text-amber-500 focus-visible:ring-ring border-border rounded"
+                    className="h-4 w-4 text-primary focus-visible:ring-ring border-border rounded"
                     {...register("vatApplicable")}
                   />
                   <label

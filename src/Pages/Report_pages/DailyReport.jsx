@@ -34,7 +34,7 @@ const DailyStatement = () => {
   const financialSummary = report?.financialSummary || {};
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-6">
+    <div className="min-h-screen bg-background p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8 bg-primary/10 p-6 rounded-lg shadow">
@@ -69,7 +69,7 @@ const DailyStatement = () => {
               </button>
             </div>
             <div className="flex flex-col justify-end">
-              <button className="flex items-center justify-center bg-gray-800 text-primary-foreground px-4 py-3 rounded-lg hover:bg-gray-900 transition-colors w-full shadow-md">
+              <button className="flex items-center justify-center bg-primary text-primary-foreground px-4 py-3 rounded-lg hover:bg-primary/90 transition-colors w-full shadow-md">
                 <FaFilePdf className="mr-2" />
                 Export PDF
               </button>
@@ -88,10 +88,10 @@ const DailyStatement = () => {
                 Sales Summary
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-                <div className="bg-gradient-to-r  p-5 rounded-xl border border-blue-100">
+                <div className="bg-gradient-to-r  p-5 rounded-xl border border-border">
                   <div className="flex items-center mb-3">
                     <div className="p-2 bg-primary/10 rounded-lg mr-3">
-                      <FaReceipt className="text-blue-600" />
+                      <FaReceipt className="text-primary" />
                     </div>
                     <p className="text-muted-foreground">Food Sale Price</p>
                   </div>
@@ -135,11 +135,11 @@ const DailyStatement = () => {
               <div className="bg-card rounded-xl shadow-md p-6">
                 <h2 className="text-xl font-semibold text-foreground mb-6">Charges & Discount</h2>
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                  <div className="flex justify-between items-center py-3 border-b border-border">
                     <span className="text-muted-foreground">VAT</span>
                     <span className="font-medium text-foreground">{formatAmount(charges.vat)}</span>
                   </div>
-                  <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                  <div className="flex justify-between items-center py-3 border-b border-border">
                     <span className="text-muted-foreground">SC</span>
                     <span className="font-medium text-foreground">{formatAmount(charges.serviceCharge)}</span>
                   </div>
@@ -163,7 +163,7 @@ const DailyStatement = () => {
                   </div>
 
                   <div className="bg-red-50 p-5 rounded-xl border border-red-200">
-                    <h3 className="text-lg font-semibold text-red-800 mb-2">Total Expense</h3>
+                    <h3 className="text-lg font-semibold text-destructive mb-2">Total Expense</h3>
                     <div className="flex justify-between items-center">
                       <span className="text-destructive">Total Expense</span>
                       <span className="text-2xl font-bold text-destructive">{formatAmount(financialSummary.totalExpense)}</span>

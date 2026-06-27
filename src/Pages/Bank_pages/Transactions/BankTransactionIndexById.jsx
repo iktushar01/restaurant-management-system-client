@@ -40,7 +40,6 @@ const BankTransactionIndexById = () => {
   }, [accountId]);
 
   const handleDelete = async (id) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this transaction?" });
     if (!ok) return;
     try {
@@ -49,7 +48,6 @@ const BankTransactionIndexById = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete");
       }
-    }
   };
 
   const transactions = rawTransactions.map(mapTransactionRow);
@@ -87,8 +85,8 @@ const BankTransactionIndexById = () => {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <div className="mt-6 bg-muted/40 border border-gray-100 rounded-xl shadow-xs overflow-hidden mb-6">
-        <div className="px-5 py-4 border-b border-gray-100">
+      <div className="mt-6 bg-muted/40 border border-border rounded-xl shadow-xs overflow-hidden mb-6">
+        <div className="px-5 py-4 border-b border-border">
           <h3 className="font-semibold text-foreground">Account Information</h3>
         </div>
         {accountError && <div className="p-5 text-sm text-destructive">{accountError}</div>}

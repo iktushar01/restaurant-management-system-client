@@ -105,7 +105,7 @@ const EmployeePayrollIndexCreate = () => {
                 Gender
               </label>
               <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-primary transition-all duration-200"
+                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary transition-all duration-200"
                 {...register("gender", { required: "Gender is required" })}
               >
                 <option value="">Select Gender</option>
@@ -181,7 +181,7 @@ const EmployeePayrollIndexCreate = () => {
                 Department
               </label>
               <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-primary transition-all duration-200"
+                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary transition-all duration-200"
                 {...register("department", { required: "Department is required" })}
               >
                 <option value="">Select Department</option>
@@ -203,7 +203,7 @@ const EmployeePayrollIndexCreate = () => {
                 Designation
               </label>
               <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-primary transition-all duration-200"
+                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary transition-all duration-200"
                 {...register("designationId", { required: "Designation is required" })}
               >
                 <option value="">Select Designation</option>
@@ -267,7 +267,7 @@ const EmployeePayrollIndexCreate = () => {
                 Status
               </label>
               <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-primary transition-all duration-200"
+                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary transition-all duration-200"
                 {...register("status", { required: "Status is required" })}
               >
                 <option value="">Select Status</option>
@@ -335,7 +335,7 @@ const EmployeePayrollIndexCreate = () => {
                     <input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter password"
-                      className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-primary transition-all duration-200"
+                      className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary transition-all duration-200"
                       {...register("password", {
                         required: isSoftwareUser
                           ? "Password is required for software users"

@@ -19,9 +19,9 @@ const EventBadge = ({ type }) => {
   const colors = {
     meeting: "bg-primary/10 text-foreground",
     call: "bg-success/10 text-success",
-    event: "bg-purple-100 text-purple-800",
-    deadline: "bg-destructive/10 text-red-800",
-    personal: "bg-yellow-100 text-yellow-800",
+    event: "bg-accent text-accent-foreground",
+    deadline: "bg-destructive/10 text-destructive",
+    personal: "bg-primary/10 text-primary-foreground",
   };
   return (
     <span
@@ -126,7 +126,7 @@ const EventDashBoard = () => {
                 view === "month" &&
                 tileDate.getDate() === date.getDate() &&
                 tileDate.getMonth() === date.getMonth()
-                  ? "bg-blue-200 rounded-full"
+                  ? "bg-primary/20 rounded-full"
                   : ""
               }
             />
@@ -243,7 +243,7 @@ const EventDashBoard = () => {
       className={`flex items-center px-3 py-2 md:px-4 md:py-2 rounded-lg ${
         view === btn.key
           ? "bg-primary/50 text-primary-foreground"
-          : "bg-gray-200 text-foreground"
+          : "bg-muted text-foreground"
       }`}
     >
       <span className="mr-1 md:mr-2">{btn.icon}</span>
@@ -274,7 +274,7 @@ const EventDashBoard = () => {
         {isMobile && (
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg bg-gray-200"
+            className="p-2 rounded-lg bg-muted"
           >
             {mobileMenuOpen ? <FaTimes /> : <FaBars />}
           </button>

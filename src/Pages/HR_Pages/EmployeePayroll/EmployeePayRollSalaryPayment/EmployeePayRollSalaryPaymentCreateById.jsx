@@ -96,7 +96,7 @@ const EmployeePayRollSalaryPaymentCreateById = () => {
               </label>
               <select
                 {...register("month")}
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-yellow-500 transition-all duration-200"
+                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring transition-all duration-200"
               >
                 <option value="">Select</option>
                 <option value="January">January</option>

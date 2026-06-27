@@ -112,7 +112,7 @@ const ChargesPage = () => {
               <button
                 type="button"
                 onClick={handleCancel}
-                className="px-4 py-2 bg-gray-200 text-foreground font-medium rounded-md hover:bg-gray-300 transition-colors"
+                className="px-4 py-2 bg-muted text-foreground font-medium rounded-md hover:bg-muted/80 transition-colors"
               >
                 Cancel
               </button>
@@ -121,12 +121,12 @@ const ChargesPage = () => {
         ) : (
           <>
             <div className="mb-4">
-              <div className="flex justify-between items-center py-2 border-b border-gray-100">
+              <div className="flex justify-between items-center py-2 border-b border-border">
                 <span className="text-foreground">VAT (%)</span>
                 <span className="font-medium">{vat.toFixed(2)}</span>
               </div>
 
-              <div className="flex justify-between items-center py-2 border-b border-gray-100">
+              <div className="flex justify-between items-center py-2 border-b border-border">
                 <span className="text-foreground">Service Charge (%)</span>
                 <span className="font-medium">{serviceCharge.toFixed(2)}</span>
               </div>

@@ -120,7 +120,7 @@ const OrderManagement = ({ orderDetails, setOrderDetails }) => {
                       type="checkbox"
                       checked={orderDetails.tableIds.includes(table.id)}
                       onChange={() => handleTableSelect(table.id)}
-                      className="mr-3 h-4 w-4 text-blue-600"
+                      className="mr-3 h-4 w-4 text-primary"
                     />
                     <span>{table.tableNo} ({table.location}) - {table.status}</span>
                   </div>

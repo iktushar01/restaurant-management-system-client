@@ -18,7 +18,6 @@ const InventoryUnitsIndex = () => {
   );
 
   const handleDeleteUnit = async (id) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this unit?" });
     if (!ok) return;
     try {
@@ -27,7 +26,6 @@ const InventoryUnitsIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete");
       }
-    }
   };
 
   const columns = [

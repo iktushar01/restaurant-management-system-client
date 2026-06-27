@@ -25,7 +25,6 @@ const EmployeePayrollbasicIndex = () => {
   );
 
   const handleDelete = async (recordId) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this basic salary record?" });
     if (!ok) return;
     try {
@@ -34,7 +33,6 @@ const EmployeePayrollbasicIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete basic salary record");
       }
-    }
   };
 
   const columns = [

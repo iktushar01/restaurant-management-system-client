@@ -17,7 +17,6 @@ const EventManage = () => {
   );
 
   const handleDelete = async (id) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this event?" });
     if (!ok) return;
     try {
@@ -26,7 +25,6 @@ const EventManage = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete event");
       }
-    }
   };
 
   const formatDate = (dateString) => dateString.split(",")[0] || dateString.split(" ")[0];
@@ -93,7 +91,7 @@ const EventManage = () => {
             <input
               type="text"
               placeholder="Search events..."
-              className="pl-10 pr-4 py-2 w-full border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-yellow-300 focus:outline-none"
+              className="pl-10 pr-4 py-2 w-full border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring focus:outline-none"
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);

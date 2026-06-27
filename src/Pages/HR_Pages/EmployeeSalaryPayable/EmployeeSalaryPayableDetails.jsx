@@ -96,7 +96,7 @@ const EmployeeSalaryPayableDetails = () => {
       </div>
 
       <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
-        <div className="p-6 bg-gradient-to-r from-blue-100 to-blue-200 border-b border-border">
+        <div className="p-6 bg-gradient-to-r bg-primary/10 border-b border-border">
           <h2 className="text-2xl font-bold text-foreground">
             Employee Salary Details for {employee?.name || "Employee"} — {monthRange.label}
           </h2>
@@ -167,10 +167,10 @@ const EmployeeSalaryPayableDetails = () => {
             </div>
           </div>
 
-          <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-foreground">Net Payable</h3>
-              <p className="text-xl font-bold text-blue-600">€ {netPayable.toFixed(2)}</p>
+              <p className="text-xl font-bold text-primary">€ {netPayable.toFixed(2)}</p>
             </div>
           </div>
 
@@ -234,11 +234,11 @@ const EmployeeSalaryPayableDetails = () => {
 
           <div className="mt-6 pt-4 border-t border-border">
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="p-4 bg-success/10 border border-success/20 rounded-lg">
                 <h3 className="text-lg font-bold text-foreground">Total Paid</h3>
                 <p className="text-xl font-bold text-success">€ {totalPaid.toFixed(2)}</p>
               </div>
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
                 <h3 className="text-lg font-bold text-foreground">Due</h3>
                 <p className="text-xl font-bold text-destructive">€ {due.toFixed(2)}</p>
               </div>

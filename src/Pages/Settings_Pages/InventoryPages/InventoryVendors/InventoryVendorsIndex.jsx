@@ -18,7 +18,6 @@ const InventoryVendorsIndex = () => {
   );
 
   const handleDeleteSupplier = async (id) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this supplier?" });
     if (!ok) return;
     try {
@@ -27,7 +26,6 @@ const InventoryVendorsIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete");
       }
-    }
   };
 
   const columns = [

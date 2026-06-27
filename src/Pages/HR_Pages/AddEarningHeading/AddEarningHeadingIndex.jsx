@@ -8,6 +8,7 @@ import ReusableModal from "../../../Shared/ReusableModal/ReusableModal";
 import FormInput from "../../../Shared/FormInput/FromInput";
 
 const EarningHeadingIndex = () => {
+  const { confirm } = useConfirmDialog();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedEarningHead, setSelectedEarningHead] = useState(null);
@@ -57,11 +58,12 @@ const EarningHeadingIndex = () => {
     setIsEditModalOpen(true);
   };
 
-  const handleDelete = (row) => {
-    if (window.confirm(`Are you sure you want to delete "${row.name}"?`)) {
-      console.log("Delete:", row);
-      // Add your delete API call here
-    }
+  const handleDelete = async (row) => {
+    const ok = await confirm({
+      description: `Are you sure you want to delete "${row.name}"?`,
+    });
+    if (!ok) return;
+    console.log("Delete:", row);
   };
 
   const onSubmitCreate = (data) => {

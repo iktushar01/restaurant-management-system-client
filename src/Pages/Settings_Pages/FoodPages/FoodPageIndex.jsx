@@ -42,7 +42,6 @@ const FoodPageIndex = () => {
   const startIndex = totalEntries > 0 ? (currentPage - 1) * entriesToShow : 0;
 
   const handleDeleteFood = async (id) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this food item?" });
     if (!ok) return;
     try {
@@ -51,7 +50,6 @@ const FoodPageIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete food item");
       }
-    }
   };
 
   const columns = [
@@ -82,7 +80,7 @@ const FoodPageIndex = () => {
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
           row.availability === "Available" 
             ? "bg-success/10 text-success" 
-            : "bg-destructive/10 text-red-800"
+            : "bg-destructive/10 text-destructive"
         }`}>
           {row.availability}
         </span>
@@ -133,11 +131,11 @@ const FoodPageIndex = () => {
     {
       label: "Add Recipe",
       icon: FaUtensils,
-      className: "text-amber-600 hover:text-amber-900",
+      className: "text-primary hover:text-primary/80",
       render: (row) => (
         <Link 
           to={`recipe/${row.id}`}
-          className="flex items-center space-x-1 text-amber-600 hover:text-amber-900 px-2 py-1 rounded hover:bg-amber-50"
+          className="flex items-center space-x-1 text-primary hover:text-primary/80 px-2 py-1 rounded hover:bg-primary/5"
         >
           <FaUtensils className="text-sm" />
           <span className="text-sm">Add Recipe</span>

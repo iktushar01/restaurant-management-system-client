@@ -25,7 +25,6 @@ const EmployeePayrollEarningIndex = () => {
   );
 
   const handleDelete = async (recordId) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this record?" });
     if (!ok) return;
     try {
@@ -34,7 +33,6 @@ const EmployeePayrollEarningIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete earning record");
       }
-    }
   };
 
   const columns = [

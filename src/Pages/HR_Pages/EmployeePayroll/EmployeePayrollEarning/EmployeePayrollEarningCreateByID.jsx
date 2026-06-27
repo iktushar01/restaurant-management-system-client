@@ -172,7 +172,7 @@ const EmployeePayrollEarningCreateByID = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2.5 bg-gradient-to-r from-blue-200 to-blue-400 text-foreground font-medium rounded-lg hover:from-blue-300 hover:to-blue-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 cursor-pointer disabled:opacity-60"
+              className="px-6 py-2.5 bg-gradient-to-r from-blue-200 to-blue-400 text-foreground font-medium rounded-lg hover:from-blue-300 hover:to-blue-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus-visible:ring-ring focus:ring-offset-2 cursor-pointer disabled:opacity-60"
             >
               {submitting ? "Saving..." : "Save Earning"}
             </button>

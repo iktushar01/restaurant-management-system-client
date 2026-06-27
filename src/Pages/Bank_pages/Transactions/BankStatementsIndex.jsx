@@ -112,8 +112,8 @@ const BankStatementsIndex = () => {
 
       {statement && (
         <div className="mt-8 space-y-6">
-          <div className="bg-muted/40 border border-gray-100 rounded-xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-gray-100">
+          <div className="bg-muted/40 border border-border rounded-xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-border">
               <h3 className="font-semibold text-foreground">Account Information</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-5">

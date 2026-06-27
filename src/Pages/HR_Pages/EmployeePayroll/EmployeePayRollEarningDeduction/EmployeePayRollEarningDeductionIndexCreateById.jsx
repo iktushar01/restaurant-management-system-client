@@ -77,7 +77,7 @@ const EmployeePayRollEarningDeductionIndexCreateById = () => {
               </label>
               <select
                 {...register("headId", { required: "Deduction type is required" })}
-                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-yellow-500 transition-all duration-200 ${errors.headId ? "border-destructive" : "border-border"}`}
+                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring transition-all duration-200 ${errors.headId ? "border-destructive" : "border-border"}`}
               >
                 <option value="">Select deduction head</option>
                 {heads.map((head) => (
@@ -121,7 +121,7 @@ const EmployeePayRollEarningDeductionIndexCreateById = () => {
               </label>
               <select
                 {...register("month")}
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-yellow-500 transition-all duration-200"
+                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring transition-all duration-200"
               >
                 <option value="">Select Month</option>
                 <option value="January">January</option>

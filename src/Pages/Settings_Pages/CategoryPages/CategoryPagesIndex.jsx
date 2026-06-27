@@ -18,7 +18,6 @@ const CategoryPagesIndex = () => {
   );
 
   const handleDeleteCategory = async (id) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this category?" });
     if (!ok) return;
     try {
@@ -27,7 +26,6 @@ const CategoryPagesIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete category");
       }
-    }
   };
 
   const columns = [

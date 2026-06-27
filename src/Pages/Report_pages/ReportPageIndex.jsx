@@ -26,7 +26,7 @@ const ReportPageIndex = () => {
       { label: 'Total Food Cost', value: formatCurrency(summary.totalFoodCost), icon: <FiDollarSign className="text-primary" /> },
       { label: 'Total Discount', value: formatCurrency(summary.totalDiscount), icon: <FiPercent className="text-success" /> },
       { label: 'Total OnHouse Cost', value: formatCurrency(summary.totalOnHouse), icon: <FiHome className="text-purple-500" /> },
-      { label: 'Total Due Orders Amount', value: formatCurrency(summary.totalDueOrders), icon: <FiDollarSign className="text-yellow-500" /> },
+      { label: 'Total Due Orders Amount', value: formatCurrency(summary.totalDueOrders), icon: <FiDollarSign className="text-primary" /> },
       { label: 'Total Due Collect Amount', value: formatCurrency(summary.totalDueCollect), icon: <FiDollarSign className="text-orange-500" /> },
       { label: 'Total Payment Through Card', value: formatCurrency(summary.totalCard), icon: <FiCreditCard className="text-indigo-500" /> },
       { label: 'Total Cash Payment', value: formatCurrency(summary.totalCash), icon: <FiCash className="text-teal-500" /> },
@@ -124,7 +124,7 @@ const ReportPageIndex = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{index + 1}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{item.orderDetail}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-destructive/10 text-red-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-destructive/10 text-destructive">
                           {item.status}
                         </span>
                       </td>

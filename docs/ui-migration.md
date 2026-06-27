@@ -1,6 +1,13 @@
 # UI Migration Guide
 
-This project uses **shadcn/ui** with semantic CSS variables and light/dark theme support. Foundation components and layouts are migrated; individual CRUD pages still need updates.
+This project uses **shadcn/ui** with semantic CSS variables and light/dark theme support.
+
+## Status
+
+- **Foundation complete:** layouts, shared components, theme toggle, login
+- **Pages migrated:** all `src/Pages/**/*.jsx` files updated to semantic tokens (113+ files)
+- **Delete flows:** index pages use `useConfirmDialog()` + `toast` instead of `window.confirm` / `alert`
+- **Migration scripts:** `scripts/migrate-pages-ui.mjs`, `scripts/migrate-confirm-alert.mjs` (for reference / future pages)
 
 ## Theme tokens (use these instead of raw colors)
 
@@ -16,26 +23,29 @@ This project uses **shadcn/ui** with semantic CSS variables and light/dark theme
 
 Toggle theme: header **sun/moon** menu (Light / Dark / System).
 
-## Shared components (already migrated)
+## Shared components
 
-- `ReusableButton` → shadcn `Button`
-- `FormInput` → shadcn `Input` + `Label`
-- `ReusableTable` → shadcn `Table` in `Card`
-- `ReusableModal` → shadcn `Dialog`
-- `PageBanner` → shadcn `Card` with muted background
+| Component | Path | Use for |
+|-----------|------|---------|
+| `PageLayout` | `@/Shared/PageLayout/PageLayout` | Page wrapper |
+| `PageHeader` | `@/Shared/PageHeader/PageHeader` | Title + actions |
+| `FormPageShell` | `@/Shared/FormPageShell/FormPageShell` | Create/edit forms |
+| `TableToolbar` / `PaginationBar` | `@/Shared/TableToolbar/TableToolbar` | List filters + pagination |
+| `LoadingState` / `EmptyState` | `@/Shared/PageStates/PageStates` | Loading / empty UI |
+| `ErrorBanner` | `@/Shared/ErrorBanner/ErrorBanner` | Inline errors |
+| `ReusableButton` | `@/Shared/ReusableButton/ReusableButton` | Actions |
+| `FormInput` | `@/Shared/FormInput/FromInput` | Form fields |
+| `ReusableTable` | `@/Shared/ReusableTable/ReusableTable` | Data tables |
+| `ReusableModal` | `@/Shared/ReusableModal/ReusableModal` | Modals |
+| `useConfirmDialog` | `@/Shared/ConfirmDialog/ConfirmDialog` | Delete confirmations |
 
-## Page migration checklist
+## Checklist for new pages
 
-For each page under `src/Pages/`:
-
-1. Wrap content in `PageLayout` from `@/Shared/PageLayout/PageLayout`
-2. Replace gradient page headers with `PageHeader` from `@/Shared/PageHeader/PageHeader`
-3. Replace inline `<button>` with `ReusableButton` or `@/components/ui/button`
-4. Replace inline `<input>` with `FormInput` or `@/components/ui/input`
-5. Replace native `<select>` with shadcn `Select` (add via `npx shadcn@latest add select`)
-6. Replace `window.confirm()` with `useConfirmDialog()` from `@/Shared/ConfirmDialog/ConfirmDialog`
-7. Replace `alert()` with `toast()` from `sonner`
-8. Remove all `yellow-*`, `gray-*`, and hardcoded hex classes
+1. Wrap content in `PageLayout`
+2. Use `PageHeader` or `FormPageShell` instead of gradient headers
+3. Use shadcn `Button`, `Input`, `Select`, `Textarea` — no raw palette classes
+4. Use `useConfirmDialog()` + `toast` — no `window.confirm` / `alert`
+5. Use semantic tokens only (`bg-background`, `text-muted-foreground`, etc.)
 
 ## Example: confirm delete
 
@@ -43,26 +53,26 @@ For each page under `src/Pages/`:
 import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
 import { toast } from "sonner";
 
-const { confirm } = useConfirmDialog();
+const MyIndex = () => {
+  const { confirm } = useConfirmDialog();
 
-const handleDelete = async (row) => {
-  const ok = await confirm({
-    title: "Delete designation?",
-    description: `Remove "${row.name}" permanently?`,
-    confirmLabel: "Delete",
-  });
-  if (!ok) return;
-  try {
-    await hrService.designations.delete(row.id);
-    toast.success("Deleted successfully");
-    refetch();
-  } catch (err) {
-    toast.error(err.message || "Delete failed");
-  }
+  const handleDelete = async (row) => {
+    const ok = await confirm({
+      title: "Delete item?",
+      description: `Remove "${row.name}" permanently?`,
+      confirmLabel: "Delete",
+    });
+    if (!ok) return;
+    try {
+      await service.delete(row.id);
+      toast.success("Deleted successfully");
+      refetch();
+    } catch (err) {
+      toast.error(err.message || "Delete failed");
+    }
+  };
 };
 ```
-
-Wrap the app (or a layout) with `ConfirmDialogProvider` when you start using confirms on a module.
 
 ## Adding more shadcn components
 
@@ -70,9 +80,6 @@ Wrap the app (or a layout) with `ConfirmDialogProvider` when you start using con
 npx shadcn@latest add select textarea checkbox
 ```
 
-## Files already on design system
+## Optional follow-ups
 
-- `src/Shared/*` (except page-specific inline usage in consumers)
-- `src/Layouts/MainLayout`, `WorkPeriodDashBoard`, `RestaurantDashboard` shells
-- `src/Authentication/LoginPage`
-- `src/components/ui/*`, `src/index.css`, `src/main.jsx`
+Some complex pages (reports, food recipe builder, event calendar) may still use domain-specific accent colors for charts/calendar events. Prefer mapping those to `--chart-*` or semantic tokens when touching those files.

@@ -30,7 +30,6 @@ const BankAccountInfoIndex = () => {
   );
 
   const handleDelete = async (id) => {
-    {
     const ok = await confirm({ description: "Are you sure you want to delete this bank account?" });
     if (!ok) return;
     try {
@@ -39,7 +38,6 @@ const BankAccountInfoIndex = () => {
       } catch (err) {
         toast.error(err.message || "Failed to delete");
       }
-    }
   };
 
   const columns = [
@@ -60,7 +58,7 @@ const BankAccountInfoIndex = () => {
       render: (row) => (
         <Link
           to={`/bank/BankTransaction/Index/${row.id}`}
-          className="flex items-center justify-center text-blue-600 hover:text-foreground transition-colors bg-muted p-2 rounded-2xl"
+          className="flex items-center justify-center text-primary hover:text-foreground transition-colors bg-muted p-2 rounded-2xl"
           title="Bank Transaction"
         >
           <FaExchangeAlt />
@@ -74,7 +72,7 @@ const BankAccountInfoIndex = () => {
       render: (row) => (
         <Link
           to={`/bank/BankStatements/Index/${row.id}`}
-          className="flex items-center justify-center text-success hover:text-green-800 transition-colors bg-gray-200 p-2 rounded-2xl"
+          className="flex items-center justify-center text-success hover:text-success/80 transition-colors bg-muted p-2 rounded-2xl"
           title="Statements"
         >
           <FaFileAlt />
@@ -89,7 +87,7 @@ const BankAccountInfoIndex = () => {
         <div className="flex items-center justify-center space-x-3">
           <Link
             to={`/bank/BankAccountInfo/Index/Edit/${row.id}`}
-            className="text-indigo-600 hover:text-indigo-800 transition-colors"
+            className="text-primary hover:text-primary/80 transition-colors"
             title="Edit"
           >
             <div className="flex items-center gap-2">
@@ -114,7 +112,7 @@ const BankAccountInfoIndex = () => {
 
   return (
     <div className="p-4 sm:p-6 max-w-6xl mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 bg-muted/40 p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 bg-muted/40 p-4 sm:p-6 rounded-xl shadow-sm border border-border">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Bank Account Info</h1>
           <p className="text-muted-foreground text-sm sm:text-base mt-1">
@@ -159,7 +157,7 @@ const BankAccountInfoIndex = () => {
 
       {error && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{error}</div>}
 
-      <div className="bg-card rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
         {loading ? (
           <div className="text-center py-12 text-muted-foreground">Loading...</div>
         ) : (
@@ -171,7 +169,7 @@ const BankAccountInfoIndex = () => {
                 <h3 className="text-lg font-medium text-foreground mb-2">No bank accounts found</h3>
                 <p className="text-muted-foreground mb-4">Get started by creating a new bank account</p>
                 <Link to="Create">
-                  <button className="px-4 py-2 bg-gradient-to-r bg-primary text-primary-foreground text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 inline-flex items-center">
+                  <button className="px-4 py-2 bg-gradient-to-r bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus-visible:ring-ring focus:ring-offset-2 inline-flex items-center">
                     <FaPlus className="mr-2" />
                     Create Bank Account
                   </button>

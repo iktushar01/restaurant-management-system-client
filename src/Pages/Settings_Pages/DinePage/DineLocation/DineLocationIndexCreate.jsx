@@ -1,18 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
+import { dineLocationService } from "../../../services/dineLocationService";
 
 const DineLocationIndexCreate = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const navigate = useNavigate();
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Location Form Data:", data);
-    // Add your API call here
+  const onSubmit = async (data) => {
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await dineLocationService.create({ name: data.name, type: data.type || "" });
+      navigate("/WorkPeriod/dine/location");
+    } catch (err) {
+      setSubmitError(err.message || "Failed to create location");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -40,6 +48,7 @@ const DineLocationIndexCreate = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          {submitError && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>}
           <div className="grid grid-cols-1 gap-6">
             {/* Location Name Input */}
             <div>
@@ -93,11 +102,8 @@ const DineLocationIndexCreate = () => {
             >
               Close
             </Link>
-            <button
-              type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
-            >
-              Save
+            <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg disabled:opacity-60">
+              {submitting ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

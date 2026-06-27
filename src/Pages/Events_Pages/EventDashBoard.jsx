@@ -9,6 +9,7 @@ import {
   FaTimes
 } from "react-icons/fa";
 import "react-calendar/dist/Calendar.css";
+import { inventoryService } from "../../services/inventoryService";
 
 // Utility: Random avatar generator
 const getAvatar = (id) =>
@@ -64,60 +65,35 @@ const EventCard = ({ event }) => {
 };
 
 const EventDashBoard = () => {
-  const [date, setDate] = useState(new Date(2025, 8, 3)); // default: Sept 3, 2025
+  const [date, setDate] = useState(new Date());
   const [view, setView] = useState("month");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    inventoryService.events.getAll({ limit: 100 })
+      .then((res) => {
+        const mapped = (res.data || []).map((e) => ({
+          id: e.id,
+          title: e.subject,
+          customerName: e.customerName,
+          date: new Date(e.dateISO || e.date),
+          type: e.status === "Booked" ? "event" : e.status === "Resolved" ? "deadline" : "meeting",
+          status: e.status,
+        }));
+        setEvents(mapped);
+      })
+      .catch(() => setEvents([]))
+      .finally(() => setLoading(false));
   }, []);
 
-  // Sample events with faces
-  const events = [
-    {
-      id: 1,
-      title: "Team Meeting",
-      date: new Date(2025, 8, 3, 10, 0),
-      duration: 60,
-      type: "meeting",
-    },
-    {
-      id: 2,
-      title: "Client Call",
-      date: new Date(2025, 8, 3, 14, 30),
-      duration: 30,
-      type: "call",
-    },
-    {
-      id: 3,
-      title: "Birthday Party",
-      date: new Date(2025, 8, 4, 18, 0),
-      duration: 120,
-      type: "event",
-    },
-    {
-      id: 4,
-      title: "Project Deadline",
-      date: new Date(2025, 8, 5, 9, 0),
-      duration: 0,
-      type: "deadline",
-    },
-    {
-      id: 5,
-      title: "Lunch with Team",
-      date: new Date(2025, 8, 3, 12, 0),
-      duration: 60,
-      type: "personal",
-    },
-  ];
-
-  // Filter helpers
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   const getDayEvents = (date) =>
     events.filter(
       (event) =>
@@ -281,6 +257,10 @@ const EventDashBoard = () => {
     { key: "day", label: "Day", icon: <FaCalendarDay /> },
     { key: "agenda", label: "Agenda", icon: <FaList /> },
   ];
+
+  if (loading) {
+    return <div className="p-6 max-w-7xl mx-auto text-center text-gray-500">Loading calendar...</div>;
+  }
 
   return (
     <div className="p-4 md:p-6 max-w-7xl mx-auto space-y-6">

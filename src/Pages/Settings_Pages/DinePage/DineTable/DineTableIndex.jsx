@@ -1,47 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import ReusableTable from "../../../../Shared/ReusableTable/ReusableTable";
+import { dineTableService } from "../../../../services/dineTableService";
 
 const DineTableIndex = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  
-  // Sample table data matching the image
-  const [tables, setTables] = useState([
-    { id: 1, location: "Central", tableNo: "KABIN 1", capacity: 4, status: "Vacant" },
-    { id: 2, location: "Central", tableNo: "A2", capacity: 8, status: "Vacant" },
-    { id: 3, location: "Central", tableNo: "A3", capacity: 8, status: "Vacant" },
-    { id: 4, location: "Central", tableNo: "A4", capacity: 8, status: "Vacant" },
-    { id: 5, location: "Central", tableNo: "B1", capacity: 4, status: "Vacant" },
-    { id: 6, location: "Central", tableNo: "B2", capacity: 4, status: "Vacant" },
-    { id: 7, location: "Central", tableNo: "B3", capacity: 4, status: "Vacant" },
-    { id: 8, location: "Central", tableNo: "B4", capacity: 4, status: "Vacant" },
-    { id: 9, location: "Central", tableNo: "C1", capacity: 4, status: "Vacant" },
-    { id: 10, location: "Central", tableNo: "C2", capacity: 4, status: "Vacant" },
-    { id: 11, location: "Terrace", tableNo: "T1", capacity: 6, status: "Occupied" },
-    { id: 12, location: "Terrace", tableNo: "T2", capacity: 4, status: "Vacant" },
-    { id: 13, location: "Bar Area", tableNo: "BAR1", capacity: 2, status: "Vacant" },
-    { id: 14, location: "Bar Area", tableNo: "BAR2", capacity: 2, status: "Reserved" },
-    { id: 15, location: "Private Room", tableNo: "PR1", capacity: 10, status: "Vacant" },
-  ]);
+  const [tables, setTables] = useState([]);
+  const [totalEntries, setTotalEntries] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const filteredTables = tables.filter((table) =>
-    table.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    table.tableNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    table.status.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const fetchTables = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await dineTableService.getAll({ search: searchTerm, page: currentPage, limit: entriesToShow });
+      setTables(res.data || []);
+      setTotalEntries(res.meta?.total || 0);
+      setTotalPages(res.meta?.totalPages || 0);
+    } catch (err) {
+      setError(err.message || "Failed to load tables");
+    } finally {
+      setLoading(false);
+    }
+  }, [searchTerm, currentPage, entriesToShow]);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredTables.length / entriesToShow);
-  const startIndex = (currentPage - 1) * entriesToShow;
-  const paginatedTables = filteredTables.slice(startIndex, startIndex + entriesToShow);
+  useEffect(() => { fetchTables(); }, [fetchTables]);
 
-  // Delete table function
-  const handleDeleteTable = (id) => {
+  const startIndex = totalEntries > 0 ? (currentPage - 1) * entriesToShow : 0;
+
+  const handleDeleteTable = async (id) => {
     if (window.confirm("Are you sure you want to delete this table?")) {
-      setTables(tables.filter(table => table.id !== id));
+      try {
+        await dineTableService.delete(id);
+        fetchTables();
+      } catch (err) {
+        alert(err.message || "Failed to delete table");
+      }
     }
   };
 
@@ -180,16 +179,17 @@ const DineTableIndex = () => {
       </div>
 
       {/* ✅ Reusable Table */}
-      <ReusableTable 
-        columns={columns} 
-        data={paginatedTables} 
-        actions={actions} 
-      />
+      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {loading ? (
+        <div className="text-center py-12 text-gray-500">Loading tables...</div>
+      ) : (
+        <ReusableTable columns={columns} data={tables} actions={actions} />
+      )}
 
       {/* Table info and pagination */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 text-sm text-gray-700">
         <div>
-          Showing {filteredTables.length > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, filteredTables.length)} of {filteredTables.length} entries
+          Showing {totalEntries > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, totalEntries)} of {totalEntries} entries
         </div>
         <div className="flex space-x-2 mt-2 md:mt-0">
           <button 

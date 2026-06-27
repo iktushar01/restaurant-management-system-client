@@ -1,34 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import ReusableTable from "../../../../Shared/ReusableTable/ReusableTable";
+import { dineLocationService } from "../../../../services/dineLocationService";
 
 const DineLocationIndex = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [locations, setLocations] = useState([
-    { id: 1, name: "Central", type: "Indoor" },
-    { id: 2, name: "Terrace", type: "Outdoor" },
-    { id: 3, name: "Private Room", type: "Private" },
-    { id: 4, name: "Bar Area", type: "Bar" },
-    { id: 5, name: "Garden", type: "Outdoor" },
-  ]);
+  const [locations, setLocations] = useState([]);
+  const [totalEntries, setTotalEntries] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const filteredLocations = locations.filter((location) =>
-    location.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    location.type.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const fetchLocations = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await dineLocationService.getAll({ search: searchTerm, page: currentPage, limit: entriesToShow });
+      setLocations(res.data || []);
+      setTotalEntries(res.meta?.total || 0);
+      setTotalPages(res.meta?.totalPages || 0);
+    } catch (err) {
+      setError(err.message || "Failed to load locations");
+    } finally {
+      setLoading(false);
+    }
+  }, [searchTerm, currentPage, entriesToShow]);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredLocations.length / entriesToShow);
-  const startIndex = (currentPage - 1) * entriesToShow;
-  const paginatedLocations = filteredLocations.slice(startIndex, startIndex + entriesToShow);
+  useEffect(() => { fetchLocations(); }, [fetchLocations]);
 
-  // Delete location function
-  const handleDeleteLocation = (id) => {
+  const startIndex = totalEntries > 0 ? (currentPage - 1) * entriesToShow : 0;
+
+  const handleDeleteLocation = async (id) => {
     if (window.confirm("Are you sure you want to delete this location?")) {
-      setLocations(locations.filter(location => location.id !== id));
+      try {
+        await dineLocationService.delete(id);
+        fetchLocations();
+      } catch (err) {
+        alert(err.message || "Failed to delete location");
+      }
     }
   };
 
@@ -148,16 +160,17 @@ const DineLocationIndex = () => {
       </div>
 
       {/* ✅ Reusable Table */}
-      <ReusableTable 
-        columns={columns} 
-        data={paginatedLocations} 
-        actions={actions} 
-      />
+      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {loading ? (
+        <div className="text-center py-12 text-gray-500">Loading locations...</div>
+      ) : (
+        <ReusableTable columns={columns} data={locations} actions={actions} />
+      )}
 
       {/* Table info and pagination */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 text-sm text-gray-700">
         <div>
-          Showing {filteredLocations.length > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, filteredLocations.length)} of {filteredLocations.length} entries
+          Showing {totalEntries > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, totalEntries)} of {totalEntries} entries
         </div>
         <div className="flex space-x-2 mt-2 md:mt-0">
           <button 

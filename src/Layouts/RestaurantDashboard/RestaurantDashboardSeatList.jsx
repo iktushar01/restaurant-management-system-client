@@ -5,6 +5,8 @@ import {
   FaBox, 
   FaShoppingBag, 
   FaUtensils,
+  FaInfoCircle,
+  FaCheckCircle,
 } from 'react-icons/fa';
 import { dashboardService } from '../../services/dashboardService';
 
@@ -201,6 +203,7 @@ const RestaurantDashboardSeatList = () => {
           </div>
           
           {/* Takeaway Section */}
+          {takeaway && (
           <div className="flex justify-center mt-2">
             <div className="text-center">
               <div className="text-xs md:text-sm font-semibold text-gray-700 mb-1 flex items-center justify-center">
@@ -216,6 +219,7 @@ const RestaurantDashboardSeatList = () => {
               </div>
             </div>
           </div>
+          )}
         </div>
 
         {/* Selected Seat Info */}

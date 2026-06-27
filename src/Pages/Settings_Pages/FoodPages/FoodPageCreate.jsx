@@ -1,24 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiUpload } from "react-icons/fi";
+import { foodService } from "../../../services/foodService";
+import { foodCategoryService } from "../../../services/foodCategoryService";
 
 const FoodPageCreate = () => {
+  const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const [selectedFile, setSelectedFile] = useState(null);
+  useEffect(() => {
+    foodCategoryService.getAllSimple().then((res) => {
+      setCategories(res.data || []);
+    });
+  }, []);
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
-
-  const onSubmit = (data) => {
-    console.log("Food Form Data:", data);
-    // Add your API call here
+  const onSubmit = async (data) => {
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await foodService.create({
+        categoryId: data.categoryId,
+        foodNo: data.foodNo,
+        name: data.foodName,
+        serialNo: Number(data.serialNo),
+        price: Number(data.price),
+        availability: data.availability === "Unavailable" ? "UNAVAILABLE" : "AVAILABLE",
+      });
+      navigate("/WorkPeriod/foods/index");
+    } catch (err) {
+      setSubmitError(err.message || "Failed to create food");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -95,19 +116,15 @@ const FoodPageCreate = () => {
                 </label>
                 <select
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 transition-all duration-200 outline-none"
-                  {...register("category", { required: "Food category is required" })}
+                  {...register("categoryId", { required: "Food category is required" })}
                 >
                   <option value="">Select a category</option>
-                  <option value="Cold Beverages">Cold Beverages</option>
-                  <option value="Hot Beverages">Hot Beverages</option>
-                  <option value="Appetizer">Appetizer</option>
-                  <option value="Main Course">Main Course</option>
-                  <option value="Dessert">Dessert</option>
-                  <option value="Salad">Salad</option>
-                  <option value="Soup">Soup</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
                 </select>
-                {errors.category && (
-                  <p className="mt-1 text-sm text-red-600">{errors.category.message}</p>
+                {errors.categoryId && (
+                  <p className="mt-1 text-sm text-red-600">{errors.categoryId.message}</p>
                 )}
               </div>
 

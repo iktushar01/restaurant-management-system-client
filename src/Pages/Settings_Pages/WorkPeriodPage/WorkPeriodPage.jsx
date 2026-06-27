@@ -1,73 +1,70 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
 import { FaPlus, FaClock, FaPlay, FaStop } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
+import { workPeriodService } from "../../../services/workPeriodService";
 
 const WorkPeriodPage = () => {
-  const workPeriods = [
-    { 
-      ID: 1, 
-      startDate: "15/08/2025 10:46:21", 
-      endDate: "", 
-      openingCash: "234234.00", 
-      totalSale: "2895.00", 
-      discount: "0.00", 
-      cashPayment: "1120.00", 
-      cardPayment: "0", 
-      totalPaid: "1120.00", 
-      onTheHouse: "0", 
-      closingCash: "",
-      status: "Active" 
-    },
-  ];
+  const [workPeriods, setWorkPeriods] = useState([]);
+  const [activePeriod, setActivePeriod] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [listRes, activeRes] = await Promise.all([
+        workPeriodService.getAll({ page: 1, limit: 20 }),
+        workPeriodService.getActive(),
+      ]);
+      setWorkPeriods(listRes.data || []);
+      setActivePeriod(activeRes.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
+
+  const handleStart = async () => {
+    const cash = prompt("Opening cash amount:", "0");
+    if (cash === null) return;
+    try {
+      await workPeriodService.open(Number(cash) || 0);
+      fetchData();
+    } catch (err) {
+      alert(err.message || "Failed to start work period");
+    }
+  };
+
+  const handleEnd = async () => {
+    if (!activePeriod) {
+      alert("No active work period to close");
+      return;
+    }
+    const cash = prompt("Closing cash amount:", "0");
+    if (cash === null) return;
+    try {
+      await workPeriodService.close(activePeriod.id, Number(cash) || 0);
+      fetchData();
+    } catch (err) {
+      alert(err.message || "Failed to close work period");
+    }
+  };
 
   const columns = [
-    {
-      header: "Sl No",
-      accessor: "ID",
-    },
-    {
-      header: "Start date",
-      accessor: "startDate",
-    },
-    {
-      header: "End Date",
-      accessor: "endDate",
-      render: (row) => row.endDate || "-",
-    },
-    {
-      header: "Opening Cash",
-      accessor: "openingCash",
-    },
-    {
-      header: "Total Sale",
-      accessor: "totalSale",
-    },
-    {
-      header: "Discount",
-      accessor: "discount",
-    },
-    {
-      header: "Cash Payment",
-      accessor: "cashPayment",
-    },
-    {
-      header: "Card Payment",
-      accessor: "cardPayment",
-    },
-    {
-      header: "Total Paid",
-      accessor: "totalPaid",
-    },
-    {
-      header: "On The House",
-      accessor: "onTheHouse",
-    },
-    {
-      header: "Closing Cash",
-      accessor: "closingCash",
-      render: (row) => row.closingCash || "-",
-    }
+    { header: "Sl No", accessor: "ID", render: (row, idx) => idx + 1 },
+    { header: "Start date", accessor: "startDate" },
+    { header: "End Date", accessor: "endDate", render: (row) => row.endDate || "-" },
+    { header: "Opening Cash", accessor: "openingCash" },
+    { header: "Total Sale", accessor: "totalSale" },
+    { header: "Discount", accessor: "discount" },
+    { header: "Cash Payment", accessor: "cashPayment" },
+    { header: "Card Payment", accessor: "cardPayment" },
+    { header: "Total Paid", accessor: "totalPaid" },
+    { header: "On The House", accessor: "onTheHouse" },
+    { header: "Closing Cash", accessor: "closingCash", render: (row) => row.closingCash || "-" },
+    { header: "Status", accessor: "status" },
   ];
 
   return (
@@ -79,38 +76,31 @@ const WorkPeriodPage = () => {
             Recent Work Periods
           </h1>
           <p className="text-gray-500 text-sm sm:text-base mt-1">
-            Manage your restaurant's work periods and shifts
+            {activePeriod ? "Active work period is running" : "No active work period"}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <button className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-offset-2 cursor-pointer text-sm sm:text-base">
-            <FaPlay className="mr-2" />
-            Start Work Period
+          <button onClick={handleStart} disabled={!!activePeriod} className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 disabled:opacity-50 cursor-pointer text-sm sm:text-base">
+            <FaPlay className="mr-2" /> Start Work Period
           </button>
-          <button className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-offset-2 cursor-pointer text-sm sm:text-base">
-            <FaStop className="mr-2" />
-            End Work Period
+          <button onClick={handleEnd} disabled={!activePeriod} className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 disabled:opacity-50 cursor-pointer text-sm sm:text-base">
+            <FaStop className="mr-2" /> End Work Period
           </button>
         </div>
       </div>
 
-      {/* ✅ Reusable Table */}
-      <ReusableTable columns={columns} data={workPeriods} />
+      {loading ? (
+        <div className="text-center py-12 text-gray-500">Loading work periods...</div>
+      ) : (
+        <ReusableTable columns={columns} data={workPeriods} />
+      )}
 
-      {workPeriods.length === 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 md:p-12 text-center mt-8">
-          <div className="mx-auto w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-4">
-            <FaClock className="text-amber-500 text-2xl" />
-          </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
-            No work periods found
-          </h3>
-          <p className="text-gray-500 mb-6">
-            Get started by creating a new work period
-          </p>
-          <button className="px-5 py-2.5 bg-gradient-to-r from-amber-400 to-amber-600 text-white font-medium rounded-lg hover:from-amber-500 hover:to-amber-700 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 inline-flex items-center">
-            <FaPlus className="mr-2" />
-            Start Work Period
+      {!loading && workPeriods.length === 0 && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center mt-8">
+          <FaClock className="text-amber-500 text-3xl mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No work periods found</h3>
+          <button onClick={handleStart} className="px-5 py-2.5 bg-amber-500 text-white font-medium rounded-lg inline-flex items-center mt-4">
+            <FaPlus className="mr-2" /> Start Work Period
           </button>
         </div>
       )}

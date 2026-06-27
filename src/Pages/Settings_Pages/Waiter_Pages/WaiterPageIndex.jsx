@@ -1,27 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
+import { waiterService } from "../../../services/waiterService";
 
 const WaiterPageIndex = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesToShow, setEntriesToShow] = useState(10);
-  const [waiters, setWaiters] = useState([
-    { ID: 1, name: "Shawan", note: "" },
-    { ID: 2, name: "Robiul", note: "" },
-    { ID: 3, name: "ADMIN", note: "" },
-    { ID: 4, name: "payel", note: "" },
-    { ID: 5, name: "py", note: "" },
-  ]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [waiters, setWaiters] = useState([]);
+  const [totalEntries, setTotalEntries] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const filteredWaiters = waiters.filter((waiter) =>
-    waiter.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const fetchWaiters = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await waiterService.getAll({ search: searchTerm, page: currentPage, limit: entriesToShow });
+      setWaiters(res.data || []);
+      setTotalEntries(res.meta?.total || 0);
+      setTotalPages(res.meta?.totalPages || 0);
+    } catch (err) {
+      setError(err.message || "Failed to load waiters");
+    } finally {
+      setLoading(false);
+    }
+  }, [searchTerm, currentPage, entriesToShow]);
 
-  // Delete waiter function
-  const handleDeleteWaiter = (id) => {
+  useEffect(() => { fetchWaiters(); }, [fetchWaiters]);
+
+  const handleDeleteWaiter = async (id) => {
     if (window.confirm("Are you sure you want to delete this waiter?")) {
-      setWaiters(waiters.filter(waiter => waiter.ID !== id));
+      try {
+        await waiterService.delete(id);
+        fetchWaiters();
+      } catch (err) {
+        alert(err.message || "Failed to delete waiter");
+      }
     }
   };
 
@@ -129,16 +146,17 @@ const WaiterPageIndex = () => {
       </div>
 
       {/* ✅ Reusable Table */}
-      <ReusableTable 
-        columns={columns} 
-        data={filteredWaiters.slice(0, entriesToShow)} 
-        actions={actions} 
-      />
+      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {loading ? (
+        <div className="text-center py-12 text-gray-500">Loading waiters...</div>
+      ) : (
+        <ReusableTable columns={columns} data={waiters} actions={actions} />
+      )}
 
       {/* Table info and pagination */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 text-sm text-gray-700">
         <div>
-          Showing {filteredWaiters.length > 0 ? 1 : 0} to {Math.min(entriesToShow, filteredWaiters.length)} of {filteredWaiters.length} entries
+          Showing {totalEntries > 0 ? 1 : 0} to {Math.min(entriesToShow, totalEntries)} of {totalEntries} entries
         </div>
         <div className="flex space-x-2 mt-2 md:mt-0">
           <button className="px-3 py-1 border border-gray-300 rounded-md bg-gray-50 hover:bg-gray-100">

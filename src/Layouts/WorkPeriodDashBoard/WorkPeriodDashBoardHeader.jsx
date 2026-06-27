@@ -46,7 +46,7 @@ const WorkPeriodDashBoardHeader = () => {
   };
 
   return (
-    <header className="h-16 bg-primary text-primary-foreground shadow-md">
+    <header className="h-16 shrink-0 bg-primary text-primary-foreground shadow-md">
       <div className="flex justify-between items-center h-full px-4 sm:px-6 lg:px-8 w-full mx-auto">
         <div className="flex items-center gap-2 sm:gap-4 min-w-0">
           <SidebarTrigger

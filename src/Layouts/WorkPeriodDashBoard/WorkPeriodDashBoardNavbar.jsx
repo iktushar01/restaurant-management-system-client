@@ -194,7 +194,7 @@ function SidebarShell({ collapsed, onToggle, onNavigate, className }) {
       data-state={collapsed ? "collapsed" : "expanded"}
       data-collapsible={collapsed ? "icon" : ""}
       className={cn(
-        "group flex h-full shrink-0 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width] duration-300",
+        "group flex min-h-0 shrink-0 self-stretch flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width] duration-300",
         collapsed ? "w-16" : "w-64",
         className
       )}
@@ -224,7 +224,7 @@ function SidebarShell({ collapsed, onToggle, onNavigate, className }) {
 
       <SidebarSeparator />
 
-      <SidebarContent className="overflow-y-auto">
+      <SidebarContent className="min-h-0 flex-1 overflow-y-auto">
         <SidebarGroup>
           <SidebarGroupContent>
             <WorkPeriodSidebarMenu collapsed={collapsed} onNavigate={onNavigate} />
@@ -269,7 +269,7 @@ const WorkPeriodDashBoardNavbar = () => {
     <SidebarShell
       collapsed={collapsed}
       onToggle={handleToggle}
-      className="hidden md:flex"
+      className="hidden min-h-0 self-stretch md:flex"
     />
   );
 };

@@ -109,8 +109,7 @@ const SubCategoryIndex = () => {
           <span className="mr-2 text-foreground">Show</span>
           <SelectField
             value={entriesToShow}
-            onValueChange={(v) => { setEntriesToShow(Number(v));
-              setCurrentPage(1); // Reset to first page when changing entries; }}
+            onValueChange={(v) => { setEntriesToShow(Number(v)); setCurrentPage(1); }}
             className="w-20"
             options={[{ value: "10", label: "10" }, { value: "25", label: "25" }, { value: "50", label: "50" }, { value: "100", label: "100" }]}
           />

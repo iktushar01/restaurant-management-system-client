@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import FormInput from "../../../Shared/FormInput/FromInput";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { bankService } from "../../../services/bankService";
 
 const transactionTypeOptions = [
@@ -16,7 +17,7 @@ const BankTransactionIndexByIdCreate = () => {
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, control } = useForm();
 
   const onSubmit = async (data) => {
     setSubmitError("");
@@ -68,24 +69,22 @@ const BankTransactionIndexByIdCreate = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1">
-                Transaction Type <span className="text-destructive">*</span>
-              </label>
-              <select
-                {...register("type", { required: "Transaction type is required" })}
-                className={`w-full px-3 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus-visible:ring-ring ${
-                  errors.type ? "border-destructive" : "border-border"
-                }`}
-              >
-                {transactionTypeOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              {errors.type && (
-                <p className="mt-1 text-sm text-destructive">{errors.type.message}</p>
-              )}
+              <FormSelect
+                label={
+                  <>
+                    Transaction Type <span className="text-destructive">*</span>
+                  </>
+                }
+                name="type"
+                control={control}
+                rules={{ required: "Transaction type is required" }}
+                errors={errors}
+                placeholder="Select Transaction Type"
+                options={transactionTypeOptions.filter((o) => o.value !== "").map((o) => ({
+                  value: o.value,
+                  label: o.label,
+                }))}
+              />
             </div>
             <div className="md:col-span-2">
               <FormInput

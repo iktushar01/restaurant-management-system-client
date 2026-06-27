@@ -96,8 +96,9 @@ function parseSelectBlock(block) {
   const placeholderMatch = block.match(/<option value="">([^<]*)<\/option>/);
 
   const isEntriesSelect =
-    numericOptions.length === 4 &&
-    numericOptions.every((o, i) => ENTRIES_OPTIONS[i]?.value === o.value);
+    valueMatch &&
+    /entriesToShow/.test(valueMatch[1]) &&
+    numericOptions.length >= 2;
 
   return {
     registerMatch,
@@ -138,13 +139,17 @@ function convertSelectBlockInner(parsed, indent) {
   if (isEntriesSelect && valueMatch && onChangeMatch) {
     const value = valueMatch[1].trim();
     let body = formatOnValueChange(onChangeMatch[1]);
-    if (!body.startsWith("{")) body = `{ ${body}; }`;
     body = body.replace(/Number\(e\.target\.value\)/g, "Number(v)").replace(/e\.target\.value/g, "v");
+    body = body.replace(/\/\/[^\n]*/g, "").trim();
+    if (!body.startsWith("{")) body = `{ ${body.replace(/;?\s*$/, ";")} }`;
+    const optionsStr = numericOptions
+      .map((o) => `{ value: "${o.value}", label: "${o.label}" }`)
+      .join(", ");
     return `${indent}<SelectField
 ${indent}  value={${value}}
 ${indent}  onValueChange={(v) => ${body}}
 ${indent}  className="w-20"
-${indent}  options={[${ENTRIES_OPTIONS.map((o) => `{ value: "${o.value}", label: "${o.label}" }`).join(", ")}]}
+${indent}  options={[${optionsStr}]}
 ${indent}/>`;
   }
 

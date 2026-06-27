@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { Link, useNavigate } from "react-router-dom";
 import {
   FaMoneyBillWave,
@@ -117,15 +118,12 @@ const InventoryHomeIndex = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
         <div className="flex items-center">
           <span className="mr-2 text-foreground">Show</span>
-          <select
+          <SelectField
             value={entriesToShow}
-            onChange={(e) => { setEntriesToShow(Number(e.target.value)); setCurrentPage(1); }}
-            className="border border-border rounded-md px-2 py-1"
-          >
-            <option value={10}>10</option>
-            <option value={25}>25</option>
-            <option value={50}>50</option>
-          </select>
+            onValueChange={(v) => { setEntriesToShow(Number(v)); setCurrentPage(1); }}
+            className="w-20"
+            options={[{ value: "10", label: "10" }, { value: "25", label: "25" }, { value: "50", label: "50" }]}
+          />
           <span className="ml-2 text-foreground">entries</span>
         </div>
         <div className="flex items-center gap-2">

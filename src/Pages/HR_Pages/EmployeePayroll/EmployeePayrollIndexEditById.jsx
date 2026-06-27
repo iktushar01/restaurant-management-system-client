@@ -1,43 +1,72 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import FormInput from "../../../Shared/FormInput/FromInput";
+import { hrService } from "../../../services/hrService";
+
+const toApiStatus = (status) => {
+  if (status === "Retired") return "RETIRED";
+  if (status === "Inactive") return "INACTIVE";
+  return "ACTIVE";
+};
 
 const EmployeePayrollIndexEditById = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [designations, setDesignations] = useState([]);
+  const [isSoftwareUser, setIsSoftwareUser] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
+    reset,
   } = useForm();
 
-  const [isSoftwareUser, setIsSoftwareUser] = useState(true);
-  const [profileImage, setProfileImage] = useState(null);
+  useEffect(() => {
+    Promise.all([
+      hrService.designations.getAll({ limit: 100 }),
+      hrService.employees.getById(id),
+    ])
+      .then(([designationsRes, employeeRes]) => {
+        setDesignations(designationsRes.data || []);
+        const employee = employeeRes.data;
+        setIsSoftwareUser(Boolean(employee.hasAccess));
+        reset({
+          name: employee.name,
+          contactNo: employee.contactNo,
+          designationId: employee.designationId || "",
+          status: employee.status || "Active",
+          isSoftwareUser: employee.hasAccess,
+        });
+      })
+      .catch((err) => setSubmitError(err.message || "Failed to load employee"))
+      .finally(() => setLoading(false));
+  }, [id, reset]);
 
-  // In a real application, you would fetch the existing data based on ID
-  React.useEffect(() => {
-    // Simulating loading existing data
-    setValue("name", "ADMIN");
-    setValue("gender", "Male");
-    setValue("dateOfBirth", "2019-12-26");
-    setValue("contactNo", "01827123671");
-    setValue("age", "00");
-    setValue("address", "Chittagong");
-    setValue("nid", "1545445454");
-    setValue("department", "Admin");
-    setValue("designation", "Admin");
-    setValue("discountLevel", "100.00");
-    setValue("status", "Active");
-    setValue("hiredDate", "2019-12-26");
-    setValue("isSoftwareUser", true);
-    setValue("userName", "admin");
-  }, [setValue]);
-
-  const onSubmit = (data) => {
-    console.log("Employee Form Data:", data);
-    // Add your API call here
+  const onSubmit = async (data) => {
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await hrService.employees.update(id, {
+        name: data.name,
+        contactNo: data.contactNo,
+        designationId: data.designationId || null,
+        status: toApiStatus(data.status),
+        hasAccess: Boolean(data.isSoftwareUser),
+      });
+      navigate("/hr/HrEmployeePayroll/Index");
+    } catch (err) {
+      setSubmitError(err.message || "Failed to update employee");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -51,6 +80,10 @@ const EmployeePayrollIndexEditById = () => {
     setIsSoftwareUser(e.target.checked);
     setValue("isSoftwareUser", e.target.checked);
   };
+
+  if (loading) {
+    return <div className="p-6 text-center text-gray-500">Loading...</div>;
+  }
 
   return (
     <div className="max-w-7xl min-h-screen mx-auto p-6">
@@ -77,8 +110,10 @@ const EmployeePayrollIndexEditById = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          {submitError && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Name Input */}
             <div>
               <FormInput
                 label="Name"
@@ -90,39 +125,6 @@ const EmployeePayrollIndexEditById = () => {
               />
             </div>
 
-            {/* Gender Select */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Gender
-              </label>
-              <select
-                {...register("gender", { required: "Gender is required" })}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 focus:outline-none transition-colors duration-200"
-              >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-              {errors.gender && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.gender.message}
-                </p>
-              )}
-            </div>
-
-            {/* Date of Birth Input */}
-            <div>
-              <FormInput
-                label="Date of Birth"
-                name="dateOfBirth"
-                type="date"
-                register={register}
-                rules={{ required: "Date of birth is required" }}
-                errors={errors}
-              />
-            </div>
-
-            {/* Contact No Input */}
             <div>
               <FormInput
                 label="Contact No"
@@ -134,82 +136,45 @@ const EmployeePayrollIndexEditById = () => {
               />
             </div>
 
-            {/* Age Input */}
             <div>
-              <FormInput
-                label="Age"
-                placeholder="Enter age"
-                name="age"
-                type="number"
-                register={register}
-                rules={{ required: "Age is required" }}
-                errors={errors}
-              />
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Designation
+              </label>
+              <select
+                {...register("designationId", { required: "Designation is required" })}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 focus:outline-none transition-colors duration-200"
+              >
+                <option value="">Select Designation</option>
+                {designations.map((d) => (
+                  <option key={d.id} value={d.id}>{d.name}</option>
+                ))}
+              </select>
+              {errors.designationId && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.designationId.message}
+                </p>
+              )}
             </div>
 
-            {/* Address Input */}
             <div>
-              <FormInput
-                label="Address"
-                placeholder="Enter address"
-                name="address"
-                register={register}
-                rules={{ required: "Address is required" }}
-                errors={errors}
-              />
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Status
+              </label>
+              <select
+                {...register("status", { required: "Status is required" })}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 focus:outline-none transition-colors duration-200"
+              >
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="Retired">Retired</option>
+              </select>
+              {errors.status && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.status.message}
+                </p>
+              )}
             </div>
 
-            {/* NID Input */}
-            <div>
-              <FormInput
-                label="NID"
-                placeholder="Enter NID number"
-                name="nid"
-                register={register}
-                rules={{ required: "NID is required" }}
-                errors={errors}
-              />
-            </div>
-
-            {/* Department Input */}
-            <div>
-              <FormInput
-                label="Department"
-                placeholder="Enter department"
-                name="department"
-                register={register}
-                rules={{ required: "Department is required" }}
-                errors={errors}
-              />
-            </div>
-
-            {/* Designation Input */}
-            <div>
-              <FormInput
-                label="Designation"
-                placeholder="Enter designation"
-                name="designation"
-                register={register}
-                rules={{ required: "Designation is required" }}
-                errors={errors}
-              />
-            </div>
-
-            {/* Discount Level Input */}
-            <div>
-              <FormInput
-                label="Discount Level"
-                placeholder="Enter discount level"
-                name="discountLevel"
-                type="number"
-                step="0.01"
-                register={register}
-                rules={{ required: "Discount level is required" }}
-                errors={errors}
-              />
-            </div>
-
-            {/* Image Upload */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Image
@@ -247,39 +212,6 @@ const EmployeePayrollIndexEditById = () => {
               )}
             </div>
 
-            {/* Status Select */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Status
-              </label>
-              <select
-                {...register("status", { required: "Status is required" })}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 focus:outline-none transition-colors duration-200"
-              >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-                <option value="On Leave">On Leave</option>
-              </select>
-              {errors.status && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.status.message}
-                </p>
-              )}
-            </div>
-
-            {/* Hired Date Input */}
-            <div>
-              <FormInput
-                label="Hired Date"
-                name="hiredDate"
-                type="date"
-                register={register}
-                rules={{ required: "Hired date is required" }}
-                errors={errors}
-              />
-            </div>
-
-            {/* Software User Checkbox */}
             <div className="md:col-span-2">
               <div className="flex items-center">
                 <input
@@ -287,7 +219,6 @@ const EmployeePayrollIndexEditById = () => {
                   id="isSoftwareUser"
                   {...register("isSoftwareUser")}
                   onChange={handleSoftwareUserToggle}
-                  defaultChecked={true}
                   className="h-4 w-4 text-amber-500 focus:ring-amber-300 border-gray-300 rounded"
                 />
                 <label
@@ -299,7 +230,6 @@ const EmployeePayrollIndexEditById = () => {
               </div>
             </div>
 
-            {/* Conditional Username and Password Fields */}
             {isSoftwareUser && (
               <>
                 <div>
@@ -308,7 +238,6 @@ const EmployeePayrollIndexEditById = () => {
                     placeholder="Enter username"
                     name="userName"
                     register={register}
-                    rules={{ required: "Username is required" }}
                     errors={errors}
                   />
                 </div>
@@ -319,9 +248,6 @@ const EmployeePayrollIndexEditById = () => {
                     name="password"
                     type="password"
                     register={register}
-                    rules={
-                      isSoftwareUser ? { required: "Password is required" } : {}
-                    }
                     errors={errors}
                   />
                 </div>
@@ -338,9 +264,10 @@ const EmployeePayrollIndexEditById = () => {
             </Link>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
+              disabled={submitting}
+              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer disabled:opacity-60"
             >
-              Update Employee Info
+              {submitting ? "Updating..." : "Update Employee Info"}
             </button>
           </div>
         </form>

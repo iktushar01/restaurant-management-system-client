@@ -1,24 +1,54 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiUpload, FiEye, FiEyeOff } from "react-icons/fi";
 import FormInput from "../../../Shared/FormInput/FromInput";
+import { hrService } from "../../../services/hrService";
+
+const toApiStatus = (status) => {
+  if (status === "Retired") return "RETIRED";
+  if (status === "Inactive") return "INACTIVE";
+  return "ACTIVE";
+};
 
 const EmployeePayrollIndexCreate = () => {
+  const navigate = useNavigate();
+  const [designations, setDesignations] = useState([]);
+  const [isSoftwareUser, setIsSoftwareUser] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    // watch,
   } = useForm();
 
-  const [isSoftwareUser, setIsSoftwareUser] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
-  const [showPassword, setShowPassword] = useState(false);
+  useEffect(() => {
+    hrService.designations.getAll({ limit: 100 })
+      .then((res) => setDesignations(res.data || []))
+      .catch(() => {});
+  }, []);
 
-  const onSubmit = (data) => {
-    console.log("Employee Form Data:", data);
-    // Add your API call here
+  const onSubmit = async (data) => {
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await hrService.employees.create({
+        name: data.name,
+        contactNo: data.contactNo,
+        designationId: data.designationId || null,
+        status: toApiStatus(data.status),
+        hasAccess: Boolean(data.softwareUser),
+      });
+      navigate("/hr/HrEmployeePayroll/Index");
+    } catch (err) {
+      setSubmitError(err.message || "Failed to create employee");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -55,8 +85,10 @@ const EmployeePayrollIndexCreate = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          {submitError && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>
+          )}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {/* Name Input */}
             <div>
               <FormInput
                 label="Name"
@@ -68,7 +100,6 @@ const EmployeePayrollIndexCreate = () => {
               />
             </div>
 
-            {/* Gender Input */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Gender
@@ -89,7 +120,6 @@ const EmployeePayrollIndexCreate = () => {
               )}
             </div>
 
-            {/* Date of Birth Input */}
             <div>
               <FormInput
                 label="Date of Birth"
@@ -101,7 +131,6 @@ const EmployeePayrollIndexCreate = () => {
               />
             </div>
 
-            {/* Contact No Input */}
             <div>
               <FormInput
                 label="Contact No"
@@ -113,7 +142,6 @@ const EmployeePayrollIndexCreate = () => {
               />
             </div>
 
-            {/* Age Input */}
             <div>
               <FormInput
                 label="Age"
@@ -126,7 +154,6 @@ const EmployeePayrollIndexCreate = () => {
               />
             </div>
 
-            {/* Address Input */}
             <div>
               <FormInput
                 label="Address"
@@ -138,7 +165,6 @@ const EmployeePayrollIndexCreate = () => {
               />
             </div>
 
-            {/* NID Input */}
             <div>
               <FormInput
                 label="NID"
@@ -150,7 +176,6 @@ const EmployeePayrollIndexCreate = () => {
               />
             </div>
 
-            {/* Department Input */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Department
@@ -173,29 +198,26 @@ const EmployeePayrollIndexCreate = () => {
               )}
             </div>
 
-            {/* Designation Input */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Designation
               </label>
               <select
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-yellow-400 transition-all duration-200"
-                {...register("designation", { required: "Designation is required" })}
+                {...register("designationId", { required: "Designation is required" })}
               >
                 <option value="">Select Designation</option>
-                <option value="Admin">Admin</option>
-                <option value="Manager">Manager</option>
-                <option value="Executive">Executive</option>
-                <option value="Associate">Associate</option>
+                {designations.map((d) => (
+                  <option key={d.id} value={d.id}>{d.name}</option>
+                ))}
               </select>
-              {errors.designation && (
+              {errors.designationId && (
                 <p className="mt-1 text-sm text-red-600">
-                  {errors.designation.message}
+                  {errors.designationId.message}
                 </p>
               )}
             </div>
 
-            {/* Image Upload */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Image
@@ -240,7 +262,6 @@ const EmployeePayrollIndexCreate = () => {
               )}
             </div>
 
-            {/* Status Input */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Status
@@ -252,7 +273,7 @@ const EmployeePayrollIndexCreate = () => {
                 <option value="">Select Status</option>
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
-                <option value="On Leave">On Leave</option>
+                <option value="Retired">Retired</option>
               </select>
               {errors.status && (
                 <p className="mt-1 text-sm text-red-600">
@@ -261,7 +282,6 @@ const EmployeePayrollIndexCreate = () => {
               )}
             </div>
 
-            {/* Hired Date Input */}
             <div>
               <FormInput
                 label="Hired Date"
@@ -273,7 +293,6 @@ const EmployeePayrollIndexCreate = () => {
               />
             </div>
 
-            {/* Software User Checkbox */}
             <div className="md:col-span-2">
               <div className="flex items-center">
                 <input
@@ -292,7 +311,6 @@ const EmployeePayrollIndexCreate = () => {
               </div>
             </div>
 
-            {/* Conditional Fields for Software User */}
             {isSoftwareUser && (
               <>
                 <div>
@@ -359,9 +377,10 @@ const EmployeePayrollIndexCreate = () => {
             </Link>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
+              disabled={submitting}
+              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer disabled:opacity-60"
             >
-              Submit
+              {submitting ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>

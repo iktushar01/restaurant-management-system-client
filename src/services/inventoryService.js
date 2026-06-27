@@ -63,6 +63,13 @@ export const inventoryService = {
     getAll: (params) => apiClient(`${BASE}/purchases`, { params }),
     create: (data) => apiClient(`${BASE}/purchases`, { method: "POST", body: data }),
   },
+  vendorPayments: {
+    getAll: (params) => apiClient(`${BASE}/vendor-payments`, { params }),
+    create: (data) => apiClient(`${BASE}/vendor-payments`, { method: "POST", body: data }),
+  },
+  vendorsDuePurchases: {
+    getAll: () => apiClient(`${BASE}/vendors/due-purchases`),
+  },
   events: {
     getAll: (params) => apiClient(`${BASE}/events`, { params }),
     getToday: () => apiClient(`${BASE}/events/today`),

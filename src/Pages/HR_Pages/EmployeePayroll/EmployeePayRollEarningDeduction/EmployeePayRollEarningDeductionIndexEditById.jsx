@@ -1,55 +1,78 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import FormInput from "../../../../Shared/FormInput/FromInput";
+import { hrService } from "../../../../services/hrService";
+
+const toDateInput = (dateISO) => {
+  if (!dateISO) return "";
+  return new Date(dateISO).toISOString().slice(0, 10);
+};
 
 const EmployeePayRollEarningDeductionIndexEditById = () => {
+  const { employeeId, id } = useParams();
+  const navigate = useNavigate();
+  const [heads, setHeads] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
-    watch,
+    reset,
   } = useForm();
 
-  // Watch employee selection to potentially auto-fill other fields
-  const selectedEmployee = watch("employeeName");
+  useEffect(() => {
+    Promise.all([
+      hrService.deductionHeads.getAll({ limit: 100 }),
+      hrService.deductions.getById(employeeId, id),
+    ])
+      .then(([headsRes, deductionRes]) => {
+        setHeads(headsRes.data || []);
+        const deduction = deductionRes.data;
+        reset({
+          headId: deduction.headId,
+          particular: deduction.note || deduction.particular || "",
+          amount: deduction.amount,
+          monthName: deduction.monthName,
+          yearName: deduction.yearName,
+          date: toDateInput(deduction.dateISO),
+        });
+      })
+      .catch((err) => setSubmitError(err.message || "Failed to load deduction"))
+      .finally(() => setLoading(false));
+  }, [employeeId, id, reset]);
 
-  // Simulating loading existing data from your screenshot
-  React.useEffect(() => {
-    setValue("deductionHeading", "");
-    setValue("employeeName", "ADMIN");
-    setValue("particular", "sfsdf");
-    setValue("amount", "3423.00");
-    setValue("monthName", "January");
-    setValue("yearName", "2025");
-    setValue("date", "2025-08-21T00:00"); // Format for datetime-local input
-  }, [setValue]);
-
-  const onSubmit = (data) => {
-    console.log("Deduction Form Data:", data);
-    // Add your API call here
+  const onSubmit = async (data) => {
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await hrService.deductions.update(employeeId, id, {
+        headId: data.headId,
+        amount: Number(data.amount),
+        date: data.date,
+        note: data.particular || "",
+      });
+      navigate(`/hr/employee-payroll/deduction/${employeeId}`);
+    } catch (err) {
+      setSubmitError(err.message || "Failed to update deduction");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  // Sample employee data for dropdown
-  const employees = [
-    { id: 1, name: "ADMIN" },
-    { id: 2, name: "John Doe" },
-    { id: 3, name: "Jane Smith" },
-  ];
-
-  // Month options
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
+  if (loading) {
+    return <div className="p-6 text-center text-gray-500">Loading...</div>;
+  }
 
   return (
     <div className="max-w-6xl min-h-screen mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link
-          to="/hr/employee-payroll/deduction/1"
+          to={`/hr/employee-payroll/deduction/${employeeId}`}
           className="flex items-center group transition-all duration-200"
         >
           <button className="flex items-center px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 group-hover:-translate-x-1 cursor-pointer">
@@ -70,54 +93,38 @@ const EmployeePayRollEarningDeductionIndexEditById = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          {submitError && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Deduction Heading Input */}
-            <div>
-              <FormInput
-                label="Deduction Heading"
-                placeholder="Enter deduction heading"
-                name="deductionHeading"
-                register={register}
-                errors={errors}
-              />
-            </div>
-            
-            {/* Employee Name Select */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Employee Name *
+                Deduction Heading <span className="text-red-500">*</span>
               </label>
               <select
-                {...register("employeeName", { required: "Employee name is required" })}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 focus:outline-none transition-colors duration-200"
+                {...register("headId", { required: "Deduction head is required" })}
+                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 focus:outline-none transition-colors duration-200 ${errors.headId ? "border-red-500" : "border-gray-300"}`}
               >
-                <option value="">Select an employee</option>
-                {employees.map(employee => (
-                  <option key={employee.id} value={employee.name}>
-                    {employee.name}
-                  </option>
+                <option value="">Select deduction head</option>
+                {heads.map((head) => (
+                  <option key={head.id} value={head.id}>{head.name}</option>
                 ))}
               </select>
-              {errors.employeeName && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.employeeName.message}
-                </p>
+              {errors.headId && (
+                <p className="mt-1 text-sm text-red-600">{errors.headId.message}</p>
               )}
             </div>
-            
-            {/* Particular Input */}
+
             <div>
               <FormInput
                 label="Particular"
                 placeholder="Enter particular"
                 name="particular"
                 register={register}
-                rules={{ required: "Particular is required" }}
                 errors={errors}
               />
             </div>
-            
-            {/* Amount Input */}
+
             <div>
               <FormInput
                 label="Amount"
@@ -126,38 +133,24 @@ const EmployeePayRollEarningDeductionIndexEditById = () => {
                 type="number"
                 step="0.01"
                 register={register}
-                rules={{ 
+                rules={{
                   required: "Amount is required",
-                  min: { value: 0, message: "Amount must be positive" }
+                  min: { value: 0, message: "Amount must be positive" },
                 }}
                 errors={errors}
               />
             </div>
-            
-            {/* Month Name Select */}
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Month Name *
-              </label>
-              <select
-                {...register("monthName", { required: "Month name is required" })}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 focus:outline-none transition-colors duration-200"
-              >
-                <option value="">Select a month</option>
-                {months.map(month => (
-                  <option key={month} value={month}>
-                    {month}
-                  </option>
-                ))}
-              </select>
-              {errors.monthName && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.monthName.message}
-                </p>
-              )}
+              <FormInput
+                label="Month Name"
+                placeholder="Enter month name"
+                name="monthName"
+                register={register}
+                errors={errors}
+              />
             </div>
-            
-            {/* Year Name Input */}
+
             <div>
               <FormInput
                 label="Year Name"
@@ -165,21 +158,15 @@ const EmployeePayRollEarningDeductionIndexEditById = () => {
                 name="yearName"
                 type="number"
                 register={register}
-                rules={{ 
-                  required: "Year is required",
-                  min: { value: 2000, message: "Year must be 2000 or later" },
-                  max: { value: 2100, message: "Year must be 2100 or earlier" }
-                }}
                 errors={errors}
               />
             </div>
-            
-            {/* Date Input */}
+
             <div>
               <FormInput
                 label="Date"
                 name="date"
-                type="datetime-local"
+                type="date"
                 register={register}
                 rules={{ required: "Date is required" }}
                 errors={errors}
@@ -189,16 +176,17 @@ const EmployeePayRollEarningDeductionIndexEditById = () => {
 
           <div className="mt-8 flex justify-end space-x-3">
             <Link
-              to="/hr/employee-payroll/deduction/1"
+              to={`/hr/employee-payroll/deduction/${employeeId}`}
               className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2"
             >
               Cancel
             </Link>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
+              disabled={submitting}
+              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer disabled:opacity-60"
             >
-              Update Deduction
+              {submitting ? "Updating..." : "Update Deduction"}
             </button>
           </div>
         </form>

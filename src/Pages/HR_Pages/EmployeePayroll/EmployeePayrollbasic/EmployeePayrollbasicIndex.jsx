@@ -1,79 +1,67 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useCallback, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import ReusableTable from "../../../../Shared/ReusableTable/ReusableTable";
+import { hrService } from "../../../../services/hrService";
+import { useApiList } from "../../../../hooks/useApiList";
 
 const EmployeePayrollbasicIndex = () => {
+  const { employeeId } = useParams();
   const navigate = useNavigate();
-  
-  // Sample data for demonstration - matching your screenshot
-  const [basicData, setBasicData] = useState([
-    {
-      id: 1,
-      employeeName: "ADMIN",
-      particular: "sfscif",
-      basic: "",
-      month: "January",
-      year: 2025,
-      date: "21/08/2025 00:00:00"
-    }
-  ]);
-
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [entriesToShow, setEntriesToShow] = useState(100);
 
-  // Filter data based on search term
-  const filteredData = basicData.filter(item =>
-    Object.values(item).some(val =>
-      val.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
+  const fetchBasicSalaries = useCallback(
+    (params) => hrService.basicSalaries.getAll(employeeId, params),
+    [employeeId]
   );
 
-  const handleDelete = (id) => {
+  const { data: basicData, loading, error, refetch } = useApiList(
+    fetchBasicSalaries,
+    { searchTerm, currentPage, entriesToShow }
+  );
+
+  const handleDelete = async (recordId) => {
     if (window.confirm("Are you sure you want to delete this basic salary record?")) {
-      setBasicData(basicData.filter(item => item.id !== id));
+      try {
+        await hrService.basicSalaries.delete(employeeId, recordId);
+        refetch();
+      } catch (err) {
+        alert(err.message || "Failed to delete basic salary record");
+      }
     }
   };
 
-  // Define columns for the ReusableTable - matching your screenshot
   const columns = [
-    {
-      header: "SL No",
-      accessor: "id",
-    },
-    {
-      header: "Employee Name",
-      accessor: "employeeName",
-    },
-    {
-      header: "Particular",
-      accessor: "particular",
-    },
+    { header: "SL No", accessor: "id" },
+    { header: "Employee Name", accessor: "employeeName" },
+    { header: "Particular", accessor: "particular" },
     {
       header: "Basic",
       accessor: "basic",
-      render: (row) => row.basic ? `$${row.basic}` : "",
+      render: (row) => (row.amount != null ? `$${row.amount}` : row.basic ? `$${row.basic}` : ""),
     },
     {
       header: "Month",
       accessor: "month",
+      render: (row) => row.monthName || row.month,
     },
     {
       header: "Year",
       accessor: "year",
+      render: (row) => row.yearName || row.year,
     },
-    {
-      header: "Date",
-      accessor: "date",
-    },
+    { header: "Date", accessor: "date" },
   ];
 
-  // Define actions for the ReusableTable
   const actions = [
     {
       label: "Edit",
       icon: FaEdit,
       className: "text-indigo-600 hover:text-indigo-900",
-      onClick: (row) => navigate(`/hr/employee-payroll/basic/${row.id}/edit`)
+      onClick: (row) =>
+        navigate(`/hr/employee-payroll/basic/${employeeId}/edit/${row.id}`),
     },
     {
       label: "Delete",
@@ -97,12 +85,15 @@ const EmployeePayrollbasicIndex = () => {
               placeholder="Search records..."
               className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
             />
             <FaSearch className="absolute left-3 top-3 text-gray-400" />
           </div>
-          <Link 
-            to="Create" 
+          <Link
+            to="create"
             className="flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-medium py-2 px-4 rounded-lg transition-colors"
           >
             <FaPlus />
@@ -111,20 +102,24 @@ const EmployeePayrollbasicIndex = () => {
         </div>
       </div>
 
-      {/* ReusableTable component */}
-      <ReusableTable 
-        columns={columns} 
-        data={filteredData} 
-        actions={actions}
-        containerClass="bg-white rounded-lg shadow overflow-hidden"
-        tableClass="min-w-full divide-y divide-gray-200"
-        theadClass="bg-gray-100"
-        thClass="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-        tbodyClass="bg-white divide-y divide-gray-200"
-        tdClass="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-      />
+      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {loading ? (
+        <div className="text-center py-12 text-gray-500">Loading...</div>
+      ) : (
+        <ReusableTable
+          columns={columns}
+          data={basicData}
+          actions={actions}
+          containerClass="bg-white rounded-lg shadow overflow-hidden"
+          tableClass="min-w-full divide-y divide-gray-200"
+          theadClass="bg-gray-100"
+          thClass="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          tbodyClass="bg-white divide-y divide-gray-200"
+          tdClass="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+        />
+      )}
 
-      {filteredData.length === 0 && (
+      {!loading && basicData.length === 0 && (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center mt-8">
           <h3 className="text-lg font-medium text-gray-900 mb-2">
             No basic salary records found
@@ -132,7 +127,7 @@ const EmployeePayrollbasicIndex = () => {
           <p className="text-gray-500 mb-6">
             {searchTerm ? "Try a different search term" : "Get started by creating a new basic salary record"}
           </p>
-          <Link to="Create">
+          <Link to="create">
             <button className="px-5 py-2.5 bg-yellow-400 text-gray-900 font-medium rounded-lg hover:bg-yellow-500 transition-colors inline-flex items-center">
               <FaPlus className="mr-2" />
               Create Basic Record

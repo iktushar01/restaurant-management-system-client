@@ -6,21 +6,21 @@ import ReusableModal from "../../../Shared/ReusableModal/ReusableModal";
 import ReusableButton from "../../../Shared/ReusableButton/ReusableButton";
 import PageBanner from "../../../Shared/PageBanner/PageBanner";
 import FormInput from "../../../Shared/FormInput/FromInput";
+import { hrService } from "../../../services/hrService";
+import { useApiList } from "../../../hooks/useApiList";
 
 const EarningHeadingIndex = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedEarningHead, setSelectedEarningHead] = useState(null);
+  const [submitError, setSubmitError] = useState("");
 
   const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm();
 
-  // Corrected data structure for earning heads
-  const earningHeads = [
-    { ID: 1, name: "Basic Salary", description: "Basic monthly compensation" },
-    { ID: 2, name: "Overtime Pay", description: "Additional pay for extra hours" },
-    { ID: 3, name: "Bonus", description: "Performance-based incentive" },
-    { ID: 4, name: "Allowances", description: "Various employee allowances" },
-  ];
+  const { data: earningHeads, loading, error, refetch } = useApiList(
+    hrService.earningHeads.getAll,
+    { searchTerm: "", currentPage: 1, entriesToShow: 100 }
+  );
 
   const columns = [
     {
@@ -41,39 +41,56 @@ const EarningHeadingIndex = () => {
 
   const handleCreateModalClose = () => {
     setIsCreateModalOpen(false);
+    setSubmitError("");
     reset();
   };
 
   const handleEditModalClose = () => {
     setIsEditModalOpen(false);
     setSelectedEarningHead(null);
+    setSubmitError("");
     reset();
   };
 
   const handleEdit = (row) => {
     setSelectedEarningHead(row);
     setValue("earningHeadName", row.name);
-    setValue("description", row.description);
     setIsEditModalOpen(true);
   };
 
-  const handleDelete = (row) => {
+  const handleDelete = async (row) => {
     if (window.confirm(`Are you sure you want to delete "${row.name}"?`)) {
-      console.log("Delete:", row);
-      // Add your delete API call here
+      try {
+        await hrService.earningHeads.delete(row.id);
+        refetch();
+      } catch (err) {
+        alert(err.message || "Failed to delete earning head");
+      }
     }
   };
 
-  const onSubmitCreate = (data) => {
-    console.log("Create Earning Head:", data);
-    // Add your create API call here
-    handleCreateModalClose();
+  const onSubmitCreate = async (data) => {
+    setSubmitError("");
+    try {
+      await hrService.earningHeads.create({ name: data.earningHeadName });
+      refetch();
+      handleCreateModalClose();
+    } catch (err) {
+      setSubmitError(err.message || "Failed to create earning head");
+    }
   };
 
-  const onSubmitEdit = (data) => {
-    console.log("Edit Earning Head:", { ...data, id: selectedEarningHead.ID });
-    // Add your update API call here
-    handleEditModalClose();
+  const onSubmitEdit = async (data) => {
+    setSubmitError("");
+    try {
+      await hrService.earningHeads.update(selectedEarningHead.id, {
+        name: data.earningHeadName,
+      });
+      refetch();
+      handleEditModalClose();
+    } catch (err) {
+      setSubmitError(err.message || "Failed to update earning head");
+    }
   };
 
   const actions = [
@@ -108,10 +125,14 @@ const EarningHeadingIndex = () => {
         </ReusableButton>
       </PageBanner>
 
-      {/* ✅ Reusable Table */}
-      <ReusableTable columns={columns} data={earningHeads} actions={actions} />
+      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {loading ? (
+        <div className="text-center py-12 text-gray-500">Loading...</div>
+      ) : (
+        <ReusableTable columns={columns} data={earningHeads} actions={actions} />
+      )}
 
-      {earningHeads.length === 0 && (
+      {!loading && earningHeads.length === 0 && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 md:p-12 text-center mt-8">
           <h3 className="text-lg font-medium text-gray-900 mb-2">
             No earning heads found
@@ -129,7 +150,6 @@ const EarningHeadingIndex = () => {
         </div>
       )}
 
-      {/* Create Modal */}
       <ReusableModal
         isOpen={isCreateModalOpen}
         onClose={handleCreateModalClose}
@@ -138,22 +158,19 @@ const EarningHeadingIndex = () => {
         size="md"
         footer={
           <div className="flex justify-end space-x-3">
-            <ReusableButton
-              onClick={handleCreateModalClose}
-              variant="outline"
-            >
+            <ReusableButton onClick={handleCreateModalClose} variant="outline">
               Cancel
             </ReusableButton>
-            <ReusableButton
-              onClick={handleSubmit(onSubmitCreate)}
-              variant="primary"
-            >
+            <ReusableButton onClick={handleSubmit(onSubmitCreate)} variant="primary">
               Submit
             </ReusableButton>
           </div>
         }
       >
         <form onSubmit={handleSubmit(onSubmitCreate)}>
+          {submitError && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>
+          )}
           <FormInput
             label="Earning Head Name"
             placeholder="e.g., Basic Salary, Overtime Pay, etc."
@@ -165,7 +182,6 @@ const EarningHeadingIndex = () => {
         </form>
       </ReusableModal>
 
-      {/* Edit Modal */}
       <ReusableModal
         isOpen={isEditModalOpen}
         onClose={handleEditModalClose}
@@ -174,22 +190,19 @@ const EarningHeadingIndex = () => {
         size="md"
         footer={
           <div className="flex justify-end space-x-3">
-            <ReusableButton
-              onClick={handleEditModalClose}
-              variant="outline"
-            >
+            <ReusableButton onClick={handleEditModalClose} variant="outline">
               Cancel
             </ReusableButton>
-            <ReusableButton
-              onClick={handleSubmit(onSubmitEdit)}
-              variant="primary"
-            >
+            <ReusableButton onClick={handleSubmit(onSubmitEdit)} variant="primary">
               Update Earning Head
             </ReusableButton>
           </div>
         }
       >
         <form onSubmit={handleSubmit(onSubmitEdit)}>
+          {submitError && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>
+          )}
           <FormInput
             label="Earning Head Name"
             placeholder="Enter earning head name"

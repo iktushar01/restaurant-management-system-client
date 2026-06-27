@@ -1,18 +1,28 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { 
   FaPlus, FaMinus, FaDollarSign, FaPercent, 
   FaUtensils, FaShoppingBasket, FaCalculator,
   FaTrash, FaArrowRight, FaCoins
 } from "react-icons/fa";
+import { inventoryService } from "../../../services/inventoryService";
 
 const FoodPageRecipeAdd = () => {
-  const rawMaterials = [
-    { id: 1, name: "Chicken", unit: "KG", price: 150 },
-    { id: 2, name: "Beef", unit: "KG", price: 650 },
-    { id: 3, name: "Mutton", unit: "KG", price: 800 },
-    { id: 4, name: "Rupcanda Fish", unit: "KG", price: 500 },
-    { id: 5, name: "Koral", unit: "KG", price: 550 },
-  ];
+  const [rawMaterials, setRawMaterials] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    inventoryService.items.getAllSimple()
+      .then((res) => {
+        setRawMaterials((res.data || []).map((item) => ({
+          id: item.id,
+          name: item.name,
+          unit: item.unit || "KG",
+          price: Number(item.price || 0),
+        })));
+      })
+      .catch(() => setRawMaterials([]))
+      .finally(() => setLoading(false));
+  }, []);
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [otherCost, setOtherCost] = useState(400);
@@ -92,7 +102,11 @@ const FoodPageRecipeAdd = () => {
             <FaShoppingBasket className="text-cyan-500" /> Raw Materials
           </h2>
           <div className="space-y-3">
-            {rawMaterials.map((item) => (
+            {loading ? (
+              <p className="text-gray-500 text-center py-4">Loading inventory items...</p>
+            ) : rawMaterials.length === 0 ? (
+              <p className="text-gray-500 text-center py-4">No inventory items found</p>
+            ) : rawMaterials.map((item) => (
               <div key={item.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100 hover:bg-cyan-50 transition-colors">
                 <div>
                   <h3 className="font-medium text-gray-800">{item.name}</h3>

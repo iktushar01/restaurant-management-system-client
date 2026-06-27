@@ -6,19 +6,21 @@ import ReusableModal from "../../../Shared/ReusableModal/ReusableModal";
 import ReusableButton from "../../../Shared/ReusableButton/ReusableButton";
 import PageBanner from "../../../Shared/PageBanner/PageBanner";
 import FormInput from "../../../Shared/FormInput/FromInput";
+import { hrService } from "../../../services/hrService";
+import { useApiList } from "../../../hooks/useApiList";
 
 const PayRollDeductionHeadIndex = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedDeductionHead, setSelectedDeductionHead] = useState(null);
+  const [submitError, setSubmitError] = useState("");
 
   const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm();
 
-  const deductionHeads = [
-    { ID: 1, name: "Tax Deduction" },
-    { ID: 2, name: "PF Deduction" },
-    { ID: 3, name: "Loan Deduction" },
-  ];
+  const { data: deductionHeads, loading, error, refetch } = useApiList(
+    hrService.deductionHeads.getAll,
+    { searchTerm: "", currentPage: 1, entriesToShow: 100 }
+  );
 
   const columns = [
     {
@@ -29,12 +31,14 @@ const PayRollDeductionHeadIndex = () => {
 
   const handleCreateModalClose = () => {
     setIsCreateModalOpen(false);
+    setSubmitError("");
     reset();
   };
 
   const handleEditModalClose = () => {
     setIsEditModalOpen(false);
     setSelectedDeductionHead(null);
+    setSubmitError("");
     reset();
   };
 
@@ -44,23 +48,39 @@ const PayRollDeductionHeadIndex = () => {
     setIsEditModalOpen(true);
   };
 
-  const handleDelete = (row) => {
+  const handleDelete = async (row) => {
     if (window.confirm(`Are you sure you want to delete "${row.name}"?`)) {
-      console.log("Delete:", row);
-      // Add your delete API call here
+      try {
+        await hrService.deductionHeads.delete(row.id);
+        refetch();
+      } catch (err) {
+        alert(err.message || "Failed to delete deduction head");
+      }
     }
   };
 
-  const onSubmitCreate = (data) => {
-    console.log("Create Deduction Head:", data);
-    // Add your create API call here
-    handleCreateModalClose();
+  const onSubmitCreate = async (data) => {
+    setSubmitError("");
+    try {
+      await hrService.deductionHeads.create({ name: data.deductionHeadName });
+      refetch();
+      handleCreateModalClose();
+    } catch (err) {
+      setSubmitError(err.message || "Failed to create deduction head");
+    }
   };
 
-  const onSubmitEdit = (data) => {
-    console.log("Edit Deduction Head:", { ...data, id: selectedDeductionHead.ID });
-    // Add your update API call here
-    handleEditModalClose();
+  const onSubmitEdit = async (data) => {
+    setSubmitError("");
+    try {
+      await hrService.deductionHeads.update(selectedDeductionHead.id, {
+        name: data.deductionHeadName,
+      });
+      refetch();
+      handleEditModalClose();
+    } catch (err) {
+      setSubmitError(err.message || "Failed to update deduction head");
+    }
   };
 
   const actions = [
@@ -95,9 +115,14 @@ const PayRollDeductionHeadIndex = () => {
         </ReusableButton>
       </PageBanner>
 
-      <ReusableTable columns={columns} data={deductionHeads} actions={actions} />
+      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {loading ? (
+        <div className="text-center py-12 text-gray-500">Loading...</div>
+      ) : (
+        <ReusableTable columns={columns} data={deductionHeads} actions={actions} />
+      )}
 
-      {deductionHeads.length === 0 && (
+      {!loading && deductionHeads.length === 0 && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 md:p-12 text-center mt-8">
           <h3 className="text-lg font-medium text-gray-900 mb-2">
             No deduction heads found
@@ -115,7 +140,6 @@ const PayRollDeductionHeadIndex = () => {
         </div>
       )}
 
-      {/* Create Modal */}
       <ReusableModal
         isOpen={isCreateModalOpen}
         onClose={handleCreateModalClose}
@@ -124,22 +148,19 @@ const PayRollDeductionHeadIndex = () => {
         size="md"
         footer={
           <div className="flex justify-end space-x-3">
-            <ReusableButton
-              onClick={handleCreateModalClose}
-              variant="outline"
-            >
+            <ReusableButton onClick={handleCreateModalClose} variant="outline">
               Cancel
             </ReusableButton>
-            <ReusableButton
-              onClick={handleSubmit(onSubmitCreate)}
-              variant="primary"
-            >
+            <ReusableButton onClick={handleSubmit(onSubmitCreate)} variant="primary">
               Submit
             </ReusableButton>
           </div>
         }
       >
         <form onSubmit={handleSubmit(onSubmitCreate)}>
+          {submitError && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>
+          )}
           <FormInput
             label="Deduction Head Name"
             placeholder="Enter deduction head name"
@@ -151,7 +172,6 @@ const PayRollDeductionHeadIndex = () => {
         </form>
       </ReusableModal>
 
-      {/* Edit Modal */}
       <ReusableModal
         isOpen={isEditModalOpen}
         onClose={handleEditModalClose}
@@ -160,22 +180,19 @@ const PayRollDeductionHeadIndex = () => {
         size="md"
         footer={
           <div className="flex justify-end space-x-3">
-            <ReusableButton
-              onClick={handleEditModalClose}
-              variant="outline"
-            >
+            <ReusableButton onClick={handleEditModalClose} variant="outline">
               Cancel
             </ReusableButton>
-            <ReusableButton
-              onClick={handleSubmit(onSubmitEdit)}
-              variant="primary"
-            >
+            <ReusableButton onClick={handleSubmit(onSubmitEdit)} variant="primary">
               Update Deduction Head
             </ReusableButton>
           </div>
         }
       >
         <form onSubmit={handleSubmit(onSubmitEdit)}>
+          {submitError && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>
+          )}
           <FormInput
             label="Deduction Head Name"
             placeholder="Enter deduction head name"

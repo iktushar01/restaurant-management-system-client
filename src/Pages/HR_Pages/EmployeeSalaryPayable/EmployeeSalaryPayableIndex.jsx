@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaPlus, FaSearch } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
+import { hrService } from "../../../services/hrService";
+import { useApiList } from "../../../hooks/useApiList";
 
 const EmployeeSalaryPayableIndex = () => {
-  // Sample data matching your screenshot structure
-  const employeeSalaryData = [
-    {
-      ID: 1,
-      employeeName: "ADMIN",
-      month: "January",
-      year: 2025,
-      netPayable: -1080.00,
-    }
-  ];
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [entriesToShow, setEntriesToShow] = useState(100);
+
+  const { data: employeeSalaryData, loading, error } = useApiList(
+    hrService.salaryPayable.getAll,
+    { searchTerm, currentPage, entriesToShow }
+  );
 
   const columns = [
     {
       header: "SL No",
-      accessor: "ID",
+      accessor: "id",
     },
     {
       header: "Employee Name",
@@ -37,7 +37,7 @@ const EmployeeSalaryPayableIndex = () => {
       accessor: "netPayable",
       render: (row) => (
         <span className={row.netPayable < 0 ? "text-red-600" : "text-green-600"}>
-          {row.netPayable.toFixed(2)}
+          {Number(row.netPayable).toFixed(2)}
         </span>
       ),
     },
@@ -46,7 +46,7 @@ const EmployeeSalaryPayableIndex = () => {
       accessor: "actions",
       render: (row) => (
         <Link
-          to={`/payroll/employee-salary/details/${row.ID}`}
+          to={`/hr/salary-payable/details/${row.id}`}
           className="text-blue-600 hover:text-blue-900 font-medium"
         >
           Details
@@ -66,10 +66,12 @@ const EmployeeSalaryPayableIndex = () => {
             View and manage employee salary payable records
           </p>
         </div>
-       
       </div>
 
-      {employeeSalaryData.length > 0 ? (
+      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {loading ? (
+        <div className="text-center py-12 text-gray-500">Loading...</div>
+      ) : employeeSalaryData.length > 0 ? (
         <ReusableTable
           columns={columns}
           data={employeeSalaryData}

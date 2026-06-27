@@ -1,48 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import FormInput from "../../../Shared/FormInput/FromInput";
+import { inventoryService } from "../../../services/inventoryService";
 
 const InventoryHomeCashback = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-    // watch,
     setValue,
   } = useForm();
 
-  const [suppliers] = useState([
-    {
-      id: 1,
-      name: "Supplier A",
-      memos: [{ id: 101, no: "MEM-001", receivable: 1500 }],
-    },
-    {
-      id: 2,
-      name: "Supplier B",
-      memos: [{ id: 102, no: "MEM-002", receivable: 2500 }],
-    },
-    {
-      id: 3,
-      name: "Supplier C",
-      memos: [{ id: 103, no: "MEM-003", receivable: 3500 }],
-    },
-  ]);
-
+  const [suppliers, setSuppliers] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [selectedMemo, setSelectedMemo] = useState(null);
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const onSubmit = (data) => {
-    console.log("Cashback Form Data:", data);
-    // Add your API call here
+  useEffect(() => {
+    inventoryService.vendorsDuePurchases.getAll()
+      .then((res) => setSuppliers(res.data || []))
+      .catch(() => setSuppliers([]));
+  }, []);
+
+  const onSubmit = async (data) => {
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await inventoryService.vendorPayments.create({
+        vendorId: data.supplierName,
+        purchaseId: data.memoNo,
+        type: "CASHBACK",
+        paid: Number(data.paid),
+        paymentDate: data.transactionDate,
+        note: data.particulars || "",
+      });
+      navigate("/inventory");
+    } catch (err) {
+      setSubmitError(err.message || "Failed to record cash back");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleSupplierChange = (e) => {
     const supplierId = e.target.value;
-    const supplier = suppliers.find((s) => s.id === parseInt(supplierId));
-    setSelectedSupplier(supplier);
+    const supplier = suppliers.find((s) => s.id === supplierId);
+    setSelectedSupplier(supplier || null);
     setSelectedMemo(null);
     setValue("memoNo", "");
     setValue("totalReceivable", 0);
@@ -52,11 +59,9 @@ const InventoryHomeCashback = () => {
   const handleMemoChange = (e) => {
     const memoId = e.target.value;
     if (selectedSupplier) {
-      const memo = selectedSupplier.memos.find(
-        (m) => m.id === parseInt(memoId)
-      );
-      setSelectedMemo(memo);
-      setValue("totalReceivable", memo.receivable);
+      const memo = selectedSupplier.memos.find((m) => m.id === memoId);
+      setSelectedMemo(memo || null);
+      setValue("totalReceivable", memo ? memo.payable : 0);
     }
   };
 
@@ -85,8 +90,8 @@ const InventoryHomeCashback = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          {submitError && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {/* Supplier Selection */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Supplier Name
@@ -112,7 +117,6 @@ const InventoryHomeCashback = () => {
               )}
             </div>
 
-            {/* Memo Selection */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Memo No
@@ -137,7 +141,6 @@ const InventoryHomeCashback = () => {
               )}
             </div>
 
-            {/* Total Receivable */}
             <div>
               <FormInput
                 label="Total Receivable"
@@ -150,25 +153,23 @@ const InventoryHomeCashback = () => {
               />
             </div>
 
-            {/* Paid */}
             <div>
               <FormInput
                 label="Paid"
                 name="paid"
                 type="number"
                 register={register}
-                rules={{ 
+                rules={{
                   required: "Paid amount is required",
                   max: {
-                    value: selectedMemo ? selectedMemo.receivable : 0,
-                    message: "Paid amount cannot exceed total receivable"
-                  }
+                    value: selectedMemo ? selectedMemo.payable : 0,
+                    message: "Paid amount cannot exceed total receivable",
+                  },
                 }}
                 errors={errors}
               />
             </div>
 
-            {/* Transaction Date */}
             <div>
               <FormInput
                 label="Tran. Date"
@@ -180,7 +181,6 @@ const InventoryHomeCashback = () => {
               />
             </div>
 
-            {/* Particulars */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Particulars
@@ -203,9 +203,10 @@ const InventoryHomeCashback = () => {
             </Link>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-green-200 to-green-400 text-gray-900 font-medium rounded-lg hover:from-green-300 hover:to-green-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-offset-2 cursor-pointer"
+              disabled={submitting}
+              className="px-6 py-2.5 bg-gradient-to-r from-green-200 to-green-400 text-gray-900 font-medium rounded-lg hover:from-green-300 hover:to-green-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-offset-2 cursor-pointer disabled:opacity-60"
             >
-              Receive Cash Back
+              {submitting ? "Processing..." : "Receive Cash Back"}
             </button>
           </div>
         </form>

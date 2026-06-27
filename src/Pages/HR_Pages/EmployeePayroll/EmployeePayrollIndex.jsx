@@ -14,114 +14,28 @@ import {
   FaCreditCard 
 } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
+import { hrService } from "../../../services/hrService";
+import { useApiList } from "../../../hooks/useApiList";
 
 const EmployeePayrollIndex = () => {
-  const [employees, setEmployees] = useState([
-    {
-      id: 1,
-      name: "ADMIN",
-      contactNo: "01827123671",
-      status: "Active",
-      access: true,
-      earning: true,
-      deduction: true,
-      basic: true,
-      salaryPayment: true,
-    },
-    {
-      id: 2,
-      name: "Amir Hossain",
-      contactNo: "01827123671",
-      status: "Active",
-      earning: true,
-      deduction: true,
-      basic: true,
-      salaryPayment: true,
-    },
-    {
-      id: 3,
-      name: "Shawan",
-      contactNo: "0182715990",
-      status: "Retired",
-      earning: true,
-      deduction: true,
-      basic: true,
-      salaryPayment: true,
-    },
-    {
-      id: 4,
-      name: "Roblul",
-      contactNo: "01834249955",
-      status: "Active",
-      earning: true,
-      deduction: true,
-      basic: true,
-      salaryPayment: true,
-    },
-    {
-      id: 5,
-      name: "Safful",
-      contactNo: "01222",
-      status: "Active",
-      earning: true,
-      deduction: true,
-      basic: true,
-      salaryPayment: true,
-    },
-    {
-      id: 6,
-      name: "payel",
-      contactNo: "01979459837",
-      status: "Active",
-      earning: true,
-      deduction: true,
-      basic: true,
-      salaryPayment: true,
-    },
-    {
-      id: 7,
-      name: "nishi",
-      contactNo: "12123454",
-      status: "Active",
-      earning: true,
-      deduction: true,
-      basic: true,
-      salaryPayment: true,
-    },
-    {
-      id: 8,
-      name: "py",
-      contactNo: "5465465456",
-      status: "Active",
-      earning: true,
-      deduction: true,
-      basic: true,
-      salaryPayment: true,
-    },
-  ]);
+  const { data: employees, loading, error, refetch } = useApiList(
+    hrService.employees.getAll,
+    { searchTerm: "", currentPage: 1, entriesToShow: 100 }
+  );
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (
       window.confirm(
         "Are you sure you want to delete this employee payroll record?"
       )
     ) {
-      setEmployees(employees.filter((emp) => emp.id !== id));
+      try {
+        await hrService.employees.delete(id);
+        refetch();
+      } catch (err) {
+        alert(err.message || "Failed to delete employee");
+      }
     }
-  };
-
-  const toggleStatus = (id) => {
-    setEmployees(
-      employees.map((emp) =>
-        emp.id === id
-          ? {
-              ...emp,
-              status: emp.status === "Active" ? "Inactive" : "Active",
-              access: emp.status === "Active" ? false : true,
-            }
-          : emp
-      )
-    );
   };
 
   const columns = [
@@ -173,11 +87,7 @@ const EmployeePayrollIndex = () => {
       render: (row) => (
         <Link
           to={`/hr/employee-payroll/earning/${row.id}`}
-          className={`flex items-center px-2 py-1 rounded text-xs transition-colors ${
-            row.earning
-              ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
-              : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-          }`}
+          className="flex items-center px-2 py-1 rounded text-xs transition-colors bg-amber-100 text-amber-800 hover:bg-amber-200"
           title="View Earning"
         >
           <FaMoneyBill className="mr-1" />
@@ -191,11 +101,7 @@ const EmployeePayrollIndex = () => {
       render: (row) => (
         <Link
           to={`/hr/employee-payroll/deduction/${row.id}`}
-          className={`flex items-center px-2 py-1 rounded text-xs transition-colors ${
-            row.deduction
-              ? "bg-purple-100 text-purple-800 hover:bg-purple-200"
-              : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-          }`}
+          className="flex items-center px-2 py-1 rounded text-xs transition-colors bg-purple-100 text-purple-800 hover:bg-purple-200"
           title="View Deduction"
         >
           <FaMinusCircle className="mr-1" />
@@ -209,11 +115,7 @@ const EmployeePayrollIndex = () => {
       render: (row) => (
         <Link
           to={`/hr/employee-payroll/basic/${row.id}`}
-          className={`flex items-center px-2 py-1 rounded text-xs transition-colors ${
-            row.basic
-              ? "bg-blue-100 text-blue-800 hover:bg-blue-200"
-              : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-          }`}
+          className="flex items-center px-2 py-1 rounded text-xs transition-colors bg-blue-100 text-blue-800 hover:bg-blue-200"
           title="View Basic Salary"
         >
           <FaWallet className="mr-1" />
@@ -226,12 +128,8 @@ const EmployeePayrollIndex = () => {
       accessor: "salaryPayment",
       render: (row) => (
         <Link
-          to={`/hr/employee-payroll/payment/${row.id}`}
-          className={`flex items-center px-2 py-1 rounded text-xs transition-colors ${
-            row.salaryPayment
-              ? "bg-green-100 text-green-800 hover:bg-green-200"
-              : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-          }`}
+          to={`/hr/employee-payroll/salary-payment/${row.id}`}
+          className="flex items-center px-2 py-1 rounded text-xs transition-colors bg-green-100 text-green-800 hover:bg-green-200"
           title="Salary Payment"
         >
           <FaCreditCard className="mr-1" />
@@ -359,6 +257,10 @@ const EmployeePayrollIndex = () => {
 
       {/* Table Section */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        {error && <div className="m-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+        {loading ? (
+          <div className="text-center py-12 text-gray-500">Loading...</div>
+        ) : (
         <ReusableTable
           columns={columns}
           data={employees}
@@ -382,6 +284,7 @@ const EmployeePayrollIndex = () => {
             </div>
           }
         />
+        )}
       </div>
     </div>
   );

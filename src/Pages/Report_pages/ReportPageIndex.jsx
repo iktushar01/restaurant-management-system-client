@@ -1,38 +1,50 @@
-import React, { useState } from 'react';
-import { FiPrinter, FiDownload, FiFilter, FiChevronDown, FiChevronUp, FiDollarSign, FiPercent, FiHome, FiCreditCard, FiDollarSign as FiCash } from 'react-icons/fi';
+import React, { useEffect, useMemo, useState } from 'react';
+import { FiPrinter, FiDownload, FiChevronDown, FiChevronUp, FiDollarSign, FiPercent, FiHome, FiCreditCard, FiDollarSign as FiCash } from 'react-icons/fi';
+import { reportService } from '../../services/reportService';
+
+const formatCurrency = (value) => `$${Number(value || 0).toFixed(2)}`;
 
 const ReportPageIndex = () => {
   const [showSummary, setShowSummary] = useState(true);
+  const [report, setReport] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  
+  useEffect(() => {
+    reportService.getCurrent()
+      .then((res) => setReport(res.data || null))
+      .catch((err) => setError(err.message || 'Failed to load report'))
+      .finally(() => setLoading(false));
+  }, []);
 
-  const allOrdersData = [
-    { id: 1, orderDetail: 'A4', status: 'Ordered', orderTime: '16/08/2025 17:02', total: 395.00 },
-    { id: 2, orderDetail: 'A5', status: 'Ordered', orderTime: '17/08/2025 18:30', total: 250.00 },
-    { id: 3, orderDetail: 'A6', status: 'Ordered', orderTime: '18/08/2025 19:45', total: 520.00 }
-  ];
+  const allOrdersData = report?.allOrders || [];
+  const cancelledOrdersData = report?.cancelledOrders || [];
 
-  const cancelledOrdersData = [
-    { id: 1, orderDetail: 'A4', status: 'Cancelled', orderTime: '16/08/2025 17:02', total: 395.00 }
-  ];
+  const summaryData = useMemo(() => {
+    const summary = report?.summary || {};
+    return [
+      { label: 'Total Food Cost', value: formatCurrency(summary.totalFoodCost), icon: <FiDollarSign className="text-blue-500" /> },
+      { label: 'Total Discount', value: formatCurrency(summary.totalDiscount), icon: <FiPercent className="text-green-500" /> },
+      { label: 'Total OnHouse Cost', value: formatCurrency(summary.totalOnHouse), icon: <FiHome className="text-purple-500" /> },
+      { label: 'Total Due Orders Amount', value: formatCurrency(summary.totalDueOrders), icon: <FiDollarSign className="text-yellow-500" /> },
+      { label: 'Total Due Collect Amount', value: formatCurrency(summary.totalDueCollect), icon: <FiDollarSign className="text-orange-500" /> },
+      { label: 'Total Payment Through Card', value: formatCurrency(summary.totalCard), icon: <FiCreditCard className="text-indigo-500" /> },
+      { label: 'Total Cash Payment', value: formatCurrency(summary.totalCash), icon: <FiCash className="text-teal-500" /> },
+    ];
+  }, [report]);
 
-  const summaryData = [
-    { label: 'Total Food Cost', value: '$1,580.00', icon: <FiDollarSign className="text-blue-500" /> },
-    { label: 'Total Discount', value: '$158.00', icon: <FiPercent className="text-green-500" /> },
-    { label: 'Total OnHouse Cost', value: '$250.00', icon: <FiHome className="text-purple-500" /> },
-    { label: 'Total Due Orders Amount', value: '$2,350.00', icon: <FiDollarSign className="text-yellow-500" /> },
-    { label: 'Total Due Collect Amount', value: '$1,850.00', icon: <FiDollarSign className="text-orange-500" /> },
-    { label: 'Total Payment Through Card', value: '$3,200.00', icon: <FiCreditCard className="text-indigo-500" /> },
-    { label: 'Total Cash Payment', value: '$1,450.00', icon: <FiCash className="text-teal-500" /> }
-  ];
+  const totalAllOrders = allOrdersData.reduce((sum, item) => sum + Number(item.total), 0);
+  const totalCancelled = cancelledOrdersData.reduce((sum, item) => sum + Number(item.total), 0);
 
-  
-  const totalAllOrders = allOrdersData.reduce((sum, item) => sum + item.total, 0);
-  const totalCancelled = cancelledOrdersData.reduce((sum, item) => sum + item.total, 0);
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center text-gray-500">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
+        {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 bg-blue-100 p-6 rounded-lg shadow">
           <div>
@@ -67,9 +79,9 @@ const ReportPageIndex = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {allOrdersData.map((item) => (
+                  {allOrdersData.map((item, index) => (
                     <tr key={item.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.id}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.orderDetail}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -77,21 +89,19 @@ const ReportPageIndex = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.orderTime}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">${item.total.toFixed(2)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{formatCurrency(item.total)}</td>
                     </tr>
                   ))}
-                  {/* Total Row */}
                   <tr className="bg-gray-50 font-semibold">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900" colSpan="3"></td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Total</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${totalAllOrders.toFixed(2)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{formatCurrency(totalAllOrders)}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-
 
         {/* Cancelled Orders Section */}
         <div className="mb-8">
@@ -109,9 +119,9 @@ const ReportPageIndex = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {cancelledOrdersData.map((item) => (
+                  {cancelledOrdersData.map((item, index) => (
                     <tr key={item.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.id}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.orderDetail}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
@@ -119,14 +129,13 @@ const ReportPageIndex = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.orderTime}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">${item.total.toFixed(2)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{formatCurrency(item.total)}</td>
                     </tr>
                   ))}
-                  {/* Total Row */}
                   <tr className="bg-gray-50 font-semibold">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900" colSpan="3"></td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Total</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${totalCancelled.toFixed(2)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{formatCurrency(totalCancelled)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -146,7 +155,7 @@ const ReportPageIndex = () => {
               {showSummary ? 'Hide' : 'Show'} Summary
             </button>
           </div>
-          
+
           {showSummary && (
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
               <div className="p-6">

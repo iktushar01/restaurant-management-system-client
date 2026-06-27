@@ -100,6 +100,7 @@ import SubCategoryCreate from "../Pages/Settings_Pages/SubCategory/SubCategoryCr
 import SubCategoryEditByID from "../Pages/Settings_Pages/SubCategory/SubCategoryEditByID";
 import CategoryPagesIndex from "../Pages/Settings_Pages/CategoryPages/CategoryPagesIndex";
 import CategoryPagesCreate from "../Pages/Settings_Pages/CategoryPages/CategoryPagesCreate";
+import CategoryPagesEditById from "../Pages/Settings_Pages/CategoryPages/CategoryPagesEditById";
 import PurchaseDetails from "../Pages/Inventory_pages/PurchaseDetails/PurchaseDetails";
 import InventoryHomeIndex from "../Pages/Inventory_pages/InventoryHome/InventoryHomeIndex";
 import InventoryHomePay from "../Pages/Inventory_pages/InventoryHome/InventoryHomePay";
@@ -233,57 +234,54 @@ export const router = createBrowserRouter([
       },
       //======================================
       {
-        path: "/hr/employee-payroll/earning/1",
-        //======= dynamic id need to added =======//
+        path: "/hr/employee-payroll/earning/:employeeId",
         element: <EmployeePayrollEarningIndex />,
       },
       {
-        path: "/hr/employee-payroll/earning/1/Create",
+        path: "/hr/employee-payroll/earning/:employeeId/create",
         element: <EmployeePayrollEarningCreateByID />,
       },
       {
-        path: "/hr/employee-payroll/earning/1/edit/1",
+        path: "/hr/employee-payroll/earning/:employeeId/edit/:id",
         element: <EmployeePayrollEarningIndexEditByID />,
       },
       //======================================
       {
-        path: "/hr/employee-payroll/deduction/1",
+        path: "/hr/employee-payroll/deduction/:employeeId",
         element: <EmployeePayRollEarningDeductionIndex />,
       },
       {
-        path: "/hr/employee-payroll/deduction/1/Create",
+        path: "/hr/employee-payroll/deduction/:employeeId/create",
         element: <EmployeePayRollEarningDeductionIndexCreateById />,
       },
       {
-        path: "/hr/employee-payroll/deduction/1/edit/1",
+        path: "/hr/employee-payroll/deduction/:employeeId/edit/:id",
         element: <EmployeePayRollEarningDeductionIndexEditById />,
       },
       //======================================
       {
-        path: "/hr/employee-payroll/basic/1",
-        //======= dynamic id need to added =======//
+        path: "/hr/employee-payroll/basic/:employeeId",
         element: <EmployeePayrollbasicIndex />,
       },
       {
-        path: "/hr/employee-payroll/basic/1/Create",
+        path: "/hr/employee-payroll/basic/:employeeId/create",
         element: <EmployeePayrollbasicCreateById />,
       },
       {
-        path: "/hr/employee-payroll/basic/1/edit",
+        path: "/hr/employee-payroll/basic/:employeeId/edit/:id",
         element: <EmployeePayrollbasicEditById />,
       },
       //======================================
       {
-        path: "/hr/employee-payroll/payment/1",
-        //======= dynamic id need to added =======//
+        path: "/hr/employee-payroll/salary-payment/:employeeId",
         element: <EmployeePayRollSalaryPaymentIndex />,
       },
       {
-        path: "/hr/employee-payroll/payment/1/Create",
+        path: "/hr/employee-payroll/salary-payment/:employeeId/create",
         element: <EmployeePayRollSalaryPaymentCreateById />,
       },
       {
-        path: "/hr/employee-payroll/salary-payment/1/edit",
+        path: "/hr/employee-payroll/salary-payment/:employeeId/edit/:id",
         element: <EmployeePayRollSalaryPaymentEditByID />,
       },
       //======================================
@@ -292,8 +290,7 @@ export const router = createBrowserRouter([
         element: <EmployeeSalaryPayableIndex />,
       },
       {
-        path: "payroll/employee-salary/details/1",
-        //======= dynamic date need to added =======//
+        path: "/hr/salary-payable/details/:employeeId",
         element: <EmployeeSalaryPayableDetails />,
       },
       //=====================================
@@ -345,15 +342,15 @@ export const router = createBrowserRouter([
       },
       //=============================================//
       {
-        path: "bank/BankTransaction/Index/:id",
+        path: "bank/BankTransaction/Index/:accountId",
         element: <BankTransactionIndexById />,
       },
       {
-        path: "bank/BankTransaction/Index/:id/Create",
+        path: "bank/BankTransaction/Index/:accountId/Create",
         element: <BankTransactionIndexByIdCreate />,
       },
       {
-        path: "bank/BankTransaction/Index/:id/Edit/:id",
+        path: "bank/BankTransaction/Index/:accountId/Edit/:transactionId",
         element: <BankTransactionIndexByIdEdit />,
       },
       //=============================================//
@@ -501,7 +498,7 @@ export const router = createBrowserRouter([
         element: <ChangesPage />,
       },
       {
-        path: "/WorkPeriod/PropertyInformation/Edit/1",
+        path: "/WorkPeriod/PropertyInformation",
         element: <PropertyInformation />,
       },
       //============================
@@ -632,7 +629,7 @@ export const router = createBrowserRouter([
       },
        {
         path:"/WorkPeriod/inventory/category/edit/:id",
-        element: <SubCategoryEditByID/>
+        element: <CategoryPagesEditById/>
       },
 
 

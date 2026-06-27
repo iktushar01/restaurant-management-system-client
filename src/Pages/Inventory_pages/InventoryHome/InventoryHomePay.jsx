@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import FormInput from "../../../Shared/FormInput/FromInput";
+import { inventoryService } from "../../../services/inventoryService";
 
 const InventoryHomePay = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -13,36 +15,43 @@ const InventoryHomePay = () => {
     setValue,
   } = useForm();
 
-  const [suppliers] = useState([
-    {
-      id: 1,
-      name: "Supplier A",
-      memos: [{ id: 101, no: "MEM-001", payable: 1500 }],
-    },
-    {
-      id: 2,
-      name: "Supplier B",
-      memos: [{ id: 102, no: "MEM-002", payable: 2500 }],
-    },
-    {
-      id: 3,
-      name: "Supplier C",
-      memos: [{ id: 103, no: "MEM-003", payable: 3500 }],
-    },
-  ]);
-
+  const [suppliers, setSuppliers] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [selectedMemo, setSelectedMemo] = useState(null);
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const onSubmit = (data) => {
-    console.log("Payment Form Data:", data);
-    // Add your API call here
+  useEffect(() => {
+    inventoryService.vendorsDuePurchases.getAll()
+      .then((res) => setSuppliers(res.data || []))
+      .catch(() => setSuppliers([]));
+  }, []);
+
+  const onSubmit = async (data) => {
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await inventoryService.vendorPayments.create({
+        vendorId: data.supplierName,
+        purchaseId: data.memoNo,
+        type: "PAY",
+        paid: Number(data.paid),
+        discount: Number(data.discount) || 0,
+        paymentDate: data.transactionDate,
+        note: data.particulars || "",
+      });
+      navigate("/inventory");
+    } catch (err) {
+      setSubmitError(err.message || "Failed to record payment");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleSupplierChange = (e) => {
     const supplierId = e.target.value;
-    const supplier = suppliers.find((s) => s.id === parseInt(supplierId));
-    setSelectedSupplier(supplier);
+    const supplier = suppliers.find((s) => s.id === supplierId);
+    setSelectedSupplier(supplier || null);
     setSelectedMemo(null);
     setValue("memoNo", "");
     setValue("totalPayable", 0);
@@ -52,12 +61,10 @@ const InventoryHomePay = () => {
   const handleMemoChange = (e) => {
     const memoId = e.target.value;
     if (selectedSupplier) {
-      const memo = selectedSupplier.memos.find(
-        (m) => m.id === parseInt(memoId)
-      );
-      setSelectedMemo(memo);
-      setValue("totalPayable", memo.payable);
-      setValue("due", memo.payable);
+      const memo = selectedSupplier.memos.find((m) => m.id === memoId);
+      setSelectedMemo(memo || null);
+      setValue("totalPayable", memo ? memo.payable : 0);
+      setValue("due", memo ? memo.payable : 0);
     }
   };
 
@@ -100,8 +107,8 @@ const InventoryHomePay = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          {submitError && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {/* Supplier Selection */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Supplier Name
@@ -127,7 +134,6 @@ const InventoryHomePay = () => {
               )}
             </div>
 
-            {/* Memo Selection */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Memo No
@@ -152,7 +158,6 @@ const InventoryHomePay = () => {
               )}
             </div>
 
-            {/* Total Payable */}
             <div>
               <FormInput
                 label="Total Payable"
@@ -165,7 +170,6 @@ const InventoryHomePay = () => {
               />
             </div>
 
-            {/* Discount */}
             <div>
               <FormInput
                 label="Discount"
@@ -177,7 +181,6 @@ const InventoryHomePay = () => {
               />
             </div>
 
-            {/* Paid */}
             <div>
               <FormInput
                 label="Paid"
@@ -190,7 +193,6 @@ const InventoryHomePay = () => {
               />
             </div>
 
-            {/* Transaction Date */}
             <div>
               <FormInput
                 label="Tran. Date"
@@ -202,7 +204,6 @@ const InventoryHomePay = () => {
               />
             </div>
 
-            {/* Due */}
             <div>
               <FormInput
                 label="Due"
@@ -214,7 +215,6 @@ const InventoryHomePay = () => {
               />
             </div>
 
-            {/* Particulars */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Particulars
@@ -237,9 +237,10 @@ const InventoryHomePay = () => {
             </Link>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
+              disabled={submitting}
+              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer disabled:opacity-60"
             >
-              Pay
+              {submitting ? "Processing..." : "Pay"}
             </button>
           </div>
         </form>

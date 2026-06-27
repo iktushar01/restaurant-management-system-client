@@ -235,7 +235,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-card text-card-foreground border-b border-border shadow-sm">
-      <div className="   mx-auto px-4">
+      <div className="w-full max-w-none px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-3 md:hidden">
           <span className="text-lg font-medium">Menu</span>
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -262,7 +262,7 @@ const Navbar = () => {
           </Sheet>
         </div>
 
-        <div className="hidden md:flex justify-center flex-wrap gap-1 py-2">
+        <div className="hidden md:flex flex-wrap justify-start gap-1 py-2">
           {menuItems.map((item) => (
             <DesktopNavItem key={item.name} item={item} />
           ))}

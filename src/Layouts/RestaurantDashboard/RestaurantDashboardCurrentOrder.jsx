@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { formatMoney } from "@/lib/currency";
-import { BanknoteIcon, XIcon } from "lucide-react";
+import { BanknoteIcon, ClipboardListIcon, XIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -67,86 +67,120 @@ const RestaurantDashboardCurrentOrder = () => {
   };
 
   return (
-    <div className="p-4 bg-background min-h-[400px]">
-      <div className="  mx-auto space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Current Orders</CardTitle>
-            <CardDescription>
-              Manage and track current orders in real-time
-            </CardDescription>
-          </CardHeader>
-        </Card>
-
-        <Card className="overflow-hidden py-0">
-          {loading ? (
-            <CardContent className="p-8 text-center text-muted-foreground">
-              Loading orders...
-            </CardContent>
-          ) : orders.length === 0 ? (
-            <CardContent className="p-8 text-center text-muted-foreground">
-              No active orders
-            </CardContent>
-          ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-muted/50 hover:bg-muted/50">
-                    <TableHead>Order ID</TableHead>
-                    <TableHead>Table</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Bill Amount</TableHead>
-                    <TableHead>Items</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {orders.map((order) => (
-                    <TableRow key={order.id} className="hover:bg-muted/30">
-                      <TableCell className="font-medium">
-                        #{order.orderId || order.id.slice(0, 8)}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {order.table}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">{order.status}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        {formatMoney(order.billAmount)}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground max-w-xs truncate">
-                        {order.items?.join(", ")}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-1">
-                          <Button
-                            variant="ghost"
-                            size="icon-sm"
-                            onClick={() => handlePayClick(order.id)}
-                            title="Pay"
-                          >
-                            <BanknoteIcon className="text-success" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon-sm"
-                            onClick={() => handleCancelClick(order.id)}
-                            title="Cancel"
-                          >
-                            <XIcon className="text-destructive" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+    <Card className="w-full border-border shadow-sm overflow-hidden">
+      <CardHeader className="pb-3 border-b border-border">
+        <CardTitle className="text-lg md:text-xl flex items-center gap-2">
+          <ClipboardListIcon className="size-5 text-primary" />
+          Current Orders
+          {!loading && (
+            <Badge variant="secondary" className="ml-2 font-normal">
+              {orders.length} active
+            </Badge>
           )}
-        </Card>
-      </div>
-    </div>
+        </CardTitle>
+      </CardHeader>
+
+      {loading ? (
+        <CardContent className="p-10 text-center text-muted-foreground">
+          Loading orders...
+        </CardContent>
+      ) : orders.length === 0 ? (
+        <CardContent className="p-10 text-center text-muted-foreground">
+          No active orders right now.
+        </CardContent>
+      ) : (
+        <>
+          <div className="hidden md:block overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/50 hover:bg-muted/50">
+                  <TableHead>Order ID</TableHead>
+                  <TableHead>Table</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Bill Amount</TableHead>
+                  <TableHead>Items</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {orders.map((order) => (
+                  <TableRow key={order.id} className="hover:bg-muted/30">
+                    <TableCell className="font-medium">
+                      #{order.orderId || order.id.slice(0, 8)}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">{order.table}</TableCell>
+                    <TableCell>
+                      <Badge variant="secondary">{order.status}</Badge>
+                    </TableCell>
+                    <TableCell className="font-medium">{formatMoney(order.billAmount)}</TableCell>
+                    <TableCell className="text-muted-foreground max-w-md truncate">
+                      {order.items?.join(", ")}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon-sm"
+                          onClick={() => handlePayClick(order.id)}
+                          title="Complete payment"
+                        >
+                          <BanknoteIcon className="text-success" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon-sm"
+                          onClick={() => handleCancelClick(order.id)}
+                          title="Cancel order"
+                        >
+                          <XIcon className="text-destructive" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+          <div className="md:hidden divide-y divide-border">
+            {orders.map((order) => (
+              <div key={order.id} className="p-4 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="font-semibold">#{order.orderId || order.id.slice(0, 8)}</p>
+                    <p className="text-sm text-muted-foreground">Table {order.table}</p>
+                  </div>
+                  <Badge variant="secondary">{order.status}</Badge>
+                </div>
+                <p className="text-lg font-bold text-primary">{formatMoney(order.billAmount)}</p>
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {order.items?.join(", ")}
+                </p>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    className="flex-1 gap-1.5 bg-primary text-primary-foreground"
+                    onClick={() => handlePayClick(order.id)}
+                  >
+                    <BanknoteIcon className="size-4" />
+                    Pay
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="flex-1 gap-1.5 text-destructive border-destructive/30"
+                    onClick={() => handleCancelClick(order.id)}
+                  >
+                    <XIcon className="size-4" />
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </Card>
   );
 };
 

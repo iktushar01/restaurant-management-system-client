@@ -53,6 +53,8 @@ const InventoryHomePay = () => {
     setValue("totalPayable", memo ? memo.payable : 0);
     setValue("due", memo ? memo.payable : 0);
   }, [memoId, selectedSupplier, setValue]);
+
+  const onSubmit = async (data) => {
     setSubmitError("");
     setSubmitting(true);
     try {
@@ -73,7 +75,7 @@ const InventoryHomePay = () => {
     }
   };
 
-  const onSubmit = async (data) => {
+  const handleDiscountChange = (e) => {
     const discount = parseFloat(e.target.value) || 0;
     const totalPayable = selectedMemo ? selectedMemo.payable : 0;
     const paid = watch("paid") || 0;

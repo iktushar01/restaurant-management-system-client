@@ -16,6 +16,100 @@ import { floorPlanService } from "@/services/floorPlanService";
 import { dineLocationService } from "@/services/dineLocationService";
 import { dineTableService } from "@/services/dineTableService";
 
+function ZoneLabel({ location }) {
+  return (
+    <div className="flex h-full flex-col p-3 pointer-events-none">
+      <div className="text-sm font-semibold truncate">{location.name}</div>
+      <div className="text-xs text-muted-foreground mt-0.5">
+        {getLocationTypeLabel(location.type)}
+      </div>
+    </div>
+  );
+}
+
+function TableCard({ table }) {
+  return (
+    <>
+      <UtensilsCrossedIcon className="size-4 mb-0.5 pointer-events-none" />
+      <span className="text-xs font-bold pointer-events-none">{table.tableNo}</span>
+      <span className="text-[10px] opacity-90 flex items-center gap-0.5 pointer-events-none">
+        <UsersIcon className="size-2.5" />
+        {table.capacity}
+      </span>
+    </>
+  );
+}
+
+function ReadOnlyFloorPlan({ canvas, locations, tables, className, minHeight }) {
+  return (
+    <div
+      className={cn(
+        "overflow-auto rounded-xl border border-border bg-[#0a0a0a] shadow-inner",
+        className
+      )}
+      style={{ minHeight, maxHeight: 520 }}
+    >
+      <div
+        className="relative"
+        style={{ width: canvas.width, height: canvas.height, minWidth: canvas.width }}
+      >
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, rgba(250,204,21,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(250,204,21,0.08) 1px, transparent 1px)",
+            backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`,
+          }}
+        />
+
+        {locations.map((location) => (
+          <div
+            key={location.id}
+            className={cn(
+              "absolute rounded-xl border-2 border-dashed",
+              getLocationZoneClasses(location.type)
+            )}
+            style={{
+              left: location.positionX,
+              top: location.positionY,
+              width: location.width,
+              height: location.height,
+              zIndex: 1,
+            }}
+          >
+            <ZoneLabel location={location} />
+          </div>
+        ))}
+
+        {tables.map((table) => (
+          <div
+            key={table.id}
+            className={cn(
+              "absolute flex flex-col items-center justify-center rounded-lg border-2 shadow-md",
+              getTableStatusClasses(table.status)
+            )}
+            style={{
+              left: table.positionX,
+              top: table.positionY,
+              width: DEFAULT_TABLE_SIZE,
+              height: DEFAULT_TABLE_SIZE,
+              zIndex: 2,
+            }}
+          >
+            <TableCard table={table} />
+          </div>
+        ))}
+
+        {locations.length === 0 && tables.length === 0 && (
+          <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+            Add dining locations and tables to build your floor plan.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 const DineFloorPlanCanvas = ({
   readOnly = false,
   onSaveStateChange,
@@ -28,16 +122,18 @@ const DineFloorPlanCanvas = ({
   const [locations, setLocations] = useState([]);
   const [tables, setTables] = useState([]);
   const saveTimerRef = useRef(null);
+  const mountedRef = useRef(false);
 
   const notifySaveState = useCallback(
     (state) => {
+      if (readOnly) return;
       onSaveStateChange?.(state);
-      if (state === "saved") {
-        clearTimeout(saveTimerRef.current);
-        saveTimerRef.current = setTimeout(() => onSaveStateChange?.("idle"), 2000);
+      clearTimeout(saveTimerRef.current);
+      if (state === "saved" || state === "error") {
+        saveTimerRef.current = setTimeout(() => onSaveStateChange?.("idle"), 2500);
       }
     },
-    [onSaveStateChange]
+    [onSaveStateChange, readOnly]
   );
 
   const loadFloorPlan = useCallback(async () => {
@@ -61,19 +157,20 @@ const DineFloorPlanCanvas = ({
   }, [loadFloorPlan]);
 
   useEffect(() => {
-    if (!readOnly) return undefined;
-    const interval = setInterval(loadFloorPlan, 15000);
-    return () => clearInterval(interval);
-  }, [readOnly, loadFloorPlan]);
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   const persistLocation = async (id, payload) => {
     notifySaveState("saving");
     try {
       await dineLocationService.update(id, payload);
       notifySaveState("saved");
-    } catch (err) {
+    } catch {
       notifySaveState("error");
-      throw err;
+      throw new Error("save failed");
     }
   };
 
@@ -82,13 +179,15 @@ const DineFloorPlanCanvas = ({
     try {
       await dineTableService.update(id, payload);
       notifySaveState("saved");
-    } catch (err) {
+    } catch {
       notifySaveState("error");
-      throw err;
+      throw new Error("save failed");
     }
   };
 
   const handleLocationDragStop = async (locationId, d) => {
+    if (readOnly || !mountedRef.current) return;
+
     const location = locations.find((item) => item.id === locationId);
     if (!location) return;
 
@@ -100,6 +199,8 @@ const DineFloorPlanCanvas = ({
       canvas.width,
       canvas.height
     );
+
+    if (x === location.positionX && y === location.positionY) return;
 
     setLocations((prev) =>
       prev.map((item) =>
@@ -115,11 +216,18 @@ const DineFloorPlanCanvas = ({
         height: location.height,
       });
     } catch {
-      loadFloorPlan();
+      setLocations((prev) =>
+        prev.map((item) => (item.id === locationId ? location : item))
+      );
     }
   };
 
   const handleLocationResizeStop = async (locationId, ref, position) => {
+    if (readOnly || !mountedRef.current) return;
+
+    const location = locations.find((item) => item.id === locationId);
+    if (!location) return;
+
     const width = snapToGrid(parseInt(ref.style.width, 10));
     const height = snapToGrid(parseInt(ref.style.height, 10));
     const { x, y } = clampPosition(
@@ -130,6 +238,17 @@ const DineFloorPlanCanvas = ({
       canvas.width,
       canvas.height
     );
+
+    if (
+      x === location.positionX &&
+      y === location.positionY &&
+      width === location.width &&
+      height === location.height
+    ) {
+      return;
+    }
+
+    const previous = location;
 
     setLocations((prev) =>
       prev.map((item) =>
@@ -147,11 +266,15 @@ const DineFloorPlanCanvas = ({
         height,
       });
     } catch {
-      loadFloorPlan();
+      setLocations((prev) =>
+        prev.map((item) => (item.id === locationId ? previous : item))
+      );
     }
   };
 
   const handleTableDragStop = async (tableId, d) => {
+    if (readOnly || !mountedRef.current) return;
+
     const table = tables.find((item) => item.id === tableId);
     if (!table) return;
 
@@ -164,8 +287,11 @@ const DineFloorPlanCanvas = ({
       canvas.height
     );
 
+    if (x === table.positionX && y === table.positionY) return;
+
     const zone = findZoneAtPoint(x, y, DEFAULT_TABLE_SIZE, DEFAULT_TABLE_SIZE, locations);
     const nextLocationId = zone?.id ?? table.locationId;
+    const previous = table;
 
     setTables((prev) =>
       prev.map((item) =>
@@ -188,7 +314,9 @@ const DineFloorPlanCanvas = ({
         ...(zone && zone.id !== table.locationId ? { locationId: zone.id } : {}),
       });
     } catch {
-      loadFloorPlan();
+      setTables((prev) =>
+        prev.map((item) => (item.id === tableId ? previous : item))
+      );
     }
   };
 
@@ -210,13 +338,32 @@ const DineFloorPlanCanvas = ({
     return (
       <div
         className={cn(
-          "flex items-center justify-center rounded-xl border border-destructive/30 bg-destructive/10 text-destructive p-6",
+          "flex flex-col items-center justify-center gap-3 rounded-xl border border-destructive/30 bg-destructive/10 text-destructive p-6",
           className
         )}
         style={{ minHeight }}
       >
-        {error}
+        <p>{error}</p>
+        <button
+          type="button"
+          onClick={loadFloorPlan}
+          className="text-sm underline underline-offset-2 hover:text-destructive/80"
+        >
+          Try again
+        </button>
       </div>
+    );
+  }
+
+  if (readOnly) {
+    return (
+      <ReadOnlyFloorPlan
+        canvas={canvas}
+        locations={locations}
+        tables={tables}
+        className={className}
+        minHeight={minHeight}
+      />
     );
   }
 
@@ -226,7 +373,7 @@ const DineFloorPlanCanvas = ({
         "overflow-auto rounded-xl border border-border bg-[#0a0a0a] shadow-inner",
         className
       )}
-      style={{ minHeight, maxHeight: readOnly ? 520 : 720 }}
+      style={{ minHeight, maxHeight: 720 }}
     >
       <div
         className="relative"
@@ -249,8 +396,6 @@ const DineFloorPlanCanvas = ({
             resizeGrid={[GRID_SIZE, GRID_SIZE]}
             size={{ width: location.width, height: location.height }}
             position={{ x: location.positionX, y: location.positionY }}
-            disableDragging={readOnly}
-            enableResizing={!readOnly}
             minWidth={160}
             minHeight={120}
             onDragStop={(_e, d) => handleLocationDragStop(location.id, d)}
@@ -263,12 +408,7 @@ const DineFloorPlanCanvas = ({
             )}
             style={{ zIndex: 1 }}
           >
-            <div className="flex h-full flex-col p-3 pointer-events-none">
-              <div className="text-sm font-semibold truncate">{location.name}</div>
-              <div className="text-xs text-muted-foreground mt-0.5">
-                {getLocationTypeLabel(location.type)}
-              </div>
-            </div>
+            <ZoneLabel location={location} />
           </Rnd>
         ))}
 
@@ -279,7 +419,6 @@ const DineFloorPlanCanvas = ({
             dragGrid={[GRID_SIZE, GRID_SIZE]}
             size={{ width: DEFAULT_TABLE_SIZE, height: DEFAULT_TABLE_SIZE }}
             position={{ x: table.positionX, y: table.positionY }}
-            disableDragging={readOnly}
             enableResizing={false}
             onDragStop={(_e, d) => handleTableDragStop(table.id, d)}
             className={cn(
@@ -288,12 +427,7 @@ const DineFloorPlanCanvas = ({
             )}
             style={{ zIndex: 2 }}
           >
-            <UtensilsCrossedIcon className="size-4 mb-0.5 pointer-events-none" />
-            <span className="text-xs font-bold pointer-events-none">{table.tableNo}</span>
-            <span className="text-[10px] opacity-90 flex items-center gap-0.5 pointer-events-none">
-              <UsersIcon className="size-2.5" />
-              {table.capacity}
-            </span>
+            <TableCard table={table} />
           </Rnd>
         ))}
 

@@ -37,27 +37,27 @@ const InventoryHomeLocation = () => {
   const selectedName = locations.find((l) => l.id === selectedLocationId)?.name;
 
   return (
-    <div className="max-w-4xl min-h-screen mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link to="/inventory" className="flex items-center group transition-all duration-200">
-          <button className="flex items-center px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 group-hover:-translate-x-1 cursor-pointer">
-            <FiArrowLeft className="mr-2 text-gray-600 group-hover:text-gray-900 transition-colors duration-200" />
+          <button className="flex items-center px-4 py-2.5 rounded-lg border border-border bg-card text-foreground hover:bg-muted/40 hover:shadow-sm transition-all duration-200 group-hover:-translate-x-1 cursor-pointer">
+            <FiArrowLeft className="mr-2 text-muted-foreground group-hover:text-foreground transition-colors duration-200" />
             Back to Inventory
           </button>
         </Link>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="p-6 bg-gradient-to-r from-purple-200 to-purple-400 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800">Stock by Location</h2>
-          <p className="text-gray-700 mt-1">View inventory at each stock location</p>
+      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
+        <div className="p-6 bg-gradient-to-r bg-accent text-accent-foreground border-b border-border">
+          <h2 className="text-2xl font-bold text-foreground">Stock by Location</h2>
+          <p className="text-foreground mt-1">View inventory at each stock location</p>
         </div>
 
         <div className="p-6">
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Select Location</label>
+            <label className="block text-sm font-medium text-foreground mb-1">Select Location</label>
             <select
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-300 outline-none"
+              className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-300 outline-none"
               value={selectedLocationId}
               onChange={(e) => setSelectedLocationId(e.target.value)}
             >
@@ -69,20 +69,20 @@ const InventoryHomeLocation = () => {
           </div>
 
           {selectedName && (
-            <h3 className="text-xl text-gray-800 text-center bg-amber-100 p-4 font-bold rounded-xl mb-4">{selectedName}</h3>
+            <h3 className="text-xl text-foreground text-center bg-amber-100 p-4 font-bold rounded-xl mb-4">{selectedName}</h3>
           )}
 
           {loading ? (
-            <div className="text-center py-8 text-gray-500">Loading stock...</div>
+            <div className="text-center py-8 text-muted-foreground">Loading stock...</div>
           ) : selectedLocationId && stockData.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">No stock at this location.</div>
+            <div className="text-center py-8 text-muted-foreground">No stock at this location.</div>
           ) : selectedLocationId ? (
-            <ReusableTable columns={columns} data={stockData} theadClassName="bg-gray-50" />
+            <ReusableTable columns={columns} data={stockData} theadClassName="bg-muted/40" />
           ) : null}
         </div>
 
-        <div className="p-6 border-t border-gray-200 flex justify-end">
-          <Link to="/inventory" className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Close</Link>
+        <div className="p-6 border-t border-border flex justify-end">
+          <Link to="/inventory" className="px-5 py-2.5 border border-border rounded-lg text-foreground hover:bg-muted/40">Close</Link>
         </div>
       </div>
     </div>

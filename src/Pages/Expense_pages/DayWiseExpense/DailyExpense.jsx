@@ -47,7 +47,7 @@ const DailyExpense = () => {
       header: "Actions",
       accessor: "actions",
       render: (row) => (
-        <Link to={`/expense/daily-expense/details/${row.path}`} className="text-blue-600 hover:text-blue-900">
+        <Link to={`/expense/daily-expense/details/${row.path}`} className="text-primary hover:text-primary/80">
           Details
         </Link>
       ),
@@ -55,23 +55,23 @@ const DailyExpense = () => {
   ];
 
   return (
-    <div className="p-6 max-w-6xl min-h-screen mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 bg-gray-50 p-4 sm:p-6 rounded-xl">
+    <div className="p-6 max-w-6xl mx-auto">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 bg-muted/40 p-4 sm:p-6 rounded-xl">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Day Wise Total Expense</h1>
-          <p className="text-gray-500 text-sm sm:text-base mt-1">View daily summary of expenses</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Day Wise Total Expense</h1>
+          <p className="text-muted-foreground text-sm sm:text-base mt-1">View daily summary of expenses</p>
         </div>
       </div>
 
-      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
-      {loading ? <div className="text-center py-12 text-gray-500">Loading...</div> : (
+      {error && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{error}</div>}
+      {loading ? <div className="text-center py-12 text-muted-foreground">Loading...</div> : (
         <ReusableTable columns={columns} data={dailyExpenseData} className="mt-6" />
       )}
 
       {!loading && dailyExpenseData.length === 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center mt-8">
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No expense records found</h3>
-          <p className="text-gray-500">Create expense records to see daily summaries</p>
+        <div className="bg-card rounded-xl shadow-sm border border-border p-12 text-center mt-8">
+          <h3 className="text-lg font-medium text-foreground mb-2">No expense records found</h3>
+          <p className="text-muted-foreground">Create expense records to see daily summaries</p>
         </div>
       )}
     </div>

@@ -78,29 +78,29 @@ const InventoryPurchase = () => {
   };
 
   return (
-    <div className="max-w-7xl min-h-screen mx-auto p-6">
+    <div className="max-w-7xl mx-auto p-6">
       <div className="flex items-center mb-6">
-        <div className="p-6 bg-gradient-to-r from-yellow-200 to-yellow-400 rounded-2xl flex-grow">
-          <h2 className="text-2xl font-bold text-gray-800">Purchase Details</h2>
-          <p className="text-gray-700 mt-1">Fill in the purchase details below</p>
+        <div className="p-6 bg-gradient-to-r bg-primary text-primary-foreground rounded-2xl flex-grow">
+          <h2 className="text-2xl font-bold text-foreground">Purchase Details</h2>
+          <p className="text-foreground mt-1">Fill in the purchase details below</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
         <form onSubmit={handleSubmit} className="p-6">
-          {submitError && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>}
+          {submitError && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{submitError}</div>}
 
           <div className="mb-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Line Items</h3>
+            <h3 className="text-lg font-semibold text-foreground mb-4">Line Items</h3>
             <div className="overflow-x-auto">
               <table className="min-w-full border-collapse">
                 <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border border-gray-300 px-4 py-2 text-left">Item</th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">Quantity</th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">Price</th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">Sub Total</th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">Actions</th>
+                  <tr className="bg-muted">
+                    <th className="border border-border px-4 py-2 text-left">Item</th>
+                    <th className="border border-border px-4 py-2 text-left">Quantity</th>
+                    <th className="border border-border px-4 py-2 text-left">Price</th>
+                    <th className="border border-border px-4 py-2 text-left">Sub Total</th>
+                    <th className="border border-border px-4 py-2 text-left">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -108,8 +108,8 @@ const InventoryPurchase = () => {
                     const subTotal = (Number(item.quantity) || 0) * (Number(item.price) || 0);
                     return (
                       <tr key={item.id}>
-                        <td className="border border-gray-300 px-4 py-2">
-                          <select className="w-full px-2 py-1 border border-gray-300 rounded" value={item.itemId}
+                        <td className="border border-border px-4 py-2">
+                          <select className="w-full px-2 py-1 border border-border rounded" value={item.itemId}
                             onChange={(e) => handleItemChange(item.id, "itemId", e.target.value)}>
                             <option value="">Select item</option>
                             {catalogItems.map((ci) => (
@@ -117,19 +117,19 @@ const InventoryPurchase = () => {
                             ))}
                           </select>
                         </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          <input type="number" min="0" step="0.01" className="w-full px-2 py-1 border border-gray-300 rounded"
+                        <td className="border border-border px-4 py-2">
+                          <input type="number" min="0" step="0.01" className="w-full px-2 py-1 border border-border rounded"
                             value={item.quantity} onChange={(e) => handleItemChange(item.id, "quantity", e.target.value)} />
                         </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          <input type="number" min="0" step="0.01" className="w-full px-2 py-1 border border-gray-300 rounded"
+                        <td className="border border-border px-4 py-2">
+                          <input type="number" min="0" step="0.01" className="w-full px-2 py-1 border border-border rounded"
                             value={item.price} onChange={(e) => handleItemChange(item.id, "price", e.target.value)} />
                         </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          <input type="text" readOnly className="w-full px-2 py-1 border border-gray-300 rounded bg-gray-100" value={subTotal.toFixed(2)} />
+                        <td className="border border-border px-4 py-2">
+                          <input type="text" readOnly className="w-full px-2 py-1 border border-border rounded bg-muted" value={subTotal.toFixed(2)} />
                         </td>
-                        <td className="border border-gray-300 px-4 py-2 text-center">
-                          <button type="button" className="text-red-500 hover:text-red-700 font-medium" onClick={() => removeItem(item.id)} disabled={items.length <= 1}>
+                        <td className="border border-border px-4 py-2 text-center">
+                          <button type="button" className="text-destructive hover:text-destructive font-medium" onClick={() => removeItem(item.id)} disabled={items.length <= 1}>
                             Remove
                           </button>
                         </td>
@@ -139,56 +139,56 @@ const InventoryPurchase = () => {
                 </tbody>
               </table>
             </div>
-            <button type="button" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={addNewItem}>
+            <button type="button" className="mt-4 px-4 py-2 bg-primary/50 text-primary-foreground rounded hover:bg-primary/90" onClick={addNewItem}>
               Add Item
             </button>
           </div>
 
-          <hr className="my-8 border-t border-gray-300" />
+          <hr className="my-8 border-t border-border" />
 
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Purchase Master</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-4">Purchase Master</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Supplier</label>
-              <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg outline-none"
+              <label className="block text-sm font-medium text-foreground mb-1">Supplier</label>
+              <select className="w-full px-4 py-2.5 border border-border rounded-lg outline-none"
                 value={purchaseMaster.vendorId} onChange={(e) => setPurchaseMaster({ ...purchaseMaster, vendorId: e.target.value })}>
                 <option value="">Select supplier</option>
                 {vendors.map((v) => <option key={v.id} value={v.id}>{v.name}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Memo No</label>
-              <input type="text" className="w-full px-4 py-2.5 border border-gray-300 rounded-lg outline-none"
+              <label className="block text-sm font-medium text-foreground mb-1">Memo No</label>
+              <input type="text" className="w-full px-4 py-2.5 border border-border rounded-lg outline-none"
                 value={purchaseMaster.memoNo} onChange={(e) => setPurchaseMaster({ ...purchaseMaster, memoNo: e.target.value })} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Purchase Date</label>
-              <input type="date" className="w-full px-4 py-2.5 border border-gray-300 rounded-lg outline-none"
+              <label className="block text-sm font-medium text-foreground mb-1">Purchase Date</label>
+              <input type="date" className="w-full px-4 py-2.5 border border-border rounded-lg outline-none"
                 value={purchaseMaster.purchaseDate} onChange={(e) => setPurchaseMaster({ ...purchaseMaster, purchaseDate: e.target.value })} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Memo Total</label>
-              <input type="text" readOnly className="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-100" value={discountedTotal.toFixed(2)} />
+              <label className="block text-sm font-medium text-foreground mb-1">Memo Total</label>
+              <input type="text" readOnly className="w-full px-4 py-2.5 border border-border rounded-lg bg-muted" value={discountedTotal.toFixed(2)} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Discount (%)</label>
-              <input type="number" min="0" max="100" className="w-full px-4 py-2.5 border border-gray-300 rounded-lg outline-none"
+              <label className="block text-sm font-medium text-foreground mb-1">Discount (%)</label>
+              <input type="number" min="0" max="100" className="w-full px-4 py-2.5 border border-border rounded-lg outline-none"
                 value={purchaseMaster.discount} onChange={(e) => setPurchaseMaster({ ...purchaseMaster, discount: e.target.value })} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Advance Amount</label>
-              <input type="number" min="0" step="0.01" className="w-full px-4 py-2.5 border border-gray-300 rounded-lg outline-none"
+              <label className="block text-sm font-medium text-foreground mb-1">Advance Amount</label>
+              <input type="number" min="0" step="0.01" className="w-full px-4 py-2.5 border border-border rounded-lg outline-none"
                 value={purchaseMaster.advanceAmount} onChange={(e) => setPurchaseMaster({ ...purchaseMaster, advanceAmount: e.target.value })} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Due Amount</label>
-              <input type="text" readOnly className="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-100" value={due.toFixed(2)} />
+              <label className="block text-sm font-medium text-foreground mb-1">Due Amount</label>
+              <input type="text" readOnly className="w-full px-4 py-2.5 border border-border rounded-lg bg-muted" value={due.toFixed(2)} />
             </div>
           </div>
 
           <div className="mt-8 flex justify-end space-x-3">
-            <Link to="/inventory" className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancel</Link>
-            <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg disabled:opacity-60">
+            <Link to="/inventory" className="px-5 py-2.5 border border-border rounded-lg text-foreground hover:bg-muted/40">Cancel</Link>
+            <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-gradient-to-r bg-primary text-primary-foreground text-foreground font-medium rounded-lg disabled:opacity-60">
               {submitting ? "Saving..." : "Purchase"}
             </button>
           </div>

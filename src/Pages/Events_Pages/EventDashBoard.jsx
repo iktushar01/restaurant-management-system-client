@@ -17,16 +17,16 @@ const getAvatar = (id) =>
 
 const EventBadge = ({ type }) => {
   const colors = {
-    meeting: "bg-blue-100 text-blue-800",
-    call: "bg-green-100 text-green-800",
+    meeting: "bg-primary/10 text-foreground",
+    call: "bg-success/10 text-success",
     event: "bg-purple-100 text-purple-800",
-    deadline: "bg-red-100 text-red-800",
+    deadline: "bg-destructive/10 text-red-800",
     personal: "bg-yellow-100 text-yellow-800",
   };
   return (
     <span
       className={`px-2 py-0.5 rounded text-xs font-medium ${
-        colors[type] || "bg-gray-100 text-gray-800"
+        colors[type] || "bg-muted text-foreground"
       }`}
     >
       {type}
@@ -44,10 +44,10 @@ const EventCard = ({ event }) => {
       />
       <div className="flex-1">
         <div className="flex justify-between items-center">
-          <h4 className="font-semibold text-gray-900">{event.title}</h4>
+          <h4 className="font-semibold text-foreground">{event.title}</h4>
           <EventBadge type={event.type} />
         </div>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           {event.date.toLocaleDateString("en-US", {
             weekday: "short",
             month: "short",
@@ -117,7 +117,7 @@ const EventDashBoard = () => {
     switch (view) {
       case "month":
         return (
-          <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
+          <div className="bg-card rounded-lg shadow-md p-4 md:p-6">
             <Calendar
               onChange={setDate}
               value={date}
@@ -145,7 +145,7 @@ const EventDashBoard = () => {
         }
 
         return (
-          <div className="bg-white rounded-lg shadow-md p-4 md:p-6 overflow-x-auto">
+          <div className="bg-card rounded-lg shadow-md p-4 md:p-6 overflow-x-auto">
             <h2 className="text-lg md:text-xl font-bold mb-4">
               {weekDays[0].toLocaleDateString("en-US", {
                 month: "short",
@@ -164,8 +164,8 @@ const EventDashBoard = () => {
                   key={index}
                   className={`text-center p-2 md:p-3 rounded-lg ${
                     day.getDate() === date.getDate()
-                      ? "bg-blue-100"
-                      : "bg-gray-50"
+                      ? "bg-primary/10"
+                      : "bg-muted/40"
                   }`}
                 >
                   <div className="font-semibold text-xs md:text-sm">
@@ -189,7 +189,7 @@ const EventDashBoard = () => {
         for (let hour = 9; hour <= 18; hour++) timeSlots.push(hour);
 
         return (
-          <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
+          <div className="bg-card rounded-lg shadow-md p-4 md:p-6">
             <h2 className="text-lg md:text-xl font-bold mb-4">
               {date.toLocaleDateString("en-US", {
                 weekday: "long",
@@ -218,7 +218,7 @@ const EventDashBoard = () => {
       case "agenda":
         const agendaEvents = getAgendaEvents();
         return (
-          <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
+          <div className="bg-card rounded-lg shadow-md p-4 md:p-6">
             <h2 className="text-lg md:text-xl font-bold mb-4">Agenda (Next 7 Days)</h2>
             <div className="space-y-4">
               {agendaEvents.map((event) => (
@@ -242,8 +242,8 @@ const EventDashBoard = () => {
       }}
       className={`flex items-center px-3 py-2 md:px-4 md:py-2 rounded-lg ${
         view === btn.key
-          ? "bg-blue-500 text-white"
-          : "bg-gray-200 text-gray-700"
+          ? "bg-primary/50 text-primary-foreground"
+          : "bg-gray-200 text-foreground"
       }`}
     >
       <span className="mr-1 md:mr-2">{btn.icon}</span>
@@ -259,7 +259,7 @@ const EventDashBoard = () => {
   ];
 
   if (loading) {
-    return <div className="p-6 max-w-7xl mx-auto text-center text-gray-500">Loading calendar...</div>;
+    return <div className="p-6 max-w-7xl mx-auto text-center text-muted-foreground">Loading calendar...</div>;
   }
 
   return (
@@ -267,8 +267,8 @@ const EventDashBoard = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-xl md:text-2xl font-bold text-gray-900">📆 Event Calendar</h1>
-          <p className="text-sm md:text-base text-gray-600">Manage and view your events dynamically</p>
+          <h1 className="text-xl md:text-2xl font-bold text-foreground">📆 Event Calendar</h1>
+          <p className="text-sm md:text-base text-muted-foreground">Manage and view your events dynamically</p>
         </div>
         
         {isMobile && (
@@ -309,7 +309,7 @@ const EventDashBoard = () => {
       {renderView()}
 
       {/* Upcoming Events */}
-      <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
+      <div className="bg-card rounded-lg shadow-md p-4 md:p-6">
         <h2 className="text-lg md:text-xl font-bold mb-4">Upcoming Events</h2>
         <div className="space-y-3">
           {events.slice(0, 5).map((event) => (

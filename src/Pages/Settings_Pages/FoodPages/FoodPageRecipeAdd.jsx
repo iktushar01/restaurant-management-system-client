@@ -82,14 +82,14 @@ const FoodPageRecipeAdd = () => {
     : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="min-h-screen bg-muted/40 p-4 md:p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl shadow-md p-6 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="bg-card rounded-xl shadow-md p-6 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
-            <FaUtensils className="text-blue-500" /> Chicken Satay Recipe Builder
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2">
+            <FaUtensils className="text-primary" /> Chicken Satay Recipe Builder
           </h1>
-          <p className="text-gray-600 mt-1 text-lg">Menu Price: ৳ 395.00</p>
+          <p className="text-muted-foreground mt-1 text-lg">Menu Price: ৳ 395.00</p>
         </div>
        
       </div>
@@ -97,24 +97,24 @@ const FoodPageRecipeAdd = () => {
       {/* Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Raw Materials */}
-        <div className="col-span-1 bg-white rounded-xl shadow-md p-5">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-700">
+        <div className="col-span-1 bg-card rounded-xl shadow-md p-5">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-foreground">
             <FaShoppingBasket className="text-cyan-500" /> Raw Materials
           </h2>
           <div className="space-y-3">
             {loading ? (
-              <p className="text-gray-500 text-center py-4">Loading inventory items...</p>
+              <p className="text-muted-foreground text-center py-4">Loading inventory items...</p>
             ) : rawMaterials.length === 0 ? (
-              <p className="text-gray-500 text-center py-4">No inventory items found</p>
+              <p className="text-muted-foreground text-center py-4">No inventory items found</p>
             ) : rawMaterials.map((item) => (
-              <div key={item.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100 hover:bg-cyan-50 transition-colors">
+              <div key={item.id} className="flex justify-between items-center p-3 bg-muted/40 rounded-lg border border-gray-100 hover:bg-cyan-50 transition-colors">
                 <div>
-                  <h3 className="font-medium text-gray-800">{item.name}</h3>
-                  <p className="text-sm text-gray-500">{item.unit} • ৳ {item.price}</p>
+                  <h3 className="font-medium text-foreground">{item.name}</h3>
+                  <p className="text-sm text-muted-foreground">{item.unit} • ৳ {item.price}</p>
                 </div>
                 <button
                   onClick={() => addItem(item)}
-                  className="bg-cyan-500 text-white p-2 rounded-full hover:bg-cyan-600 transition-colors shadow-sm hover:shadow-md"
+                  className="bg-cyan-500 text-primary-foreground p-2 rounded-full hover:bg-cyan-600 transition-colors shadow-sm hover:shadow-md"
                 >
                   <FaPlus />
                 </button>
@@ -126,30 +126,30 @@ const FoodPageRecipeAdd = () => {
         {/* Selected Items & Pricing */}
         <div className="col-span-2 flex flex-col gap-6">
           {/* Selected Items */}
-          <div className="bg-white rounded-xl shadow-md p-5">
-            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-700">
-              <FaCalculator className="text-blue-500" /> Selected Ingredients
+          <div className="bg-card rounded-xl shadow-md p-5">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-foreground">
+              <FaCalculator className="text-primary" /> Selected Ingredients
             </h2>
             {selectedItems.length === 0 ? (
-              <div className="text-center py-8 bg-gray-50 rounded-lg">
+              <div className="text-center py-8 bg-muted/40 rounded-lg">
                 <FaShoppingBasket className="text-gray-300 text-4xl mx-auto mb-3" />
-                <p className="text-gray-500">No ingredients selected. Add items from the raw materials list.</p>
+                <p className="text-muted-foreground">No ingredients selected. Add items from the raw materials list.</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b-2 border-gray-100">
-                      <th className="text-left p-3 font-medium text-gray-600">Item</th>
-                      <th className="text-left p-3 font-medium text-gray-600">Quantity</th>
-                      <th className="text-left p-3 font-medium text-gray-600">Unit</th>
-                      <th className="text-left p-3 font-medium text-gray-600">Cost</th>
-                      <th className="text-right p-3 font-medium text-gray-600">Action</th>
+                      <th className="text-left p-3 font-medium text-muted-foreground">Item</th>
+                      <th className="text-left p-3 font-medium text-muted-foreground">Quantity</th>
+                      <th className="text-left p-3 font-medium text-muted-foreground">Unit</th>
+                      <th className="text-left p-3 font-medium text-muted-foreground">Cost</th>
+                      <th className="text-right p-3 font-medium text-muted-foreground">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {selectedItems.map((item) => (
-                      <tr key={item.id} className="border-b border-gray-100 hover:bg-blue-50 transition-colors">
+                      <tr key={item.id} className="border-b border-gray-100 hover:bg-primary/5 transition-colors">
                         <td className="p-3 font-medium">{item.name}</td>
                         <td className="p-3">
                           <div className="flex items-center">
@@ -162,7 +162,7 @@ const FoodPageRecipeAdd = () => {
                             <input
                               type="number"
                               min="0"
-                              className="w-12 text-center border-t border-b border-gray-200 py-1"
+                              className="w-12 text-center border-t border-b border-border py-1"
                               value={item.quantity}
                               onChange={(e) => handleQuantityChange(item.id, e.target.value)}
                             />
@@ -174,12 +174,12 @@ const FoodPageRecipeAdd = () => {
                             </button>
                           </div>
                         </td>
-                        <td className="p-3 text-gray-600">{item.unit}</td>
+                        <td className="p-3 text-muted-foreground">{item.unit}</td>
                         <td className="p-3 font-medium">৳ {(item.price * item.quantity).toFixed(2)}</td>
                         <td className="p-3 text-right">
                           <button
                             onClick={() => removeItem(item.id)}
-                            className="text-red-500 hover:text-red-700 transition-colors p-2"
+                            className="text-destructive hover:text-destructive transition-colors p-2"
                             aria-label="Remove"
                           >
                             <FaTrash />
@@ -194,36 +194,36 @@ const FoodPageRecipeAdd = () => {
           </div>
 
           {/* Pricing */}
-          <div className="bg-white rounded-xl shadow-md p-5">
-            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-700">
+          <div className="bg-card rounded-xl shadow-md p-5">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-foreground">
               <FaCoins className="text-yellow-500" /> Pricing & Profitability
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-4">
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <label className="block text-sm font-medium text-gray-600 mb-1 flex items-center gap-2">
-                    <FaDollarSign className="text-gray-400" /> Other Ingredients Cost
+                <div className="bg-muted/40 p-4 rounded-lg">
+                  <label className="block text-sm font-medium text-muted-foreground mb-1 flex items-center gap-2">
+                    <FaDollarSign className="text-muted-foreground" /> Other Ingredients Cost
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-2 text-gray-400">৳</span>
+                    <span className="absolute left-3 top-2 text-muted-foreground">৳</span>
                     <input
                       type="number"
-                      className="pl-8 w-full border border-gray-200 p-2 rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300"
+                      className="pl-8 w-full border border-border p-2 rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300"
                       value={otherCost}
                       onChange={(e) => setOtherCost(e.target.value)}
                     />
                   </div>
                 </div>
                 
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <label className="block text-sm font-medium text-gray-600 mb-1 flex items-center gap-2">
-                    <FaDollarSign className="text-gray-400" /> Sale Price
+                <div className="bg-muted/40 p-4 rounded-lg">
+                  <label className="block text-sm font-medium text-muted-foreground mb-1 flex items-center gap-2">
+                    <FaDollarSign className="text-muted-foreground" /> Sale Price
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-2 text-gray-400">৳</span>
+                    <span className="absolute left-3 top-2 text-muted-foreground">৳</span>
                     <input
                       type="number"
-                      className="pl-8 w-full border border-gray-200 p-2 rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300"
+                      className="pl-8 w-full border border-border p-2 rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300"
                       value={salePrice}
                       onChange={(e) => setSalePrice(Number(e.target.value))}
                     />
@@ -231,30 +231,30 @@ const FoodPageRecipeAdd = () => {
                 </div>
               </div>
               
-              <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                  <span className="text-gray-600">Total Item Cost</span>
+              <div className="bg-primary/5 p-4 rounded-lg border border-blue-100">
+                <div className="flex justify-between items-center py-2 border-b border-border">
+                  <span className="text-muted-foreground">Total Item Cost</span>
                   <span className="font-medium">৳ {totalItemCost.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                  <span className="text-gray-600">Other Costs</span>
+                <div className="flex justify-between items-center py-2 border-b border-border">
+                  <span className="text-muted-foreground">Other Costs</span>
                   <span className="font-medium">৳ {Number(otherCost || 0).toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-blue-200 font-semibold text-blue-700">
+                <div className="flex justify-between items-center py-2 border-b border-border font-semibold text-primary">
                   <span>Total Cost</span>
                   <span>৳ {totalCost.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                  <span className="text-gray-600">Profit</span>
-                  <span className={`font-medium ${profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <div className="flex justify-between items-center py-2 border-b border-border">
+                  <span className="text-muted-foreground">Profit</span>
+                  <span className={`font-medium ${profit >= 0 ? 'text-success' : 'text-destructive'}`}>
                     ৳ {profit.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2">
-                  <span className="text-gray-600 flex items-center gap-1">
-                    <FaPercent className="text-gray-400" /> Profit Margin
+                  <span className="text-muted-foreground flex items-center gap-1">
+                    <FaPercent className="text-muted-foreground" /> Profit Margin
                   </span>
-                  <span className={`font-medium ${profitMargin >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  <span className={`font-medium ${profitMargin >= 0 ? 'text-success' : 'text-destructive'}`}>
                     {profitMargin}%
                   </span>
                 </div>
@@ -262,7 +262,7 @@ const FoodPageRecipeAdd = () => {
             </div>
             
             <div className="mt-6 flex justify-end">
-              <button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-all shadow-md hover:shadow-lg">
+              <button className="bg-gradient-to-r bg-success text-success-foreground hover:bg-success/90 text-primary-foreground px-6 py-3 rounded-lg flex items-center gap-2 transition-all shadow-md hover:shadow-lg">
                 Save Recipe <FaArrowRight />
               </button>
             </div>

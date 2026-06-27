@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
+import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
@@ -16,12 +18,14 @@ const BrandsIndex = () => {
   );
 
   const handleDeleteBrand = async (id) => {
-    if (window.confirm("Are you sure you want to delete this brand?")) {
-      try {
+    {
+    const ok = await confirm({ description: "Are you sure you want to delete this brand?" });
+    if (!ok) return;
+    try {
         await inventoryService.brands.delete(id);
         refetch();
       } catch (err) {
-        alert(err.message || "Failed to delete");
+        toast.error(err.message || "Failed to delete");
       }
     }
   };
@@ -45,11 +49,11 @@ const BrandsIndex = () => {
     {
       label: "Edit",
       icon: FaEdit,
-      className: "text-indigo-600 hover:text-indigo-900",
+      className: "text-primary hover:text-primary/80",
       render: (row) => (
         <Link 
           to={`edit/${row.id}`}
-          className="flex items-center space-x-1 text-indigo-600 hover:text-indigo-900"
+          className="flex items-center space-x-1 text-primary hover:text-primary/80"
         >
           <FaEdit />
           <span>Edit</span>
@@ -59,12 +63,12 @@ const BrandsIndex = () => {
     {
       label: "Delete",
       icon: FaTrash,
-      className: "text-red-600 hover:text-red-900",
+      className: "text-destructive hover:text-destructive/80",
       onClick: (row) => handleDeleteBrand(row.id),
       render: (row) => (
         <button
           onClick={() => handleDeleteBrand(row.id)}
-          className="flex items-center space-x-1 text-red-600 hover:text-red-900"
+          className="flex items-center space-x-1 text-destructive hover:text-destructive/80"
         >
           <FaTrash />
           <span>Delete</span>
@@ -86,18 +90,18 @@ const BrandsIndex = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl min-h-screen mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 bg-gray-50 sm:bg-gray-100 p-4 sm:p-6 rounded-xl">
+    <div className="p-6 max-w-6xl mx-auto">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 bg-muted/40 sm:bg-muted/40 p-4 sm:p-6 rounded-xl">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
             Brands
           </h1>
-          <p className="text-gray-500 text-sm sm:text-base mt-1">
+          <p className="text-muted-foreground text-sm sm:text-base mt-1">
             Manage your product brands
           </p>
         </div>
         <Link to="create" className="w-full sm:w-auto">
-          <button className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer text-sm sm:text-base">
+          <button className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-gradient-to-r bg-primary text-primary-foreground text-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus-visible:ring-ring focus:ring-offset-2 cursor-pointer text-sm sm:text-base">
             <FaPlus className="mr-2" />
             Add New Brand
           </button>
@@ -107,26 +111,26 @@ const BrandsIndex = () => {
       {/* Search and entries filter */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
         <div className="flex items-center">
-          <span className="mr-2 text-gray-700">Show</span>
+          <span className="mr-2 text-foreground">Show</span>
           <select
             value={entriesToShow}
             onChange={(e) => {
               setEntriesToShow(Number(e.target.value));
               setCurrentPage(1); // Reset to first page when changing entries
             }}
-            className="border border-gray-300 rounded-md px-2 py-1"
+            className="border border-border rounded-md px-2 py-1"
           >
             <option value={10}>10</option>
             <option value={25}>25</option>
             <option value={50}>50</option>
             <option value={100}>100</option>
           </select>
-          <span className="ml-2 text-gray-700">entries</span>
+          <span className="ml-2 text-foreground">entries</span>
         </div>
         
         <div className="relative">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <FaSearch className="text-gray-400" />
+            <FaSearch className="text-muted-foreground" />
           </div>
           <input
             type="text"
@@ -136,19 +140,19 @@ const BrandsIndex = () => {
               setSearchTerm(e.target.value);
               setCurrentPage(1); // Reset to first page when searching
             }}
-            className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 w-full md:w-64"
+            className="pl-10 pr-4 py-2 border border-border rounded-md focus:ring-2 focus-visible:ring-ring focus-visible:border-ring w-full md:w-64"
           />
         </div>
       </div>
 
       {/* ✅ Reusable Table */}
-      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
-      {loading ? <div className="text-center py-12 text-gray-500">Loading...</div> : (
+      {error && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{error}</div>}
+      {loading ? <div className="text-center py-12 text-muted-foreground">Loading...</div> : (
         <ReusableTable columns={columns} data={brands} actions={actions} />
       )}
 
       {/* Table info and pagination */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 text-sm text-gray-700">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 text-sm text-foreground">
         <div>
           Showing {totalEntries > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, totalEntries)} of {totalEntries} entries
         </div>
@@ -156,7 +160,7 @@ const BrandsIndex = () => {
           <button 
             onClick={handlePreviousPage}
             disabled={currentPage === 1}
-            className={`px-3 py-1 border border-gray-300 rounded-md ${currentPage === 1 ? 'bg-gray-100 text-gray-400' : 'bg-gray-50 hover:bg-gray-100'}`}
+            className={`px-3 py-1 border border-border rounded-md ${currentPage === 1 ? 'bg-muted text-muted-foreground' : 'bg-muted/40 hover:bg-muted/50'}`}
           >
             Previous
           </button>
@@ -164,7 +168,7 @@ const BrandsIndex = () => {
             <button 
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`px-3 py-1 border border-gray-300 rounded-md ${currentPage === page ? 'bg-indigo-50 text-indigo-600 font-medium' : 'bg-gray-50 hover:bg-gray-100'}`}
+              className={`px-3 py-1 border border-border rounded-md ${currentPage === page ? 'bg-primary/10 text-primary font-medium' : 'bg-muted/40 hover:bg-muted/50'}`}
             >
               {page}
             </button>
@@ -172,7 +176,7 @@ const BrandsIndex = () => {
           <button 
             onClick={handleNextPage}
             disabled={currentPage === totalPages || totalPages === 0}
-            className={`px-3 py-1 border border-gray-300 rounded-md ${currentPage === totalPages || totalPages === 0 ? 'bg-gray-100 text-gray-400' : 'bg-gray-50 hover:bg-gray-100'}`}
+            className={`px-3 py-1 border border-border rounded-md ${currentPage === totalPages || totalPages === 0 ? 'bg-muted text-muted-foreground' : 'bg-muted/40 hover:bg-muted/50'}`}
           >
             Next
           </button>
@@ -180,15 +184,15 @@ const BrandsIndex = () => {
       </div>
 
       {brands.length === 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 md:p-12 text-center mt-8">
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-6 sm:p-8 md:p-12 text-center mt-8">
+          <h3 className="text-lg font-medium text-foreground mb-2">
             No brands found
           </h3>
-          <p className="text-gray-500 mb-6">
+          <p className="text-muted-foreground mb-6">
             Get started by adding a new brand
           </p>
           <Link to="create">
-            <button className="px-5 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 font-medium rounded-lg hover:from-amber-500 hover:to-yellow-600 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 inline-flex items-center">
+            <button className="px-5 py-2.5 bg-gradient-to-r bg-primary text-primary-foreground text-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus-visible:ring-ring focus:ring-offset-2 inline-flex items-center">
               <FaPlus className="mr-2" />
               Add New Brand
             </button>

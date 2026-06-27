@@ -56,12 +56,12 @@ const TodayEventIndex = () => {
     {
       header: "Menu",
       accessor: "menu",
-      render: (row) => row.menu || <span className="text-gray-400">Not specified</span>,
+      render: (row) => row.menu || <span className="text-muted-foreground">Not specified</span>,
     },
     {
       header: "Description",
       accessor: "description",
-      render: (row) => row.description || <span className="text-gray-400">Not specified</span>,
+      render: (row) => row.description || <span className="text-muted-foreground">Not specified</span>,
     },
     {
       header: "Status",
@@ -70,10 +70,10 @@ const TodayEventIndex = () => {
         <span
           className={`px-2 py-1 rounded-full text-xs font-medium ${
             row.status === "Booked"
-              ? "bg-blue-100 text-blue-800"
+              ? "bg-primary/10 text-foreground"
               : row.status === "Resolved"
-                ? "bg-green-100 text-green-800"
-                : "bg-gray-100 text-gray-800"
+                ? "bg-success/10 text-success"
+                : "bg-muted text-foreground"
           }`}
         >
           {row.status}
@@ -83,41 +83,41 @@ const TodayEventIndex = () => {
   ];
 
   return (
-    <div className="p-6 max-w-7xl min-h-screen mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 bg-gray-50 sm:bg-gray-100 p-4 sm:p-6 rounded-xl">
+    <div className="p-6 max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 bg-muted/40 sm:bg-muted/40 p-4 sm:p-6 rounded-xl">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Today's Events</h1>
-          <p className="text-gray-500 text-sm sm:text-base mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Today's Events</h1>
+          <p className="text-muted-foreground text-sm sm:text-base mt-1">
             {currentDate && `Events scheduled for ${currentDate}`}
           </p>
         </div>
       </div>
 
-      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {error && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{error}</div>}
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
         {loading ? (
-          <div className="text-center py-12 text-gray-500">Loading today's events...</div>
+          <div className="text-center py-12 text-muted-foreground">Loading today's events...</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-yellow-400">
+            <table className="min-w-full divide-y divide-border">
+              <thead className="bg-primary">
                 <tr>
                   {columns.map((column, index) => (
                     <th
                       key={index}
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider"
+                      className="px-6 py-3 text-left text-xs font-medium text-foreground uppercase tracking-wider"
                     >
                       {column.header}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-card divide-y divide-border">
                 {todayEvents.map((event) => (
-                  <tr key={event.id} className="hover:bg-gray-50">
+                  <tr key={event.id} className="hover:bg-muted/40">
                     {columns.map((column, colIndex) => (
-                      <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                      <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                         {column.render ? column.render(event) : event[column.accessor]}
                       </td>
                     ))}
@@ -130,10 +130,10 @@ const TodayEventIndex = () => {
 
         {!loading && todayEvents.length === 0 && (
           <div className="text-center py-12">
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No events scheduled for today</h3>
-            <p className="text-gray-500 mb-6">All events are organized and managed efficiently</p>
+            <h3 className="text-lg font-medium text-foreground mb-2">No events scheduled for today</h3>
+            <p className="text-muted-foreground mb-6">All events are organized and managed efficiently</p>
             <Link to="/events/create">
-              <button className="px-5 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 font-medium rounded-lg hover:from-amber-500 hover:to-yellow-600 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 inline-flex items-center">
+              <button className="px-5 py-2.5 bg-gradient-to-r bg-primary text-primary-foreground text-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus-visible:ring-ring focus:ring-offset-2 inline-flex items-center">
                 <FaPlus className="mr-2" />
                 Schedule an Event
               </button>

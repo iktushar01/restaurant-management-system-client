@@ -51,23 +51,23 @@ const OrderManagement = ({ orderDetails, setOrderDetails }) => {
 
   if (loading) {
     return (
-      <div className="w-full mx-auto p-6 bg-white rounded-xl shadow-md text-center text-gray-500">
+      <div className="w-full mx-auto p-6 bg-card rounded-xl shadow-md text-center text-muted-foreground">
         Loading order options...
       </div>
     );
   }
 
   return (
-    <div className="w-full mx-auto p-6 bg-white rounded-xl shadow-md">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 py-6 rounded-3xl text-center bg-red-100 p-6">Order Management</h2>
+    <div className="w-full mx-auto p-6 bg-card rounded-xl shadow-md">
+      <h2 className="text-2xl font-bold text-foreground mb-6 py-6 rounded-3xl text-center bg-destructive/10 p-6">Order Management</h2>
       
       <div className="flex flex-wrap gap-6 mb-6">
         <div className="flex-1 min-w-[200px]">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Order Type *</label>
+          <label className="block text-sm font-medium text-foreground mb-1">Order Type *</label>
           <select
             value={orderDetails.orderType || ''}
             onChange={(e) => handleChange("orderType", e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-3 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary"
             required
           >
             <option value="">Select Order Type</option>
@@ -78,11 +78,11 @@ const OrderManagement = ({ orderDetails, setOrderDetails }) => {
         </div>
 
         <div className="flex-1 min-w-[200px]">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Served By *</label>
+          <label className="block text-sm font-medium text-foreground mb-1">Served By *</label>
           <select
             value={orderDetails.waiterId || ''}
             onChange={(e) => handleChange("waiterId", e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-3 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary"
             required
           >
             <option value="">Select Staff</option>
@@ -93,12 +93,12 @@ const OrderManagement = ({ orderDetails, setOrderDetails }) => {
         </div>
 
         <div className="flex-1 min-w-[200px] relative md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Alloted Tables *</label>
+          <label className="block text-sm font-medium text-foreground mb-1">Alloted Tables *</label>
           <div className="relative">
             <button
               type="button"
               onClick={() => setShowTableDropdown(!showTableDropdown)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-left flex justify-between items-center bg-white"
+              className="w-full p-3 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:outline-none text-left flex justify-between items-center bg-card"
             >
               <span>
                 {orderDetails.tableIds.length > 0
@@ -109,11 +109,11 @@ const OrderManagement = ({ orderDetails, setOrderDetails }) => {
             </button>
             
             {showTableDropdown && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              <div className="absolute z-10 w-full mt-1 bg-card border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
                 {tables.map((table) => (
                   <div 
                     key={table.id}
-                    className="flex items-center p-3 hover:bg-gray-50 cursor-pointer"
+                    className="flex items-center p-3 hover:bg-muted/40 cursor-pointer"
                     onClick={() => handleTableSelect(table.id)}
                   >
                     <input
@@ -131,24 +131,24 @@ const OrderManagement = ({ orderDetails, setOrderDetails }) => {
         </div>
 
         <div className="flex-1 min-w-[200px]">
-          <label className="block text-sm font-medium text-gray-700 mb-1">No. of Persons</label>
+          <label className="block text-sm font-medium text-foreground mb-1">No. of Persons</label>
           <input
             type="number"
             min="1"
             value={orderDetails.persons || ''}
             onChange={(e) => handleChange("persons", e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-3 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary"
             placeholder="Enter number of persons"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Order Notes</label>
+        <label className="block text-sm font-medium text-foreground mb-1">Order Notes</label>
         <textarea
           value={orderDetails.notes || ''}
           onChange={(e) => handleChange("notes", e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full p-3 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary"
           rows={3}
           placeholder="Any special instructions..."
         />

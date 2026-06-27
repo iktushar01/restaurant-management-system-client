@@ -75,21 +75,21 @@ const PropertyInformation = () => {
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center text-gray-500">Loading...</div>;
+    return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-muted/40 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-card rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-5 sm:px-8">
+          <div className="bg-gradient-to-r bg-primary text-primary-foreground px-6 py-5 sm:px-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-bold text-white">Property Information</h1>
+              <h1 className="text-2xl font-bold text-primary-foreground">Property Information</h1>
               {!isEditing ? (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-white/30 transition-all duration-200"
+                  className="flex items-center px-4 py-2 bg-card/20 backdrop-blur-sm rounded-lg text-primary-foreground hover:bg-card/30 transition-all duration-200"
                 >
                   <FiEdit2 className="mr-2" />
                   Edit Information
@@ -97,7 +97,7 @@ const PropertyInformation = () => {
               ) : (
                 <button
                   onClick={handleCancel}
-                  className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-white/30 transition-all duration-200"
+                  className="flex items-center px-4 py-2 bg-card/20 backdrop-blur-sm rounded-lg text-primary-foreground hover:bg-card/30 transition-all duration-200"
                 >
                   <FiX className="mr-2" />
                   Cancel
@@ -108,97 +108,97 @@ const PropertyInformation = () => {
 
           {/* Content */}
           <div className="px-6 py-8 sm:px-8">
-            {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+            {error && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{error}</div>}
             {isEditing ? (
               <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {submitError && <div className="md:col-span-2 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>}
+                {submitError && <div className="md:col-span-2 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{submitError}</div>}
                 {/* Left Column */}
                 <div className="space-y-5">
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Property Name</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Property Name</label>
                     <input
                       type="text"
                       name="propertyName"
                       value={formData.propertyName}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Property Grade</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Property Grade</label>
                     <input
                       type="text"
                       name="propertyGrade"
                       value={formData.propertyGrade}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">City</label>
                     <input
                       type="text"
                       name="city"
                       value={formData.city}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">State</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">State</label>
                     <input
                       type="text"
                       name="state"
                       value={formData.state}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Phone</label>
                     <input
                       type="tel"
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Email</label>
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Registration VAT</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Registration VAT</label>
                     <input
                       type="text"
                       name="registrationVAT"
                       value={formData.registrationVAT}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Registration CST</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Registration CST</label>
                     <input
                       type="text"
                       name="registrationCST"
                       value={formData.registrationCST}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                 </div>
@@ -206,90 +206,90 @@ const PropertyInformation = () => {
                 {/* Right Column */}
                 <div className="space-y-5">
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Property Type</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Property Type</label>
                     <input
                       type="text"
                       name="propertyType"
                       value={formData.propertyType}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Address</label>
                     <textarea
                       name="address"
                       value={formData.address}
                       onChange={handleInputChange}
                       rows={2}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Postal Code</label>
                     <input
                       type="text"
                       name="postalCode"
                       value={formData.postalCode}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Country</label>
                     <input
                       type="text"
                       name="country"
                       value={formData.country}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Fax</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Fax</label>
                     <input
                       type="text"
                       name="fax"
                       value={formData.fax}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Website</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Website</label>
                     <input
                       type="url"
                       name="website"
                       value={formData.website}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Registration TIN</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Registration TIN</label>
                     <input
                       type="text"
                       name="registrationTIN"
                       value={formData.registrationTIN}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus-visible:ring-ring focus:border-transparent transition-all"
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Company Logo</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">Company Logo</label>
                     <div className="flex items-center justify-center w-full">
-                      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 transition-colors">
+                      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-border transition-colors">
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          <FiUpload className="w-8 h-8 mb-3 text-gray-400" />
-                          <p className="mb-2 text-sm text-gray-500">Click to upload</p>
-                          <p className="text-xs text-gray-500">JPG, PNG (142x140px)</p>
+                          <FiUpload className="w-8 h-8 mb-3 text-muted-foreground" />
+                          <p className="mb-2 text-sm text-muted-foreground">Click to upload</p>
+                          <p className="text-xs text-muted-foreground">JPG, PNG (142x140px)</p>
                         </div>
                         <input 
                           type="file" 
@@ -300,7 +300,7 @@ const PropertyInformation = () => {
                       </label>
                     </div>
                     {formData.companyLogo && (
-                      <p className="mt-2 text-sm text-green-600 flex items-center">
+                      <p className="mt-2 text-sm text-success flex items-center">
                         <FiInfo className="mr-1" /> 
                         File selected: {formData.companyLogo.name}
                       </p>
@@ -309,11 +309,11 @@ const PropertyInformation = () => {
                 </div>
 
                 {/* Submit Button */}
-                <div className="md:col-span-2 pt-6 border-t border-gray-200 flex justify-end">
+                <div className="md:col-span-2 pt-6 border-t border-border flex justify-end">
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-60"
+                    className="flex items-center px-6 py-3 bg-gradient-to-r bg-primary text-primary-foreground text-primary-foreground font-medium rounded-xl hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-60"
                   >
                     <FiSave className="mr-2" />
                     {submitting ? 'Saving...' : 'Update Information'}
@@ -349,10 +349,10 @@ const PropertyInformation = () => {
                 </div>
 
                 <div className="flex justify-center mt-8">
-                  <div className="bg-blue-50 rounded-xl p-4 max-w-md w-full">
+                  <div className="bg-primary/5 rounded-xl p-4 max-w-md w-full">
                     <div className="flex items-start">
-                      <FiInfo className="w-5 h-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" />
-                      <p className="text-sm text-blue-700">
+                      <FiInfo className="w-5 h-5 text-primary mt-0.5 mr-3 flex-shrink-0" />
+                      <p className="text-sm text-primary">
                         To update your property information, click the "Edit Information" button at the top of the page.
                       </p>
                     </div>
@@ -369,9 +369,9 @@ const PropertyInformation = () => {
 
 // Reusable component for display mode rows
 const InfoRow = ({ label, value }) => (
-  <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-    <span className="text-sm font-medium text-gray-600 mb-1 sm:mb-0">{label}</span>
-    <span className="text-sm font-semibold text-gray-800 text-right">{value || '-'}</span>
+  <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-muted/40 rounded-lg hover:bg-muted/50 transition-colors">
+    <span className="text-sm font-medium text-muted-foreground mb-1 sm:mb-0">{label}</span>
+    <span className="text-sm font-semibold text-foreground text-right">{value || '-'}</span>
   </div>
 );
 

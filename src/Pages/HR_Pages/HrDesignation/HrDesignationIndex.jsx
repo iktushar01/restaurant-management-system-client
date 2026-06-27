@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
@@ -34,7 +36,7 @@ const HrDesignationIndex = () => {
         row.basic !== "" && row.basic != null ? (
           row.basic
         ) : (
-          <span className="text-gray-400">Not specified</span>
+          <span className="text-muted-foreground">Not specified</span>
         ),
     },
   ];
@@ -60,12 +62,14 @@ const HrDesignationIndex = () => {
   };
 
   const handleDelete = async (row) => {
-    if (window.confirm(`Are you sure you want to delete "${row.name}"?`)) {
-      try {
+    {
+    const ok = await confirm({ description: `Are you sure you want to delete "${row.name}"?` });
+    if (!ok) return;
+    try {
         await hrService.designations.delete(row.id);
         refetch();
       } catch (err) {
-        alert(err.message || "Failed to delete designation");
+        toast.error(err.message || "Failed to delete designation");
       }
     }
   };
@@ -102,23 +106,23 @@ const HrDesignationIndex = () => {
     {
       label: "Edit",
       icon: FaEdit,
-      className: "text-indigo-600 hover:text-indigo-900 cursor-pointer",
+      className: "text-primary hover:text-primary/80 cursor-pointer",
       onClick: handleEdit,
     },
     {
       label: "Delete",
       icon: FaTrash,
-      className: "text-rose-600 hover:text-rose-900 cursor-pointer",
+      className: "text-destructive hover:text-destructive/80 cursor-pointer",
       onClick: handleDelete,
     },
   ];
 
   return (
-    <div className="p-6 max-w-6xl min-h-screen mx-auto">
+    <div className="p-6 max-w-6xl mx-auto">
       <PageBanner
         title="Designations"
         subtitle="Manage your organization's designations"
-        bgColor="from-blue-50 to-blue-100"
+        bgColor=""
       >
         <ReusableButton
           onClick={() => setIsCreateModalOpen(true)}
@@ -130,19 +134,19 @@ const HrDesignationIndex = () => {
         </ReusableButton>
       </PageBanner>
 
-      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {error && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{error}</div>}
       {loading ? (
-        <div className="text-center py-12 text-gray-500">Loading...</div>
+        <div className="text-center py-12 text-muted-foreground">Loading...</div>
       ) : (
         <ReusableTable columns={columns} data={designations} actions={actions} />
       )}
 
       {!loading && designations.length === 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 md:p-12 text-center mt-8">
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-6 sm:p-8 md:p-12 text-center mt-8">
+          <h3 className="text-lg font-medium text-foreground mb-2">
             No designations found
           </h3>
-          <p className="text-gray-500 mb-6">
+          <p className="text-muted-foreground mb-6">
             Get started by creating a new designation
           </p>
           <ReusableButton
@@ -174,7 +178,7 @@ const HrDesignationIndex = () => {
       >
         <form onSubmit={handleSubmit(onSubmitCreate)}>
           {submitError && (
-            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>
+            <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{submitError}</div>
           )}
           <div className="grid grid-cols-1 gap-6">
             <FormInput
@@ -220,7 +224,7 @@ const HrDesignationIndex = () => {
       >
         <form onSubmit={handleSubmit(onSubmitEdit)}>
           {submitError && (
-            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>
+            <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{submitError}</div>
           )}
           <div className="grid grid-cols-1 gap-6">
             <FormInput

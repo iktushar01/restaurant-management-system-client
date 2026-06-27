@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
@@ -49,12 +51,14 @@ const PayRollDeductionHeadIndex = () => {
   };
 
   const handleDelete = async (row) => {
-    if (window.confirm(`Are you sure you want to delete "${row.name}"?`)) {
-      try {
+    {
+    const ok = await confirm({ description: `Are you sure you want to delete "${row.name}"?` });
+    if (!ok) return;
+    try {
         await hrService.deductionHeads.delete(row.id);
         refetch();
       } catch (err) {
-        alert(err.message || "Failed to delete deduction head");
+        toast.error(err.message || "Failed to delete deduction head");
       }
     }
   };
@@ -87,23 +91,23 @@ const PayRollDeductionHeadIndex = () => {
     {
       label: "Edit",
       icon: FaEdit,
-      className: "text-indigo-600 hover:text-indigo-900 cursor-pointer",
+      className: "text-primary hover:text-primary/80 cursor-pointer",
       onClick: handleEdit,
     },
     {
       label: "Delete",
       icon: FaTrash,
-      className: "text-rose-600 hover:text-rose-900 cursor-pointer",
+      className: "text-destructive hover:text-destructive/80 cursor-pointer",
       onClick: handleDelete,
     },
   ];
 
   return (
-    <div className="p-6 max-w-6xl min-h-screen mx-auto">
+    <div className="p-6 max-w-6xl mx-auto">
       <PageBanner
         title="Deduction Head"
         subtitle="Manage your organization's deduction heads"
-        bgColor="from-purple-50 to-purple-100"
+        bgColor=""
       >
         <ReusableButton
           onClick={() => setIsCreateModalOpen(true)}
@@ -115,19 +119,19 @@ const PayRollDeductionHeadIndex = () => {
         </ReusableButton>
       </PageBanner>
 
-      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {error && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{error}</div>}
       {loading ? (
-        <div className="text-center py-12 text-gray-500">Loading...</div>
+        <div className="text-center py-12 text-muted-foreground">Loading...</div>
       ) : (
         <ReusableTable columns={columns} data={deductionHeads} actions={actions} />
       )}
 
       {!loading && deductionHeads.length === 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 md:p-12 text-center mt-8">
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-6 sm:p-8 md:p-12 text-center mt-8">
+          <h3 className="text-lg font-medium text-foreground mb-2">
             No deduction heads found
           </h3>
-          <p className="text-gray-500 mb-6">
+          <p className="text-muted-foreground mb-6">
             Get started by creating a new deduction head
           </p>
           <ReusableButton
@@ -159,7 +163,7 @@ const PayRollDeductionHeadIndex = () => {
       >
         <form onSubmit={handleSubmit(onSubmitCreate)}>
           {submitError && (
-            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>
+            <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{submitError}</div>
           )}
           <FormInput
             label="Deduction Head Name"
@@ -191,7 +195,7 @@ const PayRollDeductionHeadIndex = () => {
       >
         <form onSubmit={handleSubmit(onSubmitEdit)}>
           {submitError && (
-            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>
+            <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{submitError}</div>
           )}
           <FormInput
             label="Deduction Head Name"

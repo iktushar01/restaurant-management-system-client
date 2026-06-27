@@ -37,24 +37,24 @@ const DailyStatement = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8 bg-blue-100 p-6 rounded-lg shadow">
-          <h1 className="text-3xl font-bold text-gray-800">Daily Statement</h1>
-          <p className="text-gray-600 mt-2">Track your daily sales and financial performance</p>
+        <div className="mb-8 bg-primary/10 p-6 rounded-lg shadow">
+          <h1 className="text-3xl font-bold text-foreground">Daily Statement</h1>
+          <p className="text-muted-foreground mt-2">Track your daily sales and financial performance</p>
         </div>
 
-        {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+        {error && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{error}</div>}
 
         {/* Date Filter */}
-        <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4">Filter Statement</h2>
+        <div className="bg-card rounded-xl shadow-md p-6 mb-8">
+          <h2 className="text-lg font-semibold text-foreground mb-4">Filter Statement</h2>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Date</label>
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full border border-border rounded-lg px-4 py-2 focus:ring-2 focus-visible:ring-ring focus:border-primary"
               />
             </div>
             <div className="flex flex-col justify-end">
@@ -62,14 +62,14 @@ const DailyStatement = () => {
                 type="button"
                 onClick={handleSearch}
                 disabled={loading || !date}
-                className="flex items-center justify-center bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors w-full shadow-md disabled:opacity-60"
+                className="flex items-center justify-center bg-blue-600 text-primary-foreground px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors w-full shadow-md disabled:opacity-60"
               >
                 <FaSearch className="mr-2" />
                 Search
               </button>
             </div>
             <div className="flex flex-col justify-end">
-              <button className="flex items-center justify-center bg-gray-800 text-white px-4 py-3 rounded-lg hover:bg-gray-900 transition-colors w-full shadow-md">
+              <button className="flex items-center justify-center bg-gray-800 text-primary-foreground px-4 py-3 rounded-lg hover:bg-gray-900 transition-colors w-full shadow-md">
                 <FaFilePdf className="mr-2" />
                 Export PDF
               </button>
@@ -78,86 +78,86 @@ const DailyStatement = () => {
         </div>
 
         {loading ? (
-          <div className="text-center py-12 text-gray-500">Loading...</div>
+          <div className="text-center py-12 text-muted-foreground">Loading...</div>
         ) : (
           <>
             {/* Sales Summary */}
-            <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
-                <FaChartLine className="mr-2 text-blue-500" />
+            <div className="bg-card rounded-xl shadow-md p-6 mb-8">
+              <h2 className="text-xl font-semibold text-foreground mb-6 flex items-center">
+                <FaChartLine className="mr-2 text-primary" />
                 Sales Summary
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-                <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-5 rounded-xl border border-blue-100">
+                <div className="bg-gradient-to-r  p-5 rounded-xl border border-blue-100">
                   <div className="flex items-center mb-3">
-                    <div className="p-2 bg-blue-100 rounded-lg mr-3">
+                    <div className="p-2 bg-primary/10 rounded-lg mr-3">
                       <FaReceipt className="text-blue-600" />
                     </div>
-                    <p className="text-gray-600">Food Sale Price</p>
+                    <p className="text-muted-foreground">Food Sale Price</p>
                   </div>
-                  <p className="text-2xl font-bold text-gray-800">{formatAmount(salesSummary.foodSalePrice)}</p>
+                  <p className="text-2xl font-bold text-foreground">{formatAmount(salesSummary.foodSalePrice)}</p>
                 </div>
 
                 <div className="bg-gradient-to-r from-green-50 to-green-100 p-5 rounded-xl border border-green-100">
                   <div className="flex items-center mb-3">
                     <div className="p-2 bg-green-100 rounded-lg mr-3">
-                      <FaMoneyBillWave className="text-green-600" />
+                      <FaMoneyBillWave className="text-success" />
                     </div>
-                    <p className="text-gray-600">Paid Through Cash</p>
+                    <p className="text-muted-foreground">Paid Through Cash</p>
                   </div>
-                  <p className="text-2xl font-bold text-gray-800">{formatAmount(salesSummary.paidThroughCash)}</p>
+                  <p className="text-2xl font-bold text-foreground">{formatAmount(salesSummary.paidThroughCash)}</p>
                 </div>
 
-                <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-5 rounded-xl border border-purple-100">
+                <div className="bg-gradient-to-r  p-5 rounded-xl border border-purple-100">
                   <div className="flex items-center mb-3">
                     <div className="p-2 bg-purple-100 rounded-lg mr-3">
                       <FaCreditCard className="text-purple-600" />
                     </div>
-                    <p className="text-gray-600">Paid Through Card</p>
+                    <p className="text-muted-foreground">Paid Through Card</p>
                   </div>
-                  <p className="text-2xl font-bold text-gray-800">{formatAmount(salesSummary.paidThroughCard)}</p>
+                  <p className="text-2xl font-bold text-foreground">{formatAmount(salesSummary.paidThroughCard)}</p>
                 </div>
 
-                <div className="bg-gradient-to-r from-amber-50 to-amber-100 p-5 rounded-xl border border-amber-100">
+                <div className="bg-gradient-to-r  p-5 rounded-xl border border-amber-100">
                   <div className="flex items-center mb-3">
                     <div className="p-2 bg-amber-100 rounded-lg mr-3">
                       <FaMoneyCheckAlt className="text-amber-600" />
                     </div>
-                    <p className="text-gray-600">Total Price</p>
+                    <p className="text-muted-foreground">Total Price</p>
                   </div>
-                  <p className="text-2xl font-bold text-gray-800">{formatAmount(salesSummary.totalPrice)}</p>
+                  <p className="text-2xl font-bold text-foreground">{formatAmount(salesSummary.totalPrice)}</p>
                 </div>
               </div>
             </div>
 
             {/* Charges & Discount */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-6">Charges & Discount</h2>
+              <div className="bg-card rounded-xl shadow-md p-6">
+                <h2 className="text-xl font-semibold text-foreground mb-6">Charges & Discount</h2>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                    <span className="text-gray-600">VAT</span>
-                    <span className="font-medium text-gray-800">{formatAmount(charges.vat)}</span>
+                    <span className="text-muted-foreground">VAT</span>
+                    <span className="font-medium text-foreground">{formatAmount(charges.vat)}</span>
                   </div>
                   <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                    <span className="text-gray-600">SC</span>
-                    <span className="font-medium text-gray-800">{formatAmount(charges.serviceCharge)}</span>
+                    <span className="text-muted-foreground">SC</span>
+                    <span className="font-medium text-foreground">{formatAmount(charges.serviceCharge)}</span>
                   </div>
                   <div className="flex justify-between items-center py-3">
-                    <span className="text-gray-600">Discount</span>
-                    <span className="font-medium text-gray-800">{formatAmount(charges.discount)}</span>
+                    <span className="text-muted-foreground">Discount</span>
+                    <span className="font-medium text-foreground">{formatAmount(charges.discount)}</span>
                   </div>
                 </div>
               </div>
 
               {/* Income vs Expense */}
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-6">Financial Summary</h2>
+              <div className="bg-card rounded-xl shadow-md p-6">
+                <h2 className="text-xl font-semibold text-foreground mb-6">Financial Summary</h2>
                 <div className="space-y-5">
                   <div className="bg-green-50 p-5 rounded-xl border border-green-200">
                     <h3 className="text-lg font-semibold text-green-800 mb-2">Total Income</h3>
                     <div className="flex justify-between items-center">
-                      <span className="text-green-600">Total Income</span>
+                      <span className="text-success">Total Income</span>
                       <span className="text-2xl font-bold text-green-700">{formatAmount(financialSummary.totalIncome)}</span>
                     </div>
                   </div>
@@ -165,8 +165,8 @@ const DailyStatement = () => {
                   <div className="bg-red-50 p-5 rounded-xl border border-red-200">
                     <h3 className="text-lg font-semibold text-red-800 mb-2">Total Expense</h3>
                     <div className="flex justify-between items-center">
-                      <span className="text-red-600">Total Expense</span>
-                      <span className="text-2xl font-bold text-red-700">{formatAmount(financialSummary.totalExpense)}</span>
+                      <span className="text-destructive">Total Expense</span>
+                      <span className="text-2xl font-bold text-destructive">{formatAmount(financialSummary.totalExpense)}</span>
                     </div>
                   </div>
                 </div>
@@ -175,8 +175,8 @@ const DailyStatement = () => {
 
             {/* Total Balance */}
             <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl shadow-lg p-6 text-center">
-              <h2 className="text-2xl font-bold text-white mb-2">Total Balance</h2>
-              <p className="text-4xl font-bold text-white">{formatAmount(financialSummary.totalBalance)}</p>
+              <h2 className="text-2xl font-bold text-primary-foreground mb-2">Total Balance</h2>
+              <p className="text-4xl font-bold text-primary-foreground">{formatAmount(financialSummary.totalBalance)}</p>
             </div>
           </>
         )}

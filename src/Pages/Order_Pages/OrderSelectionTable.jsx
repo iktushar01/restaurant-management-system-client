@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
+import { toast } from "sonner";
 import { orderService } from "../../services/orderService";
 
 const OrderSelectionTable = ({ selectedItems, setSelectedItems, orderDetails, onOrderPlaced }) => {
@@ -20,11 +22,11 @@ const OrderSelectionTable = ({ selectedItems, setSelectedItems, orderDetails, on
 
   const handlePlaceOrder = async () => {
     if (!orderDetails.orderType || orderDetails.tableIds.length === 0 || !orderDetails.waiterId) {
-      alert("Order Type, Allotted Table, and Served By are required!");
+      toast.error("Order Type, Allotted Table, and Served By are required!");
       return;
     }
     if (selectedItems.length === 0) {
-      alert("Please add at least one item before placing the order!");
+      toast.error("Please add at least one item before placing the order!");
       return;
     }
 
@@ -47,11 +49,11 @@ const OrderSelectionTable = ({ selectedItems, setSelectedItems, orderDetails, on
         })),
       });
 
-      alert("Order placed successfully!");
+      toast.error("Order placed successfully!");
       setSelectedItems([]);
       onOrderPlaced?.();
     } catch (err) {
-      alert(err.message || "Failed to place order");
+      toast.error(err.message || "Failed to place order");
     } finally {
       setSubmitting(false);
     }
@@ -59,43 +61,43 @@ const OrderSelectionTable = ({ selectedItems, setSelectedItems, orderDetails, on
 
   const handlePrintKOT = () => {
     if (selectedItems.length === 0) {
-      alert("No items to print!");
+      toast.error("No items to print!");
       return;
     }
-    alert("KOT printed successfully!");
+    toast.error("KOT printed successfully!");
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6">
+    <div className="bg-card rounded-xl shadow-md p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-gray-800">SELECTED ITEMS</h2>
-        <div className="text-sm text-gray-500">
+        <h2 className="text-xl font-bold text-foreground">SELECTED ITEMS</h2>
+        <div className="text-sm text-muted-foreground">
           {orderDetails.tableIds?.length > 0 && `${orderDetails.tableIds.length} table(s) selected`}
         </div>
       </div>
 
       {selectedItems.length === 0 ? (
-        <div className="text-center py-8 border border-dashed border-gray-300 rounded-lg">
-          <p className="mt-4 text-gray-500">No items selected yet.</p>
+        <div className="text-center py-8 border border-dashed border-border rounded-lg">
+          <p className="mt-4 text-muted-foreground">No items selected yet.</p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-gray-200">
+        <div className="overflow-x-auto rounded-lg border border-border">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-muted/40">
               <tr>
-                <th className="p-3 text-left text-xs font-medium text-gray-500 uppercase">Food No</th>
-                <th className="p-3 text-left text-xs font-medium text-gray-500 uppercase">Food Name</th>
-                <th className="p-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
-                <th className="p-3 text-left text-xs font-medium text-gray-500 uppercase">Qty</th>
-                <th className="p-3 text-left text-xs font-medium text-gray-500 uppercase">Side item</th>
-                <th className="p-3 text-left text-xs font-medium text-gray-500 uppercase">Note</th>
-                <th className="p-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                <th className="p-3 text-left text-xs font-medium text-muted-foreground uppercase">Food No</th>
+                <th className="p-3 text-left text-xs font-medium text-muted-foreground uppercase">Food Name</th>
+                <th className="p-3 text-left text-xs font-medium text-muted-foreground uppercase">Price</th>
+                <th className="p-3 text-left text-xs font-medium text-muted-foreground uppercase">Qty</th>
+                <th className="p-3 text-left text-xs font-medium text-muted-foreground uppercase">Side item</th>
+                <th className="p-3 text-left text-xs font-medium text-muted-foreground uppercase">Note</th>
+                <th className="p-3 text-left text-xs font-medium text-muted-foreground uppercase">Action</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-card divide-y divide-border">
               {selectedItems.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50">
-                  <td className="p-3"><span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded">{item.foodNumber || item.foodNo}</span></td>
+                <tr key={item.id} className="hover:bg-muted/40">
+                  <td className="p-3"><span className="bg-primary/10 text-foreground text-xs font-medium px-2 py-1 rounded">{item.foodNumber || item.foodNo}</span></td>
                   <td className="p-3 text-sm font-medium">{item.name || item.foodName}</td>
                   <td className="p-3 text-sm">฿{item.price.toFixed(2)}</td>
                   <td className="p-3">
@@ -112,7 +114,7 @@ const OrderSelectionTable = ({ selectedItems, setSelectedItems, orderDetails, on
                     <input type="text" value={item.note || ""} onChange={(e) => handleChange(item.id, "note", e.target.value)} className="w-full p-1.5 border rounded-md" placeholder="Note" />
                   </td>
                   <td className="p-3">
-                    <button onClick={() => handleRemoveItem(item.id)} className="text-red-500 hover:text-red-700">Remove</button>
+                    <button onClick={() => handleRemoveItem(item.id)} className="text-destructive hover:text-destructive">Remove</button>
                   </td>
                 </tr>
               ))}
@@ -121,15 +123,15 @@ const OrderSelectionTable = ({ selectedItems, setSelectedItems, orderDetails, on
         </div>
       )}
 
-      <div className="mt-6 pt-4 border-t border-gray-200">
+      <div className="mt-6 pt-4 border-t border-border">
         <div className="flex justify-between items-center mb-6">
           <div className="text-lg">
-            <span className="text-gray-600">Total:</span>
+            <span className="text-muted-foreground">Total:</span>
             <span className="ml-2 font-bold text-xl text-blue-600">฿{totalPrice.toFixed(2)}</span>
           </div>
           <div className="flex space-x-3">
-            <button onClick={handlePrintKOT} className="px-5 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 font-medium">Print KOT</button>
-            <button onClick={handlePlaceOrder} disabled={submitting} className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium disabled:opacity-60">
+            <button onClick={handlePrintKOT} className="px-5 py-2.5 bg-gray-600 text-primary-foreground rounded-lg hover:bg-gray-700 font-medium">Print KOT</button>
+            <button onClick={handlePlaceOrder} disabled={submitting} className="px-5 py-2.5 bg-blue-600 text-primary-foreground rounded-lg hover:bg-blue-700 font-medium disabled:opacity-60">
               {submitting ? "Placing..." : "Place Order"}
             </button>
           </div>

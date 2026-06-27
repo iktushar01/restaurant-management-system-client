@@ -23,8 +23,8 @@ const ReportPageIndex = () => {
   const summaryData = useMemo(() => {
     const summary = report?.summary || {};
     return [
-      { label: 'Total Food Cost', value: formatCurrency(summary.totalFoodCost), icon: <FiDollarSign className="text-blue-500" /> },
-      { label: 'Total Discount', value: formatCurrency(summary.totalDiscount), icon: <FiPercent className="text-green-500" /> },
+      { label: 'Total Food Cost', value: formatCurrency(summary.totalFoodCost), icon: <FiDollarSign className="text-primary" /> },
+      { label: 'Total Discount', value: formatCurrency(summary.totalDiscount), icon: <FiPercent className="text-success" /> },
       { label: 'Total OnHouse Cost', value: formatCurrency(summary.totalOnHouse), icon: <FiHome className="text-purple-500" /> },
       { label: 'Total Due Orders Amount', value: formatCurrency(summary.totalDueOrders), icon: <FiDollarSign className="text-yellow-500" /> },
       { label: 'Total Due Collect Amount', value: formatCurrency(summary.totalDueCollect), icon: <FiDollarSign className="text-orange-500" /> },
@@ -37,27 +37,27 @@ const ReportPageIndex = () => {
   const totalCancelled = cancelledOrdersData.reduce((sum, item) => sum + Number(item.total), 0);
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center text-gray-500">Loading...</div>;
+    return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-muted/40 p-6">
       <div className="max-w-7xl mx-auto">
-        {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+        {error && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{error}</div>}
 
         {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 bg-blue-100 p-6 rounded-lg shadow">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 bg-primary/10 p-6 rounded-lg shadow">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">Charges</h1>
-            <p className="text-gray-600 mt-1">Order summary and reports</p>
+            <h1 className="text-2xl font-bold text-foreground">Charges</h1>
+            <p className="text-muted-foreground mt-1">Order summary and reports</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
-              <FiPrinter className="text-gray-600" />
+            <button className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg bg-card text-foreground hover:bg-muted/40 transition-colors shadow-sm">
+              <FiPrinter className="text-muted-foreground" />
               Print
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
-              <FiDownload className="text-gray-600" />
+            <button className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg bg-card text-foreground hover:bg-muted/40 transition-colors shadow-sm">
+              <FiDownload className="text-muted-foreground" />
               Export
             </button>
           </div>
@@ -65,37 +65,37 @@ const ReportPageIndex = () => {
 
         {/* All Orders Table */}
         <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">All Orders</h3>
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <h3 className="text-lg font-semibold text-foreground mb-4">All Orders</h3>
+          <div className="bg-card rounded-lg shadow-sm border border-border overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-100">
+                <thead className="bg-muted">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sl #</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Detail</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Time</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Sl #</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Order Detail</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Order Time</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Total</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-border">
                   {allOrdersData.map((item, index) => (
-                    <tr key={item.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.orderDetail}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <tr key={item.id} className="hover:bg-muted/40">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{index + 1}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{item.orderDetail}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success">
                           {item.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.orderTime}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{formatCurrency(item.total)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{item.orderTime}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground font-medium">{formatCurrency(item.total)}</td>
                     </tr>
                   ))}
-                  <tr className="bg-gray-50 font-semibold">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900" colSpan="3"></td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Total</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{formatCurrency(totalAllOrders)}</td>
+                  <tr className="bg-muted/40 font-semibold">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground" colSpan="3"></td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">Total</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{formatCurrency(totalAllOrders)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -105,37 +105,37 @@ const ReportPageIndex = () => {
 
         {/* Cancelled Orders Section */}
         <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Cancelled Orders</h3>
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Cancelled Orders</h3>
+          <div className="bg-card rounded-lg shadow-sm border border-border overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-100">
+                <thead className="bg-muted">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sl #</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Detail</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Time</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Sl #</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Order Detail</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Order Time</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Total</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-border">
                   {cancelledOrdersData.map((item, index) => (
-                    <tr key={item.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.orderDetail}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    <tr key={item.id} className="hover:bg-muted/40">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{index + 1}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{item.orderDetail}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-destructive/10 text-red-800">
                           {item.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.orderTime}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{formatCurrency(item.total)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{item.orderTime}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground font-medium">{formatCurrency(item.total)}</td>
                     </tr>
                   ))}
-                  <tr className="bg-gray-50 font-semibold">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900" colSpan="3"></td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Total</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{formatCurrency(totalCancelled)}</td>
+                  <tr className="bg-muted/40 font-semibold">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground" colSpan="3"></td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">Total</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{formatCurrency(totalCancelled)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -146,10 +146,10 @@ const ReportPageIndex = () => {
         {/* Summary Section */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-800">Summary</h3>
+            <h3 className="text-lg font-semibold text-foreground">Summary</h3>
             <button
               onClick={() => setShowSummary(!showSummary)}
-              className="flex items-center gap-1 text-gray-600 hover:text-gray-800 px-3 py-1 rounded-md hover:bg-gray-100"
+              className="flex items-center gap-1 text-muted-foreground hover:text-foreground px-3 py-1 rounded-md hover:bg-muted/50"
             >
               {showSummary ? <FiChevronUp /> : <FiChevronDown />}
               {showSummary ? 'Hide' : 'Show'} Summary
@@ -157,16 +157,16 @@ const ReportPageIndex = () => {
           </div>
 
           {showSummary && (
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div className="bg-card rounded-lg shadow-sm border border-border overflow-hidden">
               <div className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {summaryData.map((item, index) => (
-                    <div key={index} className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow transition-shadow">
+                    <div key={index} className="bg-muted/40 rounded-lg p-4 border border-border hover:shadow transition-shadow">
                       <div className="flex items-center justify-between mb-2">
-                        <div className="text-sm font-medium text-gray-600">{item.label}</div>
+                        <div className="text-sm font-medium text-muted-foreground">{item.label}</div>
                         {item.icon}
                       </div>
-                      <div className="text-lg font-semibold text-gray-900">{item.value}</div>
+                      <div className="text-lg font-semibold text-foreground">{item.value}</div>
                     </div>
                   ))}
                 </div>

@@ -8,10 +8,12 @@ import {
   getLocationTypeLabel,
   getLocationZoneClasses,
   getTableStatusClasses,
+  getTableVisualClasses,
   GRID_SIZE,
   snapToGrid,
   findZoneAtPoint,
 } from "@/lib/floorPlanUtils";
+import { getOrderStatusShortLabel } from "@/lib/orderStatus";
 import { floorPlanService } from "@/services/floorPlanService";
 import { dineLocationService } from "@/services/dineLocationService";
 import { dineTableService } from "@/services/dineTableService";
@@ -27,20 +29,26 @@ function ZoneLabel({ location }) {
   );
 }
 
-function TableCard({ table }) {
+function TableCard({ table, orderInfo }) {
   return (
     <>
       <UtensilsCrossedIcon className="size-4 mb-0.5 pointer-events-none" />
       <span className="text-xs font-bold pointer-events-none">{table.tableNo}</span>
-      <span className="text-[10px] opacity-90 flex items-center gap-0.5 pointer-events-none">
-        <UsersIcon className="size-2.5" />
-        {table.capacity}
-      </span>
+      {orderInfo ? (
+        <span className="text-[9px] font-bold uppercase leading-tight mt-0.5 pointer-events-none">
+          {getOrderStatusShortLabel(orderInfo.statusRaw)}
+        </span>
+      ) : (
+        <span className="text-[10px] opacity-90 flex items-center gap-0.5 pointer-events-none">
+          <UsersIcon className="size-2.5" />
+          {table.capacity}
+        </span>
+      )}
     </>
   );
 }
 
-function ReadOnlyFloorPlan({ canvas, locations, tables, className, minHeight }) {
+function ReadOnlyFloorPlan({ canvas, locations, tables, tableOrderMap, className, minHeight }) {
   return (
     <div
       className={cn(
@@ -81,24 +89,32 @@ function ReadOnlyFloorPlan({ canvas, locations, tables, className, minHeight }) 
           </div>
         ))}
 
-        {tables.map((table) => (
-          <div
-            key={table.id}
-            className={cn(
-              "absolute flex flex-col items-center justify-center rounded-lg border-2 shadow-md",
-              getTableStatusClasses(table.status)
-            )}
-            style={{
-              left: table.positionX,
-              top: table.positionY,
-              width: DEFAULT_TABLE_SIZE,
-              height: DEFAULT_TABLE_SIZE,
-              zIndex: 2,
-            }}
-          >
-            <TableCard table={table} />
-          </div>
-        ))}
+        {tables.map((table) => {
+          const orderInfo = tableOrderMap?.[table.id];
+          return (
+            <div
+              key={table.id}
+              className={cn(
+                "absolute flex flex-col items-center justify-center rounded-lg border-2 shadow-md transition-colors duration-300",
+                getTableVisualClasses(table, orderInfo)
+              )}
+              style={{
+                left: table.positionX,
+                top: table.positionY,
+                width: DEFAULT_TABLE_SIZE,
+                height: DEFAULT_TABLE_SIZE,
+                zIndex: 2,
+              }}
+              title={
+                orderInfo
+                  ? `Table ${table.tableNo} — ${getOrderStatusShortLabel(orderInfo.statusRaw)}`
+                  : `Table ${table.tableNo} — ${table.status}`
+              }
+            >
+              <TableCard table={table} orderInfo={orderInfo} />
+            </div>
+          );
+        })}
 
         {locations.length === 0 && tables.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
@@ -112,6 +128,7 @@ function ReadOnlyFloorPlan({ canvas, locations, tables, className, minHeight }) 
 
 const DineFloorPlanCanvas = ({
   readOnly = false,
+  tableOrderMap,
   onSaveStateChange,
   className,
   minHeight = 420,
@@ -361,6 +378,7 @@ const DineFloorPlanCanvas = ({
         canvas={canvas}
         locations={locations}
         tables={tables}
+        tableOrderMap={tableOrderMap}
         className={className}
         minHeight={minHeight}
       />

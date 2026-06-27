@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ClipboardListIcon, UtensilsCrossedIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { buildTableOrderMap } from "@/lib/orderStatus";
+import { dashboardService } from "@/services/dashboardService";
 import RestaurantDashboard from "./RestaurantDashboard";
 import RestaurantDashboardSeatList from "./RestaurantDashboardSeatList";
 import RestaurantDashboardCurrentOrder from "./RestaurantDashboardCurrentOrder";
@@ -12,6 +14,27 @@ const tabs = [
 
 const RestaurantDashboardIndex = () => {
   const [activeTab, setActiveTab] = useState("seating");
+  const [orders, setOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
+
+  const fetchOrders = useCallback(async () => {
+    try {
+      const res = await dashboardService.getCurrentOrders();
+      setOrders(res.data || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingOrders(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 15000);
+    return () => clearInterval(interval);
+  }, [fetchOrders]);
+
+  const tableOrderMap = buildTableOrderMap(orders);
 
   return (
     <div className="w-full min-h-[calc(100vh-8rem)] bg-background text-foreground">
@@ -42,6 +65,16 @@ const RestaurantDashboardIndex = () => {
               >
                 <Icon className="size-4 shrink-0" />
                 <span className="truncate">{tab.label}</span>
+                {tab.id === "orders" && orders.length > 0 && (
+                  <span
+                    className={cn(
+                      "ml-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold",
+                      isActive ? "bg-primary-foreground/20" : "bg-primary/20 text-primary"
+                    )}
+                  >
+                    {orders.length}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -49,9 +82,13 @@ const RestaurantDashboardIndex = () => {
 
         <div role="tabpanel" className="w-full">
           {activeTab === "seating" ? (
-            <RestaurantDashboardSeatList />
+            <RestaurantDashboardSeatList tableOrderMap={tableOrderMap} />
           ) : (
-            <RestaurantDashboardCurrentOrder />
+            <RestaurantDashboardCurrentOrder
+              orders={orders}
+              loading={loadingOrders}
+              onRefresh={fetchOrders}
+            />
           )}
         </div>
       </div>

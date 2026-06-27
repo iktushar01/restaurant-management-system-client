@@ -1,3 +1,5 @@
+import { getOrderStatusTableClasses } from "./orderStatus";
+
 export const GRID_SIZE = 10;
 export const DEFAULT_TABLE_SIZE = 72;
 
@@ -36,6 +38,22 @@ export function getTableStatusClasses(status) {
     default:
       return "bg-muted text-foreground border-border";
   }
+}
+
+export function getTableVisualClasses(table, orderInfo) {
+  const orderClasses = orderInfo?.statusRaw
+    ? getOrderStatusTableClasses(orderInfo.statusRaw)
+    : null;
+
+  if (orderClasses) return orderClasses;
+
+  if (table.status === "Reserved") {
+    return getTableStatusClasses("Reserved");
+  }
+  if (table.status === "Occupied") {
+    return getTableStatusClasses("Occupied");
+  }
+  return getTableStatusClasses("Vacant");
 }
 
 export function getLocationZoneClasses(type) {

@@ -5,50 +5,37 @@ import {
   FaBox, 
   FaShoppingBag, 
   FaUtensils,
-  FaInfoCircle,
-  FaCheckCircle
 } from 'react-icons/fa';
+import { dashboardService } from '../../services/dashboardService';
+
+const getIconForType = (type) => {
+  switch (type) {
+    case 'kabin': return <FaHome />;
+    case 'box': return <FaBox />;
+    case 'takeaway': return <FaShoppingBag />;
+    default: return <FaChair />;
+  }
+};
 
 const RestaurantDashboardSeatList = () => {
-  const layoutData = [
-    { id: 1, seatName: "KABIN 1", type: "kabin", icon: <FaHome /> },
-    { id: 2, seatName: "A2", type: "table", icon: <FaChair /> },
-    { id: 3, seatName: "A3", type: "table", icon: <FaChair /> },
-    { id: 4, seatName: "A4", type: "table", icon: <FaChair /> },
-    { id: 5, seatName: "B1", type: "table", icon: <FaChair /> },
-    { id: 6, seatName: "B2", type: "table", icon: <FaChair /> },
-    { id: 7, seatName: "B3", type: "table", icon: <FaChair /> },
-    { id: 8, seatName: "B4", type: "table", icon: <FaChair /> },
-    { id: 9, seatName: "C1", type: "table", icon: <FaChair /> },
-    { id: 10, seatName: "C2", type: "table", icon: <FaChair /> },
-    { id: 11, seatName: "C3", type: "table", icon: <FaChair /> },
-    { id: 12, seatName: "C4", type: "table", icon: <FaChair /> },
-    { id: 13, seatName: "D1", type: "table", icon: <FaChair /> },
-    { id: 14, seatName: "D2", type: "table", icon: <FaChair /> },
-    { id: 15, seatName: "D3", type: "table", icon: <FaChair /> },
-    { id: 16, seatName: "D4", type: "table", icon: <FaChair /> },
-    { id: 17, seatName: "E1", type: "table", icon: <FaChair /> },
-    { id: 18, seatName: "E2", type: "table", icon: <FaChair /> },
-    { id: 19, seatName: "E3", type: "table", icon: <FaChair /> },
-    { id: 20, seatName: "E4", type: "table", icon: <FaChair /> },
-    { id: 21, seatName: "F1", type: "table", icon: <FaChair /> },
-    { id: 22, seatName: "F2", type: "table", icon: <FaChair /> },
-    { id: 23, seatName: "F3", type: "table", icon: <FaChair /> },
-    { id: 25, seatName: "G1", type: "table", icon: <FaChair /> },
-    { id: 26, seatName: "G2", type: "table", icon: <FaChair /> },
-    { id: 27, seatName: "Box1", type: "box", icon: <FaBox /> },
-    { id: 28, seatName: "Box2", type: "box", icon: <FaBox /> },
-    { id: 29, seatName: "Box3", type: "box", icon: <FaBox /> },
-    { id: 30, seatName: "Box4", type: "box", icon: <FaBox /> },
-    { id: 31, seatName: "Box5", type: "box", icon: <FaBox /> },
-    { id: 32, seatName: "D5", type: "table", icon: <FaChair /> },
-    { id: 33, seatName: "E5", type: "table", icon: <FaChair /> },
-    { id: 34, seatName: "Take way", type: "takeaway", icon: <FaShoppingBag /> },
-  ];
-
+  const [layoutData, setLayoutData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isLarge, setIsLarge] = useState(window.innerWidth >= 1024);
+
+  useEffect(() => {
+    dashboardService.getSeatLayout()
+      .then((res) => {
+        const seats = (res.data || []).map((seat) => ({
+          ...seat,
+          icon: getIconForType(seat.type),
+        }));
+        setLayoutData(seats);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -133,6 +120,14 @@ const RestaurantDashboardSeatList = () => {
   const boxes = layoutData.filter(item => item.type === "box");
   const takeaway = layoutData.find(item => item.type === "takeaway");
 
+  if (loading) {
+    return <div className="p-8 text-center text-gray-500">Loading seat layout...</div>;
+  }
+
+  if (layoutData.length === 0) {
+    return <div className="p-8 text-center text-gray-500">No tables configured. Add dine tables in settings.</div>;
+  }
+
   return (
     <div className="bg-gray-100 p-2 md:p-4 flex justify-center">
       <div className="w-full max-w-6xl bg-white rounded-xl shadow-md p-3 md:p-4 lg:p-6">
@@ -144,6 +139,7 @@ const RestaurantDashboardSeatList = () => {
           {/* Top Section - Kabin and Boxes */}
           <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-3 md:gap-0">
             {/* Kabin Section */}
+            {kabin && (
             <div className="text-center w-full md:w-auto">
               <div className="text-xs md:text-sm font-semibold text-gray-700 mb-1 flex items-center justify-center">
                 <FaHome className="mr-1" /> Kabin
@@ -157,6 +153,7 @@ const RestaurantDashboardSeatList = () => {
                 <div className="text-xs mt-1">{kabin.seatName}</div>
               </div>
             </div>
+            )}
             
             {/* Boxes Section */}
             <div className="text-center w-full md:w-auto">

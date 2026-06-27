@@ -12,6 +12,10 @@ import {
   FaShoppingCart
 } from "react-icons/fa";
 
+import { foodService } from "../../services/foodService";
+
+const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1626645735466-5f6ce3c27459?w=500&auto=format&fit=crop&q=60";
+
 const FoodMenuTable = ({ onAddItem }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -21,84 +25,26 @@ const FoodMenuTable = ({ onAddItem }) => {
   });
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [selectedItemsCount, setSelectedItemsCount] = useState(0);
+  const [foodItems, setFoodItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const gridRef = useRef(null);
 
-  // Sample data - in a real app this would come from props or API
-  const foodItems = [
-    {
-      id: 1,
-      name: "Chicken Satay",
-      category: "Appetizer (Thai)",
-      foodNumber: "01",
-      price: 395.0,
-      image: "https://images.unsplash.com/photo-1626645735466-5f6ce3c27459?w=500&auto=format&fit=crop&q=60",
-    },
-    {
-      id: 2,
-      name: "Fried/Grilled Chicken Wings",
-      category: "Appetizer (Thai)",
-      foodNumber: "02",
-      price: 320.0,
-      image: "https://images.unsplash.com/photo-1626645735466-5f6ce3c27459?w=500&auto=format&fit=crop&q=60",
-    },
-    {
-      id: 3,
-      name: "Fish Finger (Pla Chup Pang Tod)",
-      category: "Appetizer (Thai)",
-      foodNumber: "03",
-      price: 360.0,
-      image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500&auto=format&fit=crop&q=60",
-    },
-    {
-      id: 4,
-      name: "Butter Fried Prawn",
-      category: "Appetizer (Thai)",
-      foodNumber: "04",
-      price: 380.0,
-      image: "https://images.unsplash.com/photo-1626645735466-5f6ce3c27459?w=500&auto=format&fit=crop&q=60",
-    },
-    {
-      id: 5,
-      name: "Drums of Heaven",
-      category: "Appetizer (Thai)",
-      foodNumber: "05",
-      price: 360.0,
-      image: "https://images.unsplash.com/photo-1626645735466-5f6ce3c27459?w=500&auto=format&fit=crop&q=60",
-    },
-    {
-      id: 6,
-      name: "Tempura Vegetable",
-      category: "Appetizer (Thai)",
-      foodNumber: "06",
-      price: 280.0,
-      image: "https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?w=500&auto=format&fit=crop&q=60",
-    },
-    {
-      id: 7,
-      name: "Tempura Mixed",
-      category: "Appetizer (Thai)",
-      foodNumber: "07",
-      price: 380.0,
-      image: "https://images.unsplash.com/photo-1626645735466-5f6ce3c27459?w=500&auto=format&fit=crop&q=60",
-    },
-    {
-      id: 8,
-      name: "Royal Spring Roll",
-      category: "Appetizer (Thai)",
-      foodNumber: "08",
-      price: 320.0,
-      image: "https://images.unsplash.com/photo-1613896527035-3c0c5c34e3a1?w=500&auto=format&fit=crop&q=60",
-    },
-    // Add more items to simulate large data
-    ...Array.from({ length: 20 }, (_, i) => ({
-      id: i + 9,
-      name: `Special Dish ${i + 1}`,
-      category: i % 2 === 0 ? "Main Course" : "Dessert",
-      foodNumber: `${i + 9}`.padStart(2, '0'),
-      price: 400 + (i * 50),
-      image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop&q=60",
-    }))
-  ];
+  useEffect(() => {
+    foodService.getAllSimple()
+      .then((res) => {
+        const mapped = (res.data || []).map((f) => ({
+          id: f.id,
+          name: f.name || f.foodName,
+          category: f.category,
+          foodNumber: f.foodNo,
+          price: Number(f.price),
+          image: f.image || DEFAULT_IMAGE,
+        }));
+        setFoodItems(mapped);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
   // Get unique categories
   const categories = useMemo(() => [
@@ -309,7 +255,9 @@ const FoodMenuTable = ({ onAddItem }) => {
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 overflow-y-auto flex-grow relative"
         style={{ maxHeight: '60vh' }}
       >
-        {filteredItems.length === 0 ? (
+        {loading ? (
+          <div className="col-span-full text-center py-12 text-gray-500">Loading menu...</div>
+        ) : filteredItems.length === 0 ? (
           <div className="col-span-full text-center py-12 bg-gray-50 rounded-2xl">
             <div className="w-24 h-24 mx-auto bg-gray-200 rounded-full flex items-center justify-center mb-4">
               <FaSearch className="text-4xl text-gray-400" />

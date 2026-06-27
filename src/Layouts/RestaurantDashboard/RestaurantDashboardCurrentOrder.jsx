@@ -1,50 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FaEdit, FaReceipt, FaMoneyBillWave, FaTimes } from "react-icons/fa";
+import { dashboardService } from "../../services/dashboardService";
+import { orderService } from "../../services/orderService";
 
 const RestaurantDashboardCurrentOrder = () => {
-  // Sample data for current orders - matching your table structure
-  const [orders, setOrders] = useState([
-    {
-      id: 19236,
-      table: "A3",
-      status: "Ordered ✓",
-      billAmount: 125.50,
-      items: ["Pizza", "Coke", "Salad"]
-    },
-    {
-      id: 19237,
-      table: "A4",
-      status: "Served",
-      billAmount: 89.75,
-      items: ["Burger", "Fries"]
-    },
-    {
-      id: 19238,
-      table: "House Use",
-      status: "Ordered ✓",
-      billAmount: 45.25,
-      items: ["Coffee", "Sandwich"]
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchOrders = useCallback(async () => {
+    try {
+      const res = await dashboardService.getCurrentOrders();
+      setOrders(res.data || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-  ]);
+  }, []);
 
-  const handleBillClick = (orderId) => {
-    console.log(`Generate bill for order #${orderId}`);
-    // Implement bill generation logic here
-  };
+  useEffect(() => {
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 30000);
+    return () => clearInterval(interval);
+  }, [fetchOrders]);
 
-  const handlePayClick = (orderId) => {
-    console.log(`Process payment for order #${orderId}`);
-    // Implement payment processing logic here
-  };
-
-  const handleEditClick = (orderId) => {
-    console.log(`Edit order #${orderId}`);
-    // Implement edit order logic here
-  };
-
-  const handleCancelClick = (orderId) => {
+  const handleCancelClick = async (orderId) => {
     if (window.confirm("Are you sure you want to cancel this order?")) {
-      setOrders(orders.filter(order => order.id !== orderId));
+      try {
+        await orderService.cancel(orderId);
+        fetchOrders();
+      } catch (err) {
+        alert(err.message || "Failed to cancel order");
+      }
+    }
+  };
+
+  const handlePayClick = async (orderId) => {
+    try {
+      await orderService.updateStatus(orderId, "COMPLETED");
+      fetchOrders();
+    } catch (err) {
+      alert(err.message || "Failed to complete order");
     }
   };
 
@@ -57,93 +53,46 @@ const RestaurantDashboardCurrentOrder = () => {
         </div>
 
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Bill #
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Table #
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Bill
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Pay
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Edit
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Cancel
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {orders.map((order) => (
-                  <tr key={order.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {order.id}
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
-                      {order.table}
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                        order.status.includes("Ordered") 
-                          ? "bg-yellow-100 text-yellow-800" 
-                          : "bg-green-100 text-green-800"
-                      }`}>
-                        {order.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
-                      <button
-                        onClick={() => handleBillClick(order.id)}
-                        className="flex items-center justify-center px-3 py-1.5 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors font-medium"
-                      >
-                        <FaReceipt className="mr-1" /> BILL
-                      </button>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
-                      <button
-                        onClick={() => handlePayClick(order.id)}
-                        className="flex items-center justify-center px-3 py-1.5 bg-green-100 text-green-700 rounded-md hover:bg-green-200 transition-colors font-medium"
-                      >
-                        <FaMoneyBillWave className="mr-1" /> $ RESOLVE
-                      </button>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
-                      <button
-                        onClick={() => handleEditClick(order.id)}
-                        className="flex items-center justify-center px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors font-medium"
-                      >
-                        <FaEdit className="mr-1" /> EDIT
-                      </button>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
-                      <button
-                        onClick={() => handleCancelClick(order.id)}
-                        className="flex items-center justify-center px-3 py-1.5 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors font-medium"
-                      >
-                        <FaTimes className="mr-1" /> CANCEL
-                      </button>
-                    </td>
+          {loading ? (
+            <div className="p-8 text-center text-gray-500">Loading orders...</div>
+          ) : orders.length === 0 ? (
+            <div className="p-8 text-center text-gray-500">No active orders</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Table</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bill Amount</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Items</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-        
-</div>
-      
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {orders.map((order) => (
+                    <tr key={order.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{order.orderId || order.id.slice(0, 8)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.table}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">{order.status}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">฿{Number(order.billAmount).toFixed(2)}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500">{order.items?.join(", ")}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex space-x-2">
+                          <button onClick={() => handlePayClick(order.id)} className="text-green-600 hover:text-green-900" title="Pay"><FaMoneyBillWave /></button>
+                          <button onClick={() => handleCancelClick(order.id)} className="text-red-600 hover:text-red-900" title="Cancel"><FaTimes /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

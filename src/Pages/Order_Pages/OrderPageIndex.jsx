@@ -6,8 +6,8 @@ import OrderSelectionTable from "./OrderSelectionTable";
 const OrderPageIndex = () => {
   const [orderDetails, setOrderDetails] = useState({
     orderType: "",
-    tables: [],
-    staff: "",
+    tableIds: [],
+    waiterId: "",
     persons: "",
     notes: "",
   });

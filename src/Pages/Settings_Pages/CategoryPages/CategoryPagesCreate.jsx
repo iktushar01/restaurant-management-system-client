@@ -1,18 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
+import { inventoryService } from "../../../services/inventoryService";
 
 const CategoryPagesCreate = () => {
+  const navigate = useNavigate();
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Category Form Data:", data);
-    // Add your API call here
+  const onSubmit = async (data) => {
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await inventoryService.categories.create({
+        name: data.name,
+        details: data.details || "",
+      });
+      navigate("/WorkPeriod/inventory/category");
+    } catch (err) {
+      setSubmitError(err.message || "Failed to create category");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -38,6 +53,9 @@ const CategoryPagesCreate = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          {submitError && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>
+          )}
           <div className="grid grid-cols-1 gap-6">
             {/* Category Name Input */}
             <div>
@@ -72,13 +90,7 @@ const CategoryPagesCreate = () => {
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 transition-all duration-200 outline-none"
                 placeholder="Enter category details"
                 rows={3}
-                {...register("details", {
-                  required: "Category details are required",
-                  minLength: {
-                    value: 2,
-                    message: "Category details must be at least 2 characters",
-                  },
-                })}
+                {...register("details")}
               />
               {errors.details && (
                 <p className="mt-1 text-sm text-red-600">
@@ -97,9 +109,10 @@ const CategoryPagesCreate = () => {
             </Link>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
+              disabled={submitting}
+              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer disabled:opacity-60"
             >
-              Save
+              {submitting ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

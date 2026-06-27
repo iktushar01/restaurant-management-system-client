@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
+import { inventoryService } from "../../services/inventoryService";
+
+const toDatetimeLocal = (dateStr) => {
+  const d = new Date(dateStr);
+  if (Number.isNaN(d.getTime())) return "";
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
 
 const EventManageEditById = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const {
     register,
     handleSubmit,
@@ -11,23 +24,46 @@ const EventManageEditById = () => {
     setValue,
   } = useForm();
 
-  // Pre-fill form with existing event data (in a real app, this would come from an API)
-  React.useEffect(() => {
-    setValue("title", "test event");
-    setValue("customerName", "tushar");
-    setValue("phone", "2342342234234");
-    setValue("date", "2025-09-04T00:00");
-    setValue("noOfPerson", 24);
-    setValue("menu", "sadfast");
-    setValue("description", "fastasd asf asfghdfnrt rt");
-    setValue("advanceAmount", "34534534.00");
-    setValue("themeColor", "red");
-  }, [setValue]);
+  useEffect(() => {
+    inventoryService.events.getById(id).then((res) => {
+      const e = res.data;
+      setValue("title", e.subject);
+      setValue("customerName", e.customerName);
+      setValue("phone", e.phone || "");
+      setValue("date", toDatetimeLocal(e.date));
+      setValue("noOfPerson", e.noOfPerson);
+      setValue("menu", e.menu || "");
+      setValue("description", e.description || "");
+      setValue("advanceAmount", e.advanceAmount);
+    }).catch((err) => setSubmitError(err.message || "Failed to load event"))
+      .finally(() => setLoading(false));
+  }, [id, setValue]);
 
-  const onSubmit = (data) => {
-    console.log("Event Form Data:", data);
-    // Add your API call here
+  const onSubmit = async (data) => {
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await inventoryService.events.update(id, {
+        subject: data.title,
+        customerName: data.customerName,
+        phone: data.phone || "",
+        date: new Date(data.date).toISOString(),
+        noOfPerson: Number(data.noOfPerson),
+        advanceAmount: Number(data.advanceAmount) || 0,
+        menu: data.menu || "",
+        description: data.description || "",
+      });
+      navigate("/event/manage");
+    } catch (err) {
+      setSubmitError(err.message || "Failed to update event");
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  if (loading) {
+    return <div className="max-w-7xl min-h-screen mx-auto p-6 text-center text-gray-500">Loading event...</div>;
+  }
 
   return (
     <div className="max-w-7xl min-h-screen mx-auto p-6">
@@ -54,6 +90,7 @@ const EventManageEditById = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          {submitError && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* Title Input */}
             <div className="md:col-span-2">
@@ -223,9 +260,10 @@ const EventManageEditById = () => {
             </Link>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
+              disabled={submitting}
+              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer disabled:opacity-60"
             >
-              Save Changes
+              {submitting ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

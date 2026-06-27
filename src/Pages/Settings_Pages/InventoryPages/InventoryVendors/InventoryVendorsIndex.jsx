@@ -2,40 +2,27 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import ReusableTable from "../../../../Shared/ReusableTable/ReusableTable";
+import { inventoryService } from "../../../../services/inventoryService";
+import { useApiList } from "../../../../hooks/useApiList";
 
 const InventoryVendorsIndex = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [suppliers, setSuppliers] = useState([
-    {
-      id: 1,
-      name: "Sakura Shop",
-      address: "Dhaka",
-      contact: "01111111111",
-      openingBalance: "0.00",
-    },
-  ]);
 
-  const filteredSuppliers = suppliers.filter(
-    (supplier) =>
-      supplier.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      supplier.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      supplier.contact.toLowerCase().includes(searchTerm.toLowerCase())
+  const { data: suppliers, totalEntries, totalPages, loading, error, refetch, startIndex } = useApiList(
+    inventoryService.vendors.getAll,
+    { searchTerm, currentPage, entriesToShow }
   );
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredSuppliers.length / entriesToShow);
-  const startIndex = (currentPage - 1) * entriesToShow;
-  const paginatedSuppliers = filteredSuppliers.slice(
-    startIndex,
-    startIndex + entriesToShow
-  );
-
-  // Delete supplier function
-  const handleDeleteSupplier = (id) => {
+  const handleDeleteSupplier = async (id) => {
     if (window.confirm("Are you sure you want to delete this supplier?")) {
-      setSuppliers(suppliers.filter((supplier) => supplier.id !== id));
+      try {
+        await inventoryService.vendors.delete(id);
+        refetch();
+      } catch (err) {
+        alert(err.message || "Failed to delete");
+      }
     }
   };
 
@@ -163,18 +150,17 @@ const InventoryVendorsIndex = () => {
       </div>
 
       {/* ✅ Reusable Table */}
-      <ReusableTable
-        columns={columns}
-        data={paginatedSuppliers}
-        actions={actions}
-      />
+      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {loading ? <div className="text-center py-12 text-gray-500">Loading...</div> : (
+        <ReusableTable columns={columns} data={suppliers} actions={actions} />
+      )}
 
       {/* Table info and pagination */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 text-sm text-gray-700">
         <div>
-          Showing {filteredSuppliers.length > 0 ? startIndex + 1 : 0} to{" "}
-          {Math.min(startIndex + entriesToShow, filteredSuppliers.length)} of{" "}
-          {filteredSuppliers.length} entries
+          Showing {totalEntries > 0 ? startIndex + 1 : 0} to{" "}
+          {Math.min(startIndex + entriesToShow, totalEntries)} of{" "}
+          {totalEntries} entries
         </div>
         <div className="flex space-x-2 mt-2 md:mt-0">
           <button

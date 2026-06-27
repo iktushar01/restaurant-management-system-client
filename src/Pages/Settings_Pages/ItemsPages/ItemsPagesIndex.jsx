@@ -2,37 +2,27 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
+import { inventoryService } from "../../../services/inventoryService";
+import { useApiList } from "../../../hooks/useApiList";
 
 const ItemsPagesIndex = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [items, setItems] = useState([
-    { id: 1, category: "Raw Materials", subCategory: "Meat", brand: "", unit: "KG", item: "Chicken (20.00)", reorderLevel: "5.00" },
-    { id: 2, category: "Raw Materials", subCategory: "Meat", brand: "", unit: "KG", item: "Beef (20.00)", reorderLevel: "3.00" },
-    { id: 3, category: "Raw Materials", subCategory: "Meat", brand: "", unit: "KG", item: "Mutton (20.00)", reorderLevel: "2.00" },
-    { id: 4, category: "Raw Materials", subCategory: "Fish", brand: "", unit: "KG", item: "Rupcanda Fish (0)", reorderLevel: "2.00" },
-    { id: 5, category: "Raw Materials", subCategory: "Fish", brand: "", unit: "KG", item: "Koral (0)", reorderLevel: "2.00" },
-  ]);
 
-  const filteredItems = items.filter((item) =>
-    item.item.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.subCategory.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.unit.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.reorderLevel.toLowerCase().includes(searchTerm.toLowerCase())
+  const { data: items, totalEntries, totalPages, loading, error, refetch, startIndex } = useApiList(
+    inventoryService.items.getAll,
+    { searchTerm, currentPage, entriesToShow }
   );
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredItems.length / entriesToShow);
-  const startIndex = (currentPage - 1) * entriesToShow;
-  const paginatedItems = filteredItems.slice(startIndex, startIndex + entriesToShow);
-
-  // Delete item function
-  const handleDeleteItem = (id) => {
+  const handleDeleteItem = async (id) => {
     if (window.confirm("Are you sure you want to delete this item?")) {
-      setItems(items.filter(item => item.id !== id));
+      try {
+        await inventoryService.items.delete(id);
+        refetch();
+      } catch (err) {
+        alert(err.message || "Failed to delete");
+      }
     }
   };
 
@@ -168,16 +158,15 @@ const ItemsPagesIndex = () => {
       </div>
 
       {/* ✅ Reusable Table */}
-      <ReusableTable 
-        columns={columns} 
-        data={paginatedItems} 
-        actions={actions} 
-      />
+      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {loading ? <div className="text-center py-12 text-gray-500">Loading...</div> : (
+        <ReusableTable columns={columns} data={items} actions={actions} />
+      )}
 
       {/* Table info and pagination */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 text-sm text-gray-700">
         <div>
-          Showing {filteredItems.length > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, filteredItems.length)} of {filteredItems.length} entries
+          Showing {totalEntries > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, totalEntries)} of {totalEntries} entries
         </div>
         <div className="flex space-x-2 mt-2 md:mt-0">
           <button 

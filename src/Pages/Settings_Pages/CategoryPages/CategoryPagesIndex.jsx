@@ -2,38 +2,27 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
+import { inventoryService } from "../../../services/inventoryService";
+import { useApiList } from "../../../hooks/useApiList";
 
 const CategoryPagesIndex = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [categories, setCategories] = useState([
-    { 
-      id: 1, 
-      name: "Raw Materials (4)", 
-      details: "nice" 
-    },
-    { 
-      id: 2, 
-      name: "RICE (1)", 
-      details: "FEFW" 
-    },
-  ]);
 
-  const filteredCategories = categories.filter((category) =>
-    category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    category.details.toLowerCase().includes(searchTerm.toLowerCase())
+  const { data: categories, totalEntries, totalPages, loading, error, refetch, startIndex } = useApiList(
+    inventoryService.categories.getAll,
+    { searchTerm, currentPage, entriesToShow }
   );
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredCategories.length / entriesToShow);
-  const startIndex = (currentPage - 1) * entriesToShow;
-  const paginatedCategories = filteredCategories.slice(startIndex, startIndex + entriesToShow);
-
-  // Delete category function
-  const handleDeleteCategory = (id) => {
+  const handleDeleteCategory = async (id) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
-      setCategories(categories.filter(category => category.id !== id));
+      try {
+        await inventoryService.categories.delete(id);
+        refetch();
+      } catch (err) {
+        alert(err.message || "Failed to delete category");
+      }
     }
   };
 
@@ -153,16 +142,17 @@ const CategoryPagesIndex = () => {
       </div>
 
       {/* ✅ Reusable Table */}
-      <ReusableTable 
-        columns={columns} 
-        data={paginatedCategories} 
-        actions={actions} 
-      />
+      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {loading ? (
+        <div className="text-center py-12 text-gray-500">Loading...</div>
+      ) : (
+        <ReusableTable columns={columns} data={categories} actions={actions} />
+      )}
 
       {/* Table info and pagination */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 text-sm text-gray-700">
         <div>
-          Showing {filteredCategories.length > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, filteredCategories.length)} of {filteredCategories.length} entries
+          Showing {totalEntries > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, totalEntries)} of {totalEntries} entries
         </div>
         <div className="flex space-x-2 mt-2 md:mt-0">
           <button 

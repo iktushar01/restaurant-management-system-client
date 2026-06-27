@@ -2,32 +2,27 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
+import { inventoryService } from "../../../services/inventoryService";
+import { useApiList } from "../../../hooks/useApiList";
 
 const SubCategoryIndex = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [subCategories, setSubCategories] = useState([
-    { id: 1, name: "Meat (3)" },
-    { id: 2, name: "Fish (2)" },
-    { id: 3, name: "Vegetable (0)" },
-    { id: 4, name: "JHKG (0)" },
-    { id: 5, name: "JHKG (0)" },
-  ]);
 
-  const filteredSubCategories = subCategories.filter((subCategory) =>
-    subCategory.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const { data: subCategories, totalEntries, totalPages, loading, error, refetch, startIndex } = useApiList(
+    inventoryService.subCategories.getAll,
+    { searchTerm, currentPage, entriesToShow }
   );
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredSubCategories.length / entriesToShow);
-  const startIndex = (currentPage - 1) * entriesToShow;
-  const paginatedSubCategories = filteredSubCategories.slice(startIndex, startIndex + entriesToShow);
-
-  // Delete subcategory function
-  const handleDeleteSubCategory = (id) => {
+  const handleDeleteSubCategory = async (id) => {
     if (window.confirm("Are you sure you want to delete this subcategory?")) {
-      setSubCategories(subCategories.filter(subCategory => subCategory.id !== id));
+      try {
+        await inventoryService.subCategories.delete(id);
+        refetch();
+      } catch (err) {
+        alert(err.message || "Failed to delete");
+      }
     }
   };
 
@@ -143,16 +138,15 @@ const SubCategoryIndex = () => {
       </div>
 
       {/* ✅ Reusable Table */}
-      <ReusableTable 
-        columns={columns} 
-        data={paginatedSubCategories} 
-        actions={actions} 
-      />
+      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {loading ? <div className="text-center py-12 text-gray-500">Loading...</div> : (
+        <ReusableTable columns={columns} data={subCategories} actions={actions} />
+      )}
 
       {/* Table info and pagination */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 text-sm text-gray-700">
         <div>
-          Showing {filteredSubCategories.length > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, filteredSubCategories.length)} of {filteredSubCategories.length} entries
+          Showing {totalEntries > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, totalEntries)} of {totalEntries} entries
         </div>
         <div className="flex space-x-2 mt-2 md:mt-0">
           <button 

@@ -2,30 +2,27 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
+import { inventoryService } from "../../../services/inventoryService";
+import { useApiList } from "../../../hooks/useApiList";
 
 const BrandsIndex = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [brands, setBrands] = useState([
-    { id: 1, name: "Local (0)", details: "" },
-    // Add more brand data as needed
-  ]);
 
-  const filteredBrands = brands.filter((brand) =>
-    brand.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    brand.details.toLowerCase().includes(searchTerm.toLowerCase())
+  const { data: brands, totalEntries, totalPages, loading, error, refetch, startIndex } = useApiList(
+    inventoryService.brands.getAll,
+    { searchTerm, currentPage, entriesToShow }
   );
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredBrands.length / entriesToShow);
-  const startIndex = (currentPage - 1) * entriesToShow;
-  const paginatedBrands = filteredBrands.slice(startIndex, startIndex + entriesToShow);
-
-  // Delete brand function
-  const handleDeleteBrand = (id) => {
+  const handleDeleteBrand = async (id) => {
     if (window.confirm("Are you sure you want to delete this brand?")) {
-      setBrands(brands.filter(brand => brand.id !== id));
+      try {
+        await inventoryService.brands.delete(id);
+        refetch();
+      } catch (err) {
+        alert(err.message || "Failed to delete");
+      }
     }
   };
 
@@ -145,16 +142,15 @@ const BrandsIndex = () => {
       </div>
 
       {/* ✅ Reusable Table */}
-      <ReusableTable 
-        columns={columns} 
-        data={paginatedBrands} 
-        actions={actions} 
-      />
+      {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
+      {loading ? <div className="text-center py-12 text-gray-500">Loading...</div> : (
+        <ReusableTable columns={columns} data={brands} actions={actions} />
+      )}
 
       {/* Table info and pagination */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 text-sm text-gray-700">
         <div>
-          Showing {filteredBrands.length > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, filteredBrands.length)} of {filteredBrands.length} entries
+          Showing {totalEntries > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, totalEntries)} of {totalEntries} entries
         </div>
         <div className="flex space-x-2 mt-2 md:mt-0">
           <button 

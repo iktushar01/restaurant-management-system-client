@@ -1,22 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
+import { inventoryService } from "../../services/inventoryService";
 
 const EventManageCreate = () => {
+  const navigate = useNavigate();
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Event Form Data:", data);
-    // Add your API call here
+  const onSubmit = async (data) => {
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await inventoryService.events.create({
+        subject: data.title,
+        customerName: data.customerName,
+        phone: data.phone || "",
+        date: new Date(data.date).toISOString(),
+        noOfPerson: Number(data.noOfPerson),
+        advanceAmount: Number(data.advanceAmount) || 0,
+        menu: data.menu || "",
+        description: data.description || "",
+      });
+      navigate("/event/manage");
+    } catch (err) {
+      setSubmitError(err.message || "Failed to create event");
+    } finally {
+      setSubmitting(false);
+    }
   };
-
-  const themeColor = watch("themeColor", "blue");
 
   return (
     <div className="max-w-7xl min-h-screen mx-auto p-6">
@@ -43,6 +61,7 @@ const EventManageCreate = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          {submitError && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* Title Input */}
             <div className="md:col-span-2">
@@ -219,9 +238,10 @@ const EventManageCreate = () => {
             </Link>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
+              disabled={submitting}
+              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer disabled:opacity-60"
             >
-              Save Event
+              {submitting ? "Saving..." : "Save Event"}
             </button>
           </div>
         </form>

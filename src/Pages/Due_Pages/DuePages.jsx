@@ -36,13 +36,13 @@ const DuePages = () => {
     {
       header: "Total Due Amount",
       accessor: "totalDueAmount",
-      render: (row) => formatMoney(row.totalDueAmount)},
+      render: (row) => formatMoney(row.totalDueAmount),
     },
     { header: "Payment Method", accessor: "paymentMethod" },
     {
       header: "Pay Amount",
       accessor: "payAmount",
-      render: (row) => formatMoney(row.payAmount)},
+      render: (row) => formatMoney(row.payAmount),
     },
   ];
 

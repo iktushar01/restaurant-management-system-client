@@ -44,7 +44,7 @@ const EventManage = () => {
     {
       header: "Advance Amount",
       accessor: "advanceAmount",
-      render: (row) => formatMoney(row.advanceAmount)},
+      render: (row) => formatMoney(row.advanceAmount),
     },
     {
       header: "Menu",

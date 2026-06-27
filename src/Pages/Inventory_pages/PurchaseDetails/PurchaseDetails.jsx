@@ -33,7 +33,7 @@ const PurchaseDetails = () => {
     {
       header: "Total",
       accessor: "total",
-      render: (row) => formatMoney(row.total)},
+      render: (row) => formatMoney(row.total),
     },
     {
       header: "Purchase Date",

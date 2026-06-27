@@ -29,6 +29,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthProvider";
+import { filterMenuByRole } from "@/constants/rolePermissions";
 
 const menuItems = [
   { name: "Dashboard", icon: HomeIcon, path: "/RestaurantDashboard/Index" },
@@ -216,6 +218,8 @@ const MobileNavItem = ({ item, onNavigate }) => {
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { role } = useAuth();
+  const visibleMenuItems = filterMenuByRole(menuItems, role);
 
   return (
     <nav className="sticky top-14 z-40 w-full bg-card text-card-foreground border-b border-border shadow-sm">
@@ -234,7 +238,7 @@ const Navbar = () => {
                 <SheetTitle>Navigation</SheetTitle>
               </SheetHeader>
               <div className="mt-4 space-y-1 overflow-y-auto">
-                {menuItems.map((item) => (
+                {visibleMenuItems.map((item) => (
                   <MobileNavItem
                     key={item.name}
                     item={item}
@@ -247,7 +251,7 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex w-full items-stretch gap-0.5 py-1.5">
-          {menuItems.map((item) => (
+          {visibleMenuItems.map((item) => (
             <DesktopNavItem key={item.name} item={item} />
           ))}
         </div>

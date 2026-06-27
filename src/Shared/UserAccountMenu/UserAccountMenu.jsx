@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronDownIcon, LogOutIcon, UserIcon } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,7 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { authService } from "@/services/authService";
+import { useAuth } from "@/context/AuthProvider";
+import { formatRoleLabel } from "@/constants/rolePermissions";
 import { cn } from "@/lib/utils";
 
 function getDisplayName(user) {
@@ -29,24 +31,12 @@ function getInitials(name) {
 
 export function UserAccountMenu({ triggerClassName, showAvatarOnMobile = false }) {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { user, role, logout, hasRole } = useAuth();
   const displayName = getDisplayName(user);
 
-  useEffect(() => {
-    authService
-      .getMe()
-      .then((res) => setUser(res.data))
-      .catch(() => setUser(null));
-  }, []);
-
   const handleLogout = async () => {
-    try {
-      await authService.logout();
-    } catch {
-      // Redirect even if logout request fails (e.g. expired session)
-    } finally {
-      navigate("/");
-    }
+    await logout();
+    navigate("/login");
   };
 
   return (
@@ -92,15 +82,22 @@ export function UserAccountMenu({ triggerClassName, showAvatarOnMobile = false }
               {user?.email && (
                 <span className="text-xs text-muted-foreground truncate">{user.email}</span>
               )}
+              {role && (
+                <Badge variant="secondary" className="w-fit text-[10px]">
+                  {formatRoleLabel(role)}
+                </Badge>
+              )}
             </div>
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem render={<Link to="/WorkPeriod/PropertyInformation" />}>
-            <UserIcon />
-            Profile
-          </DropdownMenuItem>
+          {hasRole("ADMIN", "SUPER_ADMIN") && (
+            <DropdownMenuItem render={<Link to="/WorkPeriod/PropertyInformation" />}>
+              <UserIcon />
+              Profile
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem variant="destructive" onClick={handleLogout}>
             <LogOutIcon />
             Logout

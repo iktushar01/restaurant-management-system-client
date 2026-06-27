@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   ChevronLeftIcon,
@@ -48,6 +48,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthProvider";
+import { filterWorkPeriodMenuByRole } from "@/constants/rolePermissions";
 
 const menuItems = [
   {
@@ -111,10 +113,15 @@ const menuItems = [
 
 function WorkPeriodSidebarMenu({ collapsed = false, onNavigate }) {
   const location = useLocation();
+  const { role } = useAuth();
+  const visibleMenuItems = useMemo(
+    () => filterWorkPeriodMenuByRole(menuItems, role),
+    [role],
+  );
 
   return (
     <SidebarMenu>
-      {menuItems.map((item) => {
+      {visibleMenuItems.map((item) => {
         const Icon = item.icon;
 
         if (item.subRoutes) {

@@ -13,4 +13,6 @@ export const authService = {
     }),
 
   getMe: () => apiClient("/api/v1/auth/me"),
+
+  getDemoUsers: () => apiClient("/api/v1/auth/demo-users"),
 };

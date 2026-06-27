@@ -1,5 +1,9 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import LoginPage from "../Authentication/LoginPage/LoginPage";
+import ProtectedRoute from "../components/ProtectedRoute";
+import GuestRoute from "../components/GuestRoute";
+import RootRedirect from "../components/RootRedirect";
+import UnauthorizedPage from "../Pages/Unauthorized/UnauthorizedPage";
 // import RestaurantDashboard from "../Layouts/RestaurantDashboard/RestaurantDashboard";
 import HrDesignationIndex from "../Pages/HR_Pages/HrDesignation/HrDesignationIndex";
 import MainLayout from "../Layouts/MainLayout/MainLayout";
@@ -121,12 +125,26 @@ import FoodPageRecipeAdd from "../Pages/Settings_Pages/FoodPages/FoodPageRecipeA
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <LoginPage />,
+    element: <RootRedirect />,
   },
   {
-    path: "/",
-    element: <MainLayout />,
+    path: "/login",
+    element: (
+      <GuestRoute>
+        <LoginPage />
+      </GuestRoute>
+    ),
+  },
+  {
+    element: <ProtectedRoute />,
     children: [
+      {
+        path: "/unauthorized",
+        element: <UnauthorizedPage />,
+      },
+      {
+        element: <MainLayout />,
+        children: [
       {
         path: "RestaurantDashboard/Index",
         element: <RestaurantDashboardIndex />,
@@ -468,13 +486,12 @@ export const router = createBrowserRouter([
         path: "/report/daily",
         element: <DailyReport />,
       },
-    ],
-  },
-  //=================================
-  {
-    path: "/WorkPeriod",
-    element: <WorkPeriodDashBoard />,
-    children: [
+        ],
+      },
+      {
+        path: "/WorkPeriod",
+        element: <WorkPeriodDashBoard />,
+        children: [
       //=========================================
       {
         path: "/WorkPeriod/foods/index",
@@ -669,6 +686,8 @@ export const router = createBrowserRouter([
       },
 
 
+        ],
+      },
     ],
   },
 ]);

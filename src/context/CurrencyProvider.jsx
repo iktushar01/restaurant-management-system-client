@@ -1,10 +1,12 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useAuth } from "@/context/AuthProvider";
 import { currencyService } from "@/services/currencyService";
 import { DEFAULT_CURRENCY, formatMoney, setActiveCurrency } from "@/lib/currency";
 
 const CurrencyContext = createContext(null);
 
 export function CurrencyProvider({ children }) {
+  const { isAuthenticated } = useAuth();
   const [currency, setCurrency] = useState(DEFAULT_CURRENCY);
   const [loading, setLoading] = useState(true);
 
@@ -22,8 +24,16 @@ export function CurrencyProvider({ children }) {
   }, []);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setActiveCurrency(DEFAULT_CURRENCY);
+      setCurrency(DEFAULT_CURRENCY);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
     refreshCurrency();
-  }, [refreshCurrency]);
+  }, [isAuthenticated, refreshCurrency]);
 
   const value = useMemo(
     () => ({

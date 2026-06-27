@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { authService } from "@/services/authService";
 import { canAccessRoute } from "@/constants/rolePermissions";
+import { tokenStorage } from "@/utils/tokenStorage";
 
 const AuthContext = createContext(null);
 
@@ -9,11 +10,17 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   const refreshUser = useCallback(async () => {
+    if (!tokenStorage.getAccessToken()) {
+      setUser(null);
+      return null;
+    }
+
     try {
       const response = await authService.getMe();
       setUser(response.data);
       return response.data;
     } catch {
+      tokenStorage.clear();
       setUser(null);
       return null;
     }
@@ -25,7 +32,13 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (email, password) => {
     const response = await authService.login(email, password);
-    const nextUser = response.data?.user ?? response.data;
+    const { user: loggedInUser, accessToken, refreshToken } = response.data ?? {};
+
+    if (accessToken) {
+      tokenStorage.setTokens(accessToken, refreshToken);
+    }
+
+    const nextUser = loggedInUser ?? response.data;
     setUser(nextUser);
     return response;
   }, []);
@@ -36,6 +49,7 @@ export function AuthProvider({ children }) {
     } catch {
       // Clear local auth state even if the request fails
     } finally {
+      tokenStorage.clear();
       setUser(null);
     }
   }, []);

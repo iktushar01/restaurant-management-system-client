@@ -4,6 +4,7 @@ import {
   IS_RENDER_API,
   SERVER_WAKE_UP_MESSAGE,
 } from "@/constants/apiConfig";
+import { tokenStorage } from "@/utils/tokenStorage";
 
 class ApiError extends Error {
   constructor(message, status, data, code) {
@@ -33,10 +34,13 @@ export async function apiClient(endpoint, options = {}) {
     }
   }
 
+  const accessToken = tokenStorage.getAccessToken();
+
   const config = {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       ...fetchOptions.headers,
     },
     ...fetchOptions,
@@ -60,10 +64,6 @@ export async function apiClient(endpoint, options = {}) {
     const data = await response.json().catch(() => ({}));
 
     if (!response.ok) {
-      if (response.status === 401 && !window.location.pathname.startsWith("/login")) {
-        window.location.href = "/login";
-      }
-
       throw new ApiError(
         data.message || "Request failed",
         response.status,

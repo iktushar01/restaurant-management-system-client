@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { formatMoney } from "@/lib/currency";
 import FormSelect, { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { Link, useNavigate } from "react-router-dom";
 import { inventoryService } from "../../../services/inventoryService";
@@ -129,7 +130,7 @@ const InventoryPurchase = () => {
                             value={item.price} onChange={(e) => handleItemChange(item.id, "price", e.target.value)} />
                         </td>
                         <td className="border border-border px-4 py-2">
-                          <input type="text" readOnly className="w-full px-2 py-1 border border-border rounded bg-muted" value={subTotal.toFixed(2)} />
+                          <input type="text" readOnly className="w-full px-2 py-1 border border-border rounded bg-muted" value={formatMoney(subTotal)} />
                         </td>
                         <td className="border border-border px-4 py-2 text-center">
                           <button type="button" className="text-destructive hover:text-destructive font-medium" onClick={() => removeItem(item.id)} disabled={items.length <= 1}>
@@ -177,7 +178,7 @@ const InventoryPurchase = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Memo Total</label>
-              <input type="text" readOnly className="w-full px-4 py-2.5 border border-border rounded-lg bg-muted" value={discountedTotal.toFixed(2)} />
+              <input type="text" readOnly className="w-full px-4 py-2.5 border border-border rounded-lg bg-muted" value={formatMoney(discountedTotal)} />
             </div>
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Discount (%)</label>
@@ -191,7 +192,7 @@ const InventoryPurchase = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Due Amount</label>
-              <input type="text" readOnly className="w-full px-4 py-2.5 border border-border rounded-lg bg-muted" value={due.toFixed(2)} />
+              <input type="text" readOnly className="w-full px-4 py-2.5 border border-border rounded-lg bg-muted" value={formatMoney(due)} />
             </div>
           </div>
 

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { FaSearch, FaFilePdf, FaMoneyBillWave, FaCreditCard, FaReceipt, FaChartLine, FaMoneyCheckAlt } from "react-icons/fa";
 import { reportService } from "../../services/reportService";
 
 const todayISO = () => new Date().toISOString().slice(0, 10);
-
-const formatAmount = (value) => Number(value || 0).toFixed(2);
 
 const DailyStatement = () => {
   const [date, setDate] = useState(todayISO());
@@ -95,7 +94,7 @@ const DailyStatement = () => {
                     </div>
                     <p className="text-muted-foreground">Food Sale Price</p>
                   </div>
-                  <p className="text-2xl font-bold text-foreground">{formatAmount(salesSummary.foodSalePrice)}</p>
+                  <p className="text-2xl font-bold text-foreground">{formatMoney(salesSummary.foodSalePrice)}</p>
                 </div>
 
                 <div className="bg-gradient-to-r from-green-50 to-green-100 p-5 rounded-xl border border-green-100">
@@ -105,7 +104,7 @@ const DailyStatement = () => {
                     </div>
                     <p className="text-muted-foreground">Paid Through Cash</p>
                   </div>
-                  <p className="text-2xl font-bold text-foreground">{formatAmount(salesSummary.paidThroughCash)}</p>
+                  <p className="text-2xl font-bold text-foreground">{formatMoney(salesSummary.paidThroughCash)}</p>
                 </div>
 
                 <div className="bg-gradient-to-r  p-5 rounded-xl border border-purple-100">
@@ -115,7 +114,7 @@ const DailyStatement = () => {
                     </div>
                     <p className="text-muted-foreground">Paid Through Card</p>
                   </div>
-                  <p className="text-2xl font-bold text-foreground">{formatAmount(salesSummary.paidThroughCard)}</p>
+                  <p className="text-2xl font-bold text-foreground">{formatMoney(salesSummary.paidThroughCard)}</p>
                 </div>
 
                 <div className="bg-gradient-to-r  p-5 rounded-xl border border-amber-100">
@@ -125,7 +124,7 @@ const DailyStatement = () => {
                     </div>
                     <p className="text-muted-foreground">Total Price</p>
                   </div>
-                  <p className="text-2xl font-bold text-foreground">{formatAmount(salesSummary.totalPrice)}</p>
+                  <p className="text-2xl font-bold text-foreground">{formatMoney(salesSummary.totalPrice)}</p>
                 </div>
               </div>
             </div>
@@ -137,15 +136,15 @@ const DailyStatement = () => {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center py-3 border-b border-border">
                     <span className="text-muted-foreground">VAT</span>
-                    <span className="font-medium text-foreground">{formatAmount(charges.vat)}</span>
+                    <span className="font-medium text-foreground">{formatMoney(charges.vat)}</span>
                   </div>
                   <div className="flex justify-between items-center py-3 border-b border-border">
                     <span className="text-muted-foreground">SC</span>
-                    <span className="font-medium text-foreground">{formatAmount(charges.serviceCharge)}</span>
+                    <span className="font-medium text-foreground">{formatMoney(charges.serviceCharge)}</span>
                   </div>
                   <div className="flex justify-between items-center py-3">
                     <span className="text-muted-foreground">Discount</span>
-                    <span className="font-medium text-foreground">{formatAmount(charges.discount)}</span>
+                    <span className="font-medium text-foreground">{formatMoney(charges.discount)}</span>
                   </div>
                 </div>
               </div>
@@ -158,7 +157,7 @@ const DailyStatement = () => {
                     <h3 className="text-lg font-semibold text-green-800 mb-2">Total Income</h3>
                     <div className="flex justify-between items-center">
                       <span className="text-success">Total Income</span>
-                      <span className="text-2xl font-bold text-green-700">{formatAmount(financialSummary.totalIncome)}</span>
+                      <span className="text-2xl font-bold text-green-700">{formatMoney(financialSummary.totalIncome)}</span>
                     </div>
                   </div>
 
@@ -166,7 +165,7 @@ const DailyStatement = () => {
                     <h3 className="text-lg font-semibold text-destructive mb-2">Total Expense</h3>
                     <div className="flex justify-between items-center">
                       <span className="text-destructive">Total Expense</span>
-                      <span className="text-2xl font-bold text-destructive">{formatAmount(financialSummary.totalExpense)}</span>
+                      <span className="text-2xl font-bold text-destructive">{formatMoney(financialSummary.totalExpense)}</span>
                     </div>
                   </div>
                 </div>
@@ -176,7 +175,7 @@ const DailyStatement = () => {
             {/* Total Balance */}
             <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl shadow-lg p-6 text-center">
               <h2 className="text-2xl font-bold text-primary-foreground mb-2">Total Balance</h2>
-              <p className="text-4xl font-bold text-primary-foreground">{formatAmount(financialSummary.totalBalance)}</p>
+              <p className="text-4xl font-bold text-primary-foreground">{formatMoney(financialSummary.totalBalance)}</p>
             </div>
           </>
         )}

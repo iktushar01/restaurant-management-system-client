@@ -1,4 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { formatMoney } from "@/lib/currency";
+import { useCurrency } from "@/context/CurrencyProvider";
 import { 
   FaPlus, FaMinus, FaDollarSign, FaPercent, 
   FaUtensils, FaShoppingBasket, FaCalculator,
@@ -7,6 +9,7 @@ import {
 import { inventoryService } from "../../../services/inventoryService";
 
 const FoodPageRecipeAdd = () => {
+  const { currency } = useCurrency();
   const [rawMaterials, setRawMaterials] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -89,7 +92,7 @@ const FoodPageRecipeAdd = () => {
           <h1 className="text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2">
             <FaUtensils className="text-primary" /> Chicken Satay Recipe Builder
           </h1>
-          <p className="text-muted-foreground mt-1 text-lg">Menu Price: ৳ 395.00</p>
+          <p className="text-muted-foreground mt-1 text-lg">Menu Price: {formatMoney(salePrice)}</p>
         </div>
        
       </div>
@@ -175,7 +178,7 @@ const FoodPageRecipeAdd = () => {
                           </div>
                         </td>
                         <td className="p-3 text-muted-foreground">{item.unit}</td>
-                        <td className="p-3 font-medium">{(item.price * item.quantity).toFixed(2)}</td>
+                        <td className="p-3 font-medium">{formatMoney(item.price * item.quantity)}</td>
                         <td className="p-3 text-right">
                           <button
                             onClick={() => removeItem(item.id)}
@@ -205,7 +208,7 @@ const FoodPageRecipeAdd = () => {
                     <FaDollarSign className="text-muted-foreground" /> Other Ingredients Cost
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-2 text-muted-foreground">৳</span>
+                    <span className="absolute left-3 top-2 text-muted-foreground">{currency.symbol}</span>
                     <input
                       type="number"
                       className="pl-8 w-full border border-border p-2 rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring"
@@ -220,7 +223,7 @@ const FoodPageRecipeAdd = () => {
                     <FaDollarSign className="text-muted-foreground" /> Sale Price
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-2 text-muted-foreground">৳</span>
+                    <span className="absolute left-3 top-2 text-muted-foreground">{currency.symbol}</span>
                     <input
                       type="number"
                       className="pl-8 w-full border border-border p-2 rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring"
@@ -234,20 +237,20 @@ const FoodPageRecipeAdd = () => {
               <div className="bg-primary/5 p-4 rounded-lg border border-border">
                 <div className="flex justify-between items-center py-2 border-b border-border">
                   <span className="text-muted-foreground">Total Item Cost</span>
-                  <span className="font-medium">{totalItemCost.toFixed(2)}</span>
+                  <span className="font-medium">{formatMoney(totalItemCost)}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-border">
                   <span className="text-muted-foreground">Other Costs</span>
-                  <span className="font-medium">{Number(otherCost || 0).toFixed(2)}</span>
+                  <span className="font-medium">{formatMoney(Number(otherCost || 0))}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-border font-semibold text-primary">
                   <span>Total Cost</span>
-                  <span>{totalCost.toFixed(2)}</span>
+                  <span>{formatMoney(totalCost)}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-border">
                   <span className="text-muted-foreground">Profit</span>
                   <span className={`font-medium ${profit >= 0 ? 'text-success' : 'text-destructive'}`}>
-                    {profit.toFixed(2)}
+                    {formatMoney(profit)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2">

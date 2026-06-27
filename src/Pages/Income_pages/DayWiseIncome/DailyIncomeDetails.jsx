@@ -81,7 +81,7 @@ const DailyIncomeDetails = () => {
               <div className="mt-6 pt-4 border-t border-border">
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-bold text-foreground">Total Income</h3>
-                  <p className="text-xl font-bold text-success">{totalIncome.toFixed(2)}</p>
+                  <p className="text-xl font-bold text-success">{formatMoney(totalIncome)}</p>
                 </div>
               </div>
             </>

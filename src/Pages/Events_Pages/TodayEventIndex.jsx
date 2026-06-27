@@ -52,7 +52,7 @@ const TodayEventIndex = () => {
     {
       header: "Advance Amount",
       accessor: "advanceAmount",
-      render: (row) => formatMoney(parseFloat(row.advanceAmount).toLocaleString())},
+      render: (row) => formatMoney(row.advanceAmount)},
     },
     {
       header: "Menu",

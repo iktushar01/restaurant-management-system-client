@@ -132,7 +132,7 @@ const EmployeeSalaryPayableDetails = () => {
                   <tr className="bg-muted/40 font-medium">
                     <td className="px-4 py-2 text-sm text-foreground border border-border"></td>
                     <td className="px-4 py-2 text-sm text-foreground border border-border">Total</td>
-                    <td className="px-4 py-2 text-sm text-foreground border border-border">€{totalBasic.toFixed(2)}</td>
+                    <td className="px-4 py-2 text-sm text-foreground border border-border">{formatMoney(totalBasic)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -161,7 +161,7 @@ const EmployeeSalaryPayableDetails = () => {
                   <tr className="bg-muted/40 font-medium">
                     <td className="px-4 py-2 text-sm text-foreground border border-border"></td>
                     <td className="px-4 py-2 text-sm text-foreground border border-border">Total</td>
-                    <td className="px-4 py-2 text-sm text-foreground border border-border">€{totalAllowances.toFixed(2)}</td>
+                    <td className="px-4 py-2 text-sm text-foreground border border-border">{formatMoney(totalAllowances)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -171,7 +171,7 @@ const EmployeeSalaryPayableDetails = () => {
           <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-foreground">Net Payable</h3>
-              <p className="text-xl font-bold text-primary">€ {netPayable.toFixed(2)}</p>
+              <p className="text-xl font-bold text-primary">{formatMoney(netPayable)}</p>
             </div>
           </div>
 
@@ -197,7 +197,7 @@ const EmployeeSalaryPayableDetails = () => {
                   <tr className="bg-muted/40 font-medium">
                     <td className="px-4 py-2 text-sm text-foreground border border-border"></td>
                     <td className="px-4 py-2 text-sm text-foreground border border-border">Total</td>
-                    <td className="px-4 py-2 text-sm text-foreground border border-border">€{totalDeductions.toFixed(2)}</td>
+                    <td className="px-4 py-2 text-sm text-foreground border border-border">{formatMoney(totalDeductions)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -226,7 +226,7 @@ const EmployeeSalaryPayableDetails = () => {
                   <tr className="bg-muted/40 font-medium">
                     <td className="px-4 py-2 text-sm text-foreground border border-border"></td>
                     <td className="px-4 py-2 text-sm text-foreground border border-border">Total</td>
-                    <td className="px-4 py-2 text-sm text-foreground border border-border">€{totalPaid.toFixed(2)}</td>
+                    <td className="px-4 py-2 text-sm text-foreground border border-border">{formatMoney(totalPaid)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -237,7 +237,7 @@ const EmployeeSalaryPayableDetails = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 bg-success/10 border border-success/20 rounded-lg">
                 <h3 className="text-lg font-bold text-foreground">Total Paid</h3>
-                <p className="text-xl font-bold text-success">€ {totalPaid.toFixed(2)}</p>
+                <p className="text-xl font-bold text-success">{formatMoney(totalPaid)}</p>
               </div>
               <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
                 <h3 className="text-lg font-bold text-foreground">Due</h3>

@@ -20,6 +20,7 @@ import OthersIncomeHeadIndex from "../Pages/Income_pages/AddIncome/OthersIncomeH
 import OthersIncomeHeadCreate from "../Pages/Income_pages/AddIncome/OthersIncomeHeadCreate";
 import OthersIncomeHeadEditById from "../Pages/Income_pages/AddIncome/OthersIncomeHeadEditById";
 import OtherIncomeIndex from "../Pages/Income_pages/ManageIncome/OtherIncomeIndex";
+import OtherIncomeIndexEditById from "../Pages/Income_pages/ManageIncome/OtherIncomeIndexEditById";
 import OtherIncomeIndexCreate from "../Pages/Income_pages/ManageIncome/OtherIncomeIndexCreate";
 import DailyIncome from "../Pages/Income_pages/DayWiseIncome/DailyIncome";
 import DailyIncomeDetails from "../Pages/Income_pages/DayWiseIncome/DailyIncomeDetails";
@@ -386,7 +387,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "income/OthersIncome/Edit/:id",
-        element: <OthersIncomeHeadEditById />,
+        element: <OtherIncomeIndexEditById />,
       },
       //=======================================
       {
@@ -394,8 +395,7 @@ export const router = createBrowserRouter([
         element: <DailyIncome />,
       },
       {
-        path: "income/daily-income/details/12/08/2025",
-        //======= dynamic date need to added =======//
+        path: "income/daily-income/details/:day/:month/:year",
         element: <DailyIncomeDetails />,
       },
       //===================================//
@@ -433,8 +433,7 @@ export const router = createBrowserRouter([
         element: <DailyExpense />,
       },
       {
-        path: "expense/daily-expense/details/06/11/2022",
-        //======= dynamic date need to added =======//
+        path: "expense/daily-expense/details/:day/:month/:year",
         element: <DailyExpenseDetails />,
       },
       //=======================================

@@ -60,6 +60,12 @@ const DineFloorPlanCanvas = ({
     return () => clearTimeout(saveTimerRef.current);
   }, [loadFloorPlan]);
 
+  useEffect(() => {
+    if (!readOnly) return undefined;
+    const interval = setInterval(loadFloorPlan, 15000);
+    return () => clearInterval(interval);
+  }, [readOnly, loadFloorPlan]);
+
   const persistLocation = async (id, payload) => {
     notifySaveState("saving");
     try {

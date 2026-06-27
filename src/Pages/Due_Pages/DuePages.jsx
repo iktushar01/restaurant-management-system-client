@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -70,16 +71,12 @@ const DuePages = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 bg-card p-4 rounded-lg shadow">
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">Show</span>
-          <select
+          <SelectField
             value={entriesToShow}
-            onChange={(e) => { setEntriesToShow(Number(e.target.value)); setCurrentPage(1); }}
-            className="px-2 py-1 border border-border rounded focus:ring-2 focus-visible:ring-ring focus:border-primary"
-          >
-            <option value={10}>10</option>
-            <option value={25}>25</option>
-            <option value={50}>50</option>
-            <option value={100}>100</option>
-          </select>
+            onValueChange={(v) => { setEntriesToShow(Number(v)); setCurrentPage(1);; }}
+            className="w-20"
+            options={[{ value: "10", label: "10" }, { value: "25", label: "25" }, { value: "50", label: "50" }, { value: "100", label: "100" }]}
+          />
           <span className="text-sm text-muted-foreground">entries</span>
         </div>
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -106,19 +107,13 @@ const SubCategoryIndex = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
         <div className="flex items-center">
           <span className="mr-2 text-foreground">Show</span>
-          <select
+          <SelectField
             value={entriesToShow}
-            onChange={(e) => {
-              setEntriesToShow(Number(e.target.value));
-              setCurrentPage(1); // Reset to first page when changing entries
-            }}
-            className="border border-border rounded-md px-2 py-1"
-          >
-            <option value={10}>10</option>
-            <option value={25}>25</option>
-            <option value={50}>50</option>
-            <option value={100}>100</option>
-          </select>
+            onValueChange={(v) => { setEntriesToShow(Number(v));
+              setCurrentPage(1); // Reset to first page when changing entries; }}
+            className="w-20"
+            options={[{ value: "10", label: "10" }, { value: "25", label: "25" }, { value: "50", label: "50" }, { value: "100", label: "100" }]}
+          />
           <span className="ml-2 text-foreground">entries</span>
         </div>
         

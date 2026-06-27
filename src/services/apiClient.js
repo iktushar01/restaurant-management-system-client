@@ -1,16 +1,22 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import {
+  API_REQUEST_TIMEOUT_MS,
+  API_URL,
+  IS_RENDER_API,
+  SERVER_WAKE_UP_MESSAGE,
+} from "@/constants/apiConfig";
 
 class ApiError extends Error {
-  constructor(message, status, data) {
+  constructor(message, status, data, code) {
     super(message);
     this.name = "ApiError";
     this.status = status;
     this.data = data;
+    this.code = code;
   }
 }
 
 export async function apiClient(endpoint, options = {}) {
-  const { params, ...fetchOptions } = options;
+  const { params, timeout = API_REQUEST_TIMEOUT_MS, ...fetchOptions } = options;
 
   let url = `${API_URL}${endpoint}`;
 
@@ -40,22 +46,59 @@ export async function apiClient(endpoint, options = {}) {
     config.body = JSON.stringify(config.body);
   }
 
-  const response = await fetch(url, config);
-  const data = await response.json().catch(() => ({}));
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
 
-  if (!response.ok) {
-    if (response.status === 401 && !window.location.pathname.startsWith("/login")) {
-      window.location.href = "/login";
+  if (config.signal) {
+    config.signal.addEventListener("abort", () => controller.abort());
+  }
+
+  config.signal = controller.signal;
+
+  try {
+    const response = await fetch(url, config);
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      if (response.status === 401 && !window.location.pathname.startsWith("/login")) {
+        window.location.href = "/login";
+      }
+
+      throw new ApiError(
+        data.message || "Request failed",
+        response.status,
+        data,
+      );
+    }
+
+    return data;
+  } catch (error) {
+    if (error instanceof ApiError) {
+      throw error;
+    }
+
+    if (error.name === "AbortError") {
+      throw new ApiError(
+        IS_RENDER_API
+          ? SERVER_WAKE_UP_MESSAGE
+          : "Request timed out. Please try again.",
+        0,
+        null,
+        "TIMEOUT",
+      );
     }
 
     throw new ApiError(
-      data.message || "Request failed",
-      response.status,
-      data,
+      IS_RENDER_API
+        ? SERVER_WAKE_UP_MESSAGE
+        : "Unable to reach the server. Check your connection and try again.",
+      0,
+      null,
+      "NETWORK",
     );
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  return data;
 }
 
 export default apiClient;

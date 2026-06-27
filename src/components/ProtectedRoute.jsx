@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { Loader2Icon } from "lucide-react";
 import { useAuth } from "@/context/AuthProvider";
+import { ServerWakeUpLoading } from "@/components/ServerWakeUpLoading";
 
 export default function ProtectedRoute() {
   const { isAuthenticated, loading, canAccess } = useAuth();
@@ -9,9 +9,7 @@ export default function ProtectedRoute() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2Icon className="size-8 animate-spin text-primary" />
-      </div>
+      <ServerWakeUpLoading message="Checking your session…" />
     );
   }
 

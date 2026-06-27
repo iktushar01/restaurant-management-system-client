@@ -29,8 +29,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAuth } from "@/context/AuthProvider";
-import { DEMO_USERS } from "@/constants/demoUsers";
+import { IS_RENDER_API, SERVER_WAKE_UP_SECONDS } from "@/constants/apiConfig";
+import { ServerWakeUpNotice } from "@/components/ServerWakeUpNotice";
+import { ServerWakeUpLoading } from "@/components/ServerWakeUpLoading";
 import { getDefaultRouteForRole } from "@/constants/rolePermissions";
+import { DEMO_USERS } from "@/constants/demoUsers";
 import { authService } from "@/services/authService";
 
 const LoginPage = () => {
@@ -84,6 +87,14 @@ const LoginPage = () => {
     await handleLogin(demoUser.email, demoUser.password);
   };
 
+  if (loading && IS_RENDER_API) {
+    return (
+      <ServerWakeUpLoading
+        message={`Connecting to server… please wait up to ${SERVER_WAKE_UP_SECONDS} seconds`}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background relative overflow-hidden">
       <div
@@ -111,6 +122,8 @@ const LoginPage = () => {
           </CardHeader>
 
           <CardContent className="p-8">
+            <ServerWakeUpNotice className="mb-4" />
+
             {error && (
               <Alert variant="destructive" className="mb-4">
                 <AlertDescription>{error}</AlertDescription>
@@ -153,7 +166,13 @@ const LoginPage = () => {
               </div>
 
               <Button type="submit" disabled={loading} className="w-full group">
-                <span>{loading ? "Logging in..." : "Login"}</span>
+                <span>
+                  {loading
+                    ? IS_RENDER_API
+                      ? `Waking up server (up to ${SERVER_WAKE_UP_SECONDS}s)…`
+                      : "Logging in..."
+                    : "Login"}
+                </span>
                 <ArrowRightIcon className="ml-2 size-4 transition-transform group-hover:translate-x-0.5" />
               </Button>
             </form>

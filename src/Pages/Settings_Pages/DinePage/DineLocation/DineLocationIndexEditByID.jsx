@@ -37,7 +37,7 @@ const DineLocationIndexEditByID = () => {
   if (loading) return <div className="p-6 text-center text-muted-foreground">Loading...</div>;
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="   mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link to="/WorkPeriod/dine/location" className="flex items-center group transition-all duration-200">
           <button className="flex items-center px-4 py-2.5 rounded-lg border border-border bg-card text-foreground hover:bg-muted/40 hover:shadow-sm transition-all duration-200 group-hover:-translate-x-1 cursor-pointer">

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -37,7 +38,7 @@ const EventManageCreate = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="   mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link
           to="/event/manage"
@@ -202,17 +203,20 @@ const EventManageCreate = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Theme Color
               </label>
-              <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary outline-none transition-colors duration-200"
-                {...register("themeColor")}
-              >
-                <option value="blue">Blue</option>
-                <option value="red">Red</option>
-                <option value="green">Green</option>
-                <option value="purple">Purple</option>
-                <option value="orange">Orange</option>
-                <option value="pink">Pink</option>
-              </select>
+              <FormSelect
+                name="themeColor"
+                control={control}
+                errors={errors}
+                placeholder="Select..."
+                options={[
+                  { value: "blue", label: "Blue" },
+                  { value: "red", label: "Red" },
+                  { value: "green", label: "Green" },
+                  { value: "purple", label: "Purple" },
+                  { value: "orange", label: "Orange" },
+                  { value: "pink", label: "Pink" },
+                ]}
+              />
             </div>
 
             {/* Description Input */}

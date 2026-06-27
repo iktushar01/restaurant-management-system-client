@@ -70,7 +70,7 @@ const WorkPeriodPage = () => {
   ];
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6    mx-auto">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 bg-card p-4 sm:p-6 rounded-xl shadow-sm border border-border">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground flex items-center">

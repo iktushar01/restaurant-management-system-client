@@ -101,7 +101,7 @@ const PayRollDeductionHeadIndex = () => {
   ];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6   mx-auto">
       <PageBanner
         title="Deduction Head"
         subtitle="Manage your organization's deduction heads"

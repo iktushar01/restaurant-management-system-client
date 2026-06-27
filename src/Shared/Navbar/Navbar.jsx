@@ -235,7 +235,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-card text-card-foreground border-b border-border shadow-sm">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="   mx-auto px-4">
         <div className="flex justify-between items-center py-3 md:hidden">
           <span className="text-lg font-medium">Menu</span>
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import FormSelect, { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { Link, useNavigate } from "react-router-dom";
 import { inventoryService } from "../../../services/inventoryService";
 
@@ -78,7 +79,7 @@ const InventoryPurchase = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="   mx-auto p-6">
       <div className="flex items-center mb-6">
         <div className="p-6 bg-gradient-to-r bg-primary text-primary-foreground rounded-2xl flex-grow">
           <h2 className="text-2xl font-bold text-foreground">Purchase Details</h2>
@@ -109,13 +110,12 @@ const InventoryPurchase = () => {
                     return (
                       <tr key={item.id}>
                         <td className="border border-border px-4 py-2">
-                          <select className="w-full px-2 py-1 border border-border rounded" value={item.itemId}
-                            onChange={(e) => handleItemChange(item.id, "itemId", e.target.value)}>
-                            <option value="">Select item</option>
-                            {catalogItems.map((ci) => (
-                              <option key={ci.id} value={ci.id}>{ci.name}</option>
-                            ))}
-                          </select>
+                          <SelectField
+                            value={item.itemId}
+                            onValueChange={(v) => handleItemChange(item.id, "itemId", v)}
+                            placeholder="Select item"
+                            options={[]}
+                          />
                         </td>
                         <td className="border border-border px-4 py-2">
                           <input type="number" min="0" step="0.01" className="w-full px-2 py-1 border border-border rounded"
@@ -150,11 +150,12 @@ const InventoryPurchase = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Supplier</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg outline-none"
-                value={purchaseMaster.vendorId} onChange={(e) => setPurchaseMaster({ ...purchaseMaster, vendorId: e.target.value })}>
-                <option value="">Select supplier</option>
-                {vendors.map((v) => <option key={v.id} value={v.id}>{v.name}</option>)}
-              </select>
+              <SelectField
+                value={purchaseMaster.vendorId}
+                onValueChange={(v) => setPurchaseMaster({ ...purchaseMaster, vendorId: v}
+                placeholder="Select supplier"
+                options={[]}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Memo No</label>

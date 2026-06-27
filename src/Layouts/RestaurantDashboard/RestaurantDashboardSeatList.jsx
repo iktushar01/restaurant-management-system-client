@@ -155,7 +155,7 @@ const RestaurantDashboardSeatList = () => {
 
   return (
     <div className="bg-muted/30 p-2 md:p-4 flex justify-center">
-      <Card className="w-full max-w-6xl">
+      <Card className="w-full  ">
         <CardHeader className="pb-2">
           <CardTitle className="text-lg md:text-xl lg:text-2xl text-center flex items-center justify-center gap-2">
             <UtensilsCrossedIcon className="size-5 text-primary" />

@@ -116,7 +116,7 @@ const HrDesignationIndex = () => {
   ];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6   mx-auto">
       <PageBanner
         title="Designations"
         subtitle="Manage your organization's designations"

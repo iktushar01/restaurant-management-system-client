@@ -55,13 +55,13 @@ const FormPageShell = ({
 
   if (onSubmit) {
     return (
-      <PageLayout className="max-w-7xl">
+      <PageLayout className="  ">
         <form onSubmit={onSubmit}>{content}</form>
       </PageLayout>
     );
   }
 
-  return <PageLayout className="max-w-7xl">{content}</PageLayout>;
+  return <PageLayout className="  ">{content}</PageLayout>;
 };
 
 export default FormPageShell;

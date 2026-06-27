@@ -35,7 +35,7 @@ const DailyStatement = () => {
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="   mx-auto">
         {/* Header */}
         <div className="mb-8 bg-primary/10 p-6 rounded-lg shadow">
           <h1 className="text-3xl font-bold text-foreground">Daily Statement</h1>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -43,7 +44,7 @@ const EmployeePayrollEarningCreateByID = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="   mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link
           to={`/hr/employee-payroll/earning/${employeeId}`}
@@ -75,15 +76,14 @@ const EmployeePayrollEarningCreateByID = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Earning <span className="text-destructive">*</span>
               </label>
-              <select
-                {...register("headId", { required: "Earning type is required" })}
-                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary transition-all duration-200 ${errors.headId ? "border-destructive" : "border-border"}`}
-              >
-                <option value="">Select earning head</option>
-                {heads.map((head) => (
-                  <option key={head.id} value={head.id}>{head.name}</option>
-                ))}
-              </select>
+              <FormSelect
+                name="headId"
+                control={control}
+                rules={{ required: "Earning type is required" }}
+                errors={errors}
+                placeholder="Select earning head"
+                options={heads.map((head) => ({ value: String(head.id), label: String(head.name) }))}
+              />
               {errors.headId && (
                 <p className="mt-1 text-sm text-destructive">{errors.headId.message}</p>
               )}
@@ -119,24 +119,26 @@ const EmployeePayrollEarningCreateByID = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Month
               </label>
-              <select
-                {...register("month")}
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary transition-all duration-200"
-              >
-                <option value="">Select Month</option>
-                <option value="January">January</option>
-                <option value="February">February</option>
-                <option value="March">March</option>
-                <option value="April">April</option>
-                <option value="May">May</option>
-                <option value="June">June</option>
-                <option value="July">July</option>
-                <option value="August">August</option>
-                <option value="September">September</option>
-                <option value="October">October</option>
-                <option value="November">November</option>
-                <option value="December">December</option>
-              </select>
+              <FormSelect
+                name="month"
+                control={control}
+                errors={errors}
+                placeholder="Select Month"
+                options={[
+                  { value: "January", label: "January" },
+                  { value: "February", label: "February" },
+                  { value: "March", label: "March" },
+                  { value: "April", label: "April" },
+                  { value: "May", label: "May" },
+                  { value: "June", label: "June" },
+                  { value: "July", label: "July" },
+                  { value: "August", label: "August" },
+                  { value: "September", label: "September" },
+                  { value: "October", label: "October" },
+                  { value: "November", label: "November" },
+                  { value: "December", label: "December" },
+                ]}
+              />
             </div>
 
             <div>

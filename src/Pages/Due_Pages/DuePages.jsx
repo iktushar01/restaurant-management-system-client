@@ -59,7 +59,7 @@ const DuePages = () => {
   ];
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6    mx-auto">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 bg-card p-4 rounded-lg shadow">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Due Management</h1>

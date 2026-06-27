@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -29,7 +30,7 @@ const SubCategoryCreate = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="   mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link to="/WorkPeriod/inventory/sub-category" className="flex items-center group transition-all duration-200">
           <button className="flex items-center px-4 py-2.5 rounded-lg border border-border bg-card text-foreground hover:bg-muted/40 hover:shadow-sm transition-all duration-200 group-hover:-translate-x-1 cursor-pointer">
@@ -60,15 +61,14 @@ const SubCategoryCreate = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Category</label>
-              <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring transition-all duration-200 outline-none"
-                {...register("categoryId", { required: "Category is required" })}
-              >
-                <option value="">Select Category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-              </select>
+              <FormSelect
+                name="categoryId"
+                control={control}
+                rules={{ required: "Category is required" }}
+                errors={errors}
+                placeholder="Select Category"
+                options={categories.map((cat) => ({ value: String(cat.id), label: String(cat.name) }))}
+              />
               {errors.categoryId && <p className="mt-1 text-sm text-destructive">{errors.categoryId.message}</p>}
             </div>
           </div>

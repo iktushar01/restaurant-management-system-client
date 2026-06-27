@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -67,13 +68,14 @@ const DineTableIndexCreate = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Dining Location</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none"
-                {...register("locationId", { required: "Dining location is required" })}>
-                <option value="">Select a dining location</option>
-                {locations.map((loc) => (
-                  <option key={loc.id} value={loc.id}>{loc.name}</option>
-                ))}
-              </select>
+              <FormSelect
+                name="locationId"
+                control={control}
+                rules={{ required: "Dining location is required" }}
+                errors={errors}
+                placeholder="Select a dining location"
+                options={locations.map((loc) => ({ value: String(loc.id), label: String(loc.name) }))}
+              />
               {errors.locationId && <p className="mt-1 text-sm text-destructive">{errors.locationId.message}</p>}
             </div>
           </div>

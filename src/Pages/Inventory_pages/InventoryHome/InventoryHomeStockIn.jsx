@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -62,25 +63,28 @@ const InventoryHomeStockIn = () => {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-foreground mb-1">Item</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none"
-                {...register("itemId", { required: "Item is required" })}>
-                <option value="">--Select Item--</option>
-                {items.map((item) => (
-                  <option key={item.id} value={item.id}>{item.name} ({item.category})</option>
-                ))}
-              </select>
+              <FormSelect
+                name="itemId"
+                control={control}
+                rules={{ required: "Item is required" }}
+                errors={errors}
+                placeholder="--Select Item--"
+                options={[
+                ]}
+              />
               {errors.itemId && <p className="mt-1 text-sm text-destructive">{errors.itemId.message}</p>}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Stock Location</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none"
-                {...register("locationId", { required: "Stock location is required" })}>
-                <option value="">--Select Location--</option>
-                {stockLocations.map((loc) => (
-                  <option key={loc.id} value={loc.id}>{loc.name}</option>
-                ))}
-              </select>
+              <FormSelect
+                name="locationId"
+                control={control}
+                rules={{ required: "Stock location is required" }}
+                errors={errors}
+                placeholder="--Select Location--"
+                options={stockLocations.map((loc) => ({ value: String(loc.id), label: String(loc.name) }))}
+              />
               {errors.locationId && <p className="mt-1 text-sm text-destructive">{errors.locationId.message}</p>}
             </div>
 

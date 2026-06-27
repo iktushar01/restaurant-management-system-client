@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -69,7 +70,7 @@ const EmployeePayRollEarningDeductionIndexEditById = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="  mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link
           to={`/hr/employee-payroll/deduction/${employeeId}`}
@@ -101,15 +102,14 @@ const EmployeePayRollEarningDeductionIndexEditById = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Deduction Heading <span className="text-destructive">*</span>
               </label>
-              <select
-                {...register("headId", { required: "Deduction head is required" })}
-                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring focus:outline-none transition-colors duration-200 ${errors.headId ? "border-destructive" : "border-border"}`}
-              >
-                <option value="">Select deduction head</option>
-                {heads.map((head) => (
-                  <option key={head.id} value={head.id}>{head.name}</option>
-                ))}
-              </select>
+              <FormSelect
+                name="headId"
+                control={control}
+                rules={{ required: "Deduction head is required" }}
+                errors={errors}
+                placeholder="Select deduction head"
+                options={heads.map((head) => ({ value: String(head.id), label: String(head.name) }))}
+              />
               {errors.headId && (
                 <p className="mt-1 text-sm text-destructive">{errors.headId.message}</p>
               )}

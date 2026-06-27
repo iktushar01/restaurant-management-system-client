@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import FormSelect, { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { dineTableService } from '../../services/dineTableService';
 import { waiterService } from '../../services/waiterService';
 
@@ -64,32 +65,22 @@ const OrderManagement = ({ orderDetails, setOrderDetails }) => {
       <div className="flex flex-wrap gap-6 mb-6">
         <div className="flex-1 min-w-[200px]">
           <label className="block text-sm font-medium text-foreground mb-1">Order Type *</label>
-          <select
+          <SelectField
             value={orderDetails.orderType || ''}
-            onChange={(e) => handleChange("orderType", e.target.value)}
-            className="w-full p-3 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary"
-            required
-          >
-            <option value="">Select Order Type</option>
-            {ORDER_TYPES.map((type) => (
-              <option key={type.value} value={type.value}>{type.label}</option>
-            ))}
-          </select>
+            onValueChange={(v) => handleChange("orderType", v)}
+            placeholder="Select Order Type"
+            options={[]}
+          />
         </div>
 
         <div className="flex-1 min-w-[200px]">
           <label className="block text-sm font-medium text-foreground mb-1">Served By *</label>
-          <select
+          <SelectField
             value={orderDetails.waiterId || ''}
-            onChange={(e) => handleChange("waiterId", e.target.value)}
-            className="w-full p-3 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary"
-            required
-          >
-            <option value="">Select Staff</option>
-            {waiters.map((waiter) => (
-              <option key={waiter.id} value={waiter.id}>{waiter.name}</option>
-            ))}
-          </select>
+            onValueChange={(v) => handleChange("waiterId", v)}
+            placeholder="Select Staff"
+            options={[]}
+          />
         </div>
 
         <div className="flex-1 min-w-[200px] relative md:col-span-2">

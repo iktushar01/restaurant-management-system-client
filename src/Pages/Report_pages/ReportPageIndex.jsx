@@ -42,7 +42,7 @@ const ReportPageIndex = () => {
 
   return (
     <div className="min-h-screen bg-muted/40 p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="   mx-auto">
         {error && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{error}</div>}
 
         {/* Header */}

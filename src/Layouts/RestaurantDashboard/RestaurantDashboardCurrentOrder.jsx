@@ -67,7 +67,7 @@ const RestaurantDashboardCurrentOrder = () => {
 
   return (
     <div className="p-4 bg-background min-h-[400px]">
-      <div className="max-w-6xl mx-auto space-y-6">
+      <div className="  mx-auto space-y-6">
         <Card>
           <CardHeader>
             <CardTitle>Current Orders</CardTitle>

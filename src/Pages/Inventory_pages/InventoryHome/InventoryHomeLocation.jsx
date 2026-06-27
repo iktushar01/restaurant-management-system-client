@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import FormSelect, { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
@@ -56,16 +57,12 @@ const InventoryHomeLocation = () => {
         <div className="p-6">
           <div className="mb-6">
             <label className="block text-sm font-medium text-foreground mb-1">Select Location</label>
-            <select
-              className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-300 outline-none"
+            <SelectField
               value={selectedLocationId}
-              onChange={(e) => setSelectedLocationId(e.target.value)}
-            >
-              <option value="">--Select Location--</option>
-              {locations.map((loc) => (
-                <option key={loc.id} value={loc.id}>{loc.name}</option>
-              ))}
-            </select>
+              onValueChange={(v) => setSelectedLocationId(v)}
+              placeholder="--Select Location--"
+              options={[]}
+            />
           </div>
 
           {selectedName && (

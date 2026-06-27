@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -86,7 +87,7 @@ const EmployeePayrollIndexEditById = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="   mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link
           to="/hr/HrEmployeePayroll/Index"
@@ -140,15 +141,14 @@ const EmployeePayrollIndexEditById = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Designation
               </label>
-              <select
-                {...register("designationId", { required: "Designation is required" })}
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring focus:outline-none transition-colors duration-200"
-              >
-                <option value="">Select Designation</option>
-                {designations.map((d) => (
-                  <option key={d.id} value={d.id}>{d.name}</option>
-                ))}
-              </select>
+              <FormSelect
+                name="designationId"
+                control={control}
+                rules={{ required: "Designation is required" }}
+                errors={errors}
+                placeholder="Select Designation"
+                options={designations.map((d) => ({ value: String(d.id), label: String(d.name) }))}
+              />
               {errors.designationId && (
                 <p className="mt-1 text-sm text-destructive">
                   {errors.designationId.message}
@@ -160,14 +160,18 @@ const EmployeePayrollIndexEditById = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Status
               </label>
-              <select
-                {...register("status", { required: "Status is required" })}
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring focus:outline-none transition-colors duration-200"
-              >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-                <option value="Retired">Retired</option>
-              </select>
+              <FormSelect
+                name="status"
+                control={control}
+                rules={{ required: "Status is required" }}
+                errors={errors}
+                placeholder="Select..."
+                options={[
+                  { value: "Active", label: "Active" },
+                  { value: "Inactive", label: "Inactive" },
+                  { value: "Retired", label: "Retired" },
+                ]}
+              />
               {errors.status && (
                 <p className="mt-1 text-sm text-destructive">
                   {errors.status.message}

@@ -39,7 +39,7 @@ const Header = () => {
 
   return (
     <header className="h-14 bg-primary text-primary-foreground shadow-md">
-      <div className="flex justify-between items-center h-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="flex justify-between items-center h-full px-4 sm:px-6 lg:px-8    mx-auto">
         <h2 className="text-xl sm:text-2xl font-bold tracking-tight truncate">
           DineFlow
         </h2>

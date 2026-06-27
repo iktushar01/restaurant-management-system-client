@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -34,7 +35,7 @@ const BranchInfoCreate = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="  mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link to="/bank/BankBranchInfo/Index" className="flex items-center group transition-all duration-200">
           <button className="flex items-center px-4 py-2.5 rounded-lg border border-border bg-card text-foreground hover:bg-muted/40 hover:shadow-sm transition-all duration-200 group-hover:-translate-x-1 cursor-pointer">
@@ -57,15 +58,14 @@ const BranchInfoCreate = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Bank <span className="text-destructive">*</span>
               </label>
-              <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring transition-all duration-200 outline-none"
-                {...register("bankId", { required: "Bank is required" })}
-              >
-                <option value="">Select Bank</option>
-                {banks.map((bank) => (
-                  <option key={bank.id} value={bank.id}>{bank.bankName}</option>
-                ))}
-              </select>
+              <FormSelect
+                name="bankId"
+                control={control}
+                rules={{ required: "Bank is required" }}
+                errors={errors}
+                placeholder="Select Bank"
+                options={banks.map((bank) => ({ value: String(bank.id), label: String(bank.bankName) }))}
+              />
               {errors.bankId && <p className="mt-1 text-sm text-destructive">{errors.bankId.message}</p>}
             </div>
             <div className="md:col-span-2">

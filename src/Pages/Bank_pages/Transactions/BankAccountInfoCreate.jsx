@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -35,7 +36,7 @@ const BankAccountInfoCreate = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="  mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link to="/bank/BankAccountInfo/Index" className="flex items-center group transition-all duration-200">
           <button className="flex items-center px-4 py-2.5 rounded-lg border border-border bg-card text-foreground hover:bg-muted/40 hover:shadow-sm transition-all duration-200 group-hover:-translate-x-1 cursor-pointer">
@@ -84,19 +85,15 @@ const BankAccountInfoCreate = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Branch <span className="text-destructive">*</span>
               </label>
-              <select
-                {...register("branchId", { required: "Branch is required" })}
-                className={`w-full px-3 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus-visible:ring-ring ${
-                  errors.branchId ? "border-destructive" : "border-border"
-                }`}
-              >
-                <option value="">Select Branch</option>
-                {branches.map((branch) => (
-                  <option key={branch.id} value={branch.id}>
-                    {branch.branchName}{branch.bankName ? ` (${branch.bankName})` : ""}
-                  </option>
-                ))}
-              </select>
+              <FormSelect
+                name="branchId"
+                control={control}
+                rules={{ required: "Branch is required" }}
+                errors={errors}
+                placeholder="Select Branch"
+                options={[
+                ]}
+              />
               {errors.branchId && (
                 <p className="mt-1 text-sm text-destructive">{errors.branchId.message}</p>
               )}

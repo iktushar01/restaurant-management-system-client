@@ -13,7 +13,7 @@ const sizeClasses = {
   sm: "sm:max-w-md",
   md: "sm:max-w-2xl",
   lg: "sm:max-w-4xl",
-  xl: "sm:max-w-6xl",
+  xl: "sm: ",
 };
 
 const ReusableModal = ({

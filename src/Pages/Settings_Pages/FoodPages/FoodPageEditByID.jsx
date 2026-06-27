@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft, FiUpload } from "react-icons/fi";
@@ -71,7 +72,7 @@ const FoodPageEditByID = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="  mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link
           to="/WorkPeriod/foods/index"
@@ -106,17 +107,16 @@ const FoodPageEditByID = () => {
                 <label className="block text-sm font-medium text-foreground mb-1">
                   Food Category *
                 </label>
-                <select
-                  className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring transition-all duration-200 outline-none"
-                  {...register("categoryId", {
+                <FormSelect
+                  name="categoryId"
+                  control={control}
+                  rules={{
                     required: "Food category is required",
-                  })}
-                >
-                  <option value="">Select a category</option>
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                  ))}
-                </select>
+                  }}
+                  errors={errors}
+                  placeholder="Select a category"
+                  options={categories.map((cat) => ({ value: String(cat.id), label: String(cat.name) }))}
+                />
                 {errors.categoryId && (
                   <p className="mt-1 text-sm text-destructive">
                     {errors.categoryId.message}

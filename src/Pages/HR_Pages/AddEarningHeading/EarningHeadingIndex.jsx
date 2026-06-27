@@ -111,7 +111,7 @@ const EarningHeadingIndex = () => {
   ];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6   mx-auto">
       <PageBanner
         title="Earning Head"
         subtitle="Manage your organization's earning heads"

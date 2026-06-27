@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -100,28 +101,31 @@ const DineTableIndexEditById = () => {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Status</label>
-              <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none"
-                {...register("status", { required: "Status is required" })}
-              >
-                <option value="Vacant">Vacant</option>
-                <option value="Occupied">Occupied</option>
-                <option value="Reserved">Reserved</option>
-              </select>
+              <FormSelect
+                name="status"
+                control={control}
+                rules={{ required: "Status is required" }}
+                errors={errors}
+                placeholder="Select..."
+                options={[
+                  { value: "Vacant", label: "Vacant" },
+                  { value: "Occupied", label: "Occupied" },
+                  { value: "Reserved", label: "Reserved" },
+                ]}
+              />
               {errors.status && <p className="mt-1 text-sm text-destructive">{errors.status.message}</p>}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Dining Location</label>
-              <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none"
-                {...register("locationId", { required: "Dining location is required" })}
-              >
-                <option value="">Select a dining location</option>
-                {locations.map((loc) => (
-                  <option key={loc.id} value={loc.id}>{loc.name}</option>
-                ))}
-              </select>
+              <FormSelect
+                name="locationId"
+                control={control}
+                rules={{ required: "Dining location is required" }}
+                errors={errors}
+                placeholder="Select a dining location"
+                options={locations.map((loc) => ({ value: String(loc.id), label: String(loc.name) }))}
+              />
               {errors.locationId && <p className="mt-1 text-sm text-destructive">{errors.locationId.message}</p>}
             </div>
           </div>

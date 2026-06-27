@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -37,7 +38,7 @@ const ExpenseCreate = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="  mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link to="/expense/manage" className="flex items-center group transition-all duration-200">
           <button className="flex items-center px-4 py-2.5 rounded-lg border border-border bg-card text-foreground hover:bg-muted/40 hover:shadow-sm transition-all duration-200 group-hover:-translate-x-1 cursor-pointer">
@@ -60,15 +61,15 @@ const ExpenseCreate = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Head Name <span className="text-destructive">*</span>
               </label>
-              <select
-                {...register("headId", { required: "Head name is required" })}
-                className={`w-full px-3 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus-visible:ring-ring ${errors.headId ? "border-destructive" : "border-border"}`}
-              >
-                <option value="">Select Head Name</option>
-                {heads.map((head) => (
-                  <option key={head.id} value={head.id}>{head.expenseheadname || head.name}</option>
-                ))}
-              </select>
+              <FormSelect
+                name="headId"
+                control={control}
+                rules={{ required: "Head name is required" }}
+                errors={errors}
+                placeholder="Select Head Name"
+                options={[
+                ]}
+              />
               {errors.headId && <p className="mt-1 text-sm text-destructive">{errors.headId.message}</p>}
             </div>
 

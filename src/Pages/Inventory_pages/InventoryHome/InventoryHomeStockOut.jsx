@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -84,15 +85,15 @@ const InventoryHomeStockOut = () => {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Select Location</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none"
-                {...register("locationId", { required: "Location is required" })}>
-                <option value="">--Select--</option>
-                {stockRows.filter((r) => r.stock > 0).map((row) => (
-                  <option key={row.locationId} value={row.locationId}>
-                    {row.location} ({row.stockFormatted})
-                  </option>
-                ))}
-              </select>
+              <FormSelect
+                name="locationId"
+                control={control}
+                rules={{ required: "Location is required" }}
+                errors={errors}
+                placeholder="--Select--"
+                options={[
+                ]}
+              />
               {errors.locationId && <p className="mt-1 text-sm text-destructive">{errors.locationId.message}</p>}
             </div>
 

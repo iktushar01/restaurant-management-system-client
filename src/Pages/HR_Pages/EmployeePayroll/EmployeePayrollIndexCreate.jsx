@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiUpload, FiEye, FiEyeOff } from "react-icons/fi";
@@ -63,7 +64,7 @@ const EmployeePayrollIndexCreate = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="  mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link
           to="/hr/HrEmployeePayroll/Index"
@@ -104,15 +105,18 @@ const EmployeePayrollIndexCreate = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Gender
               </label>
-              <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary transition-all duration-200"
-                {...register("gender", { required: "Gender is required" })}
-              >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
+              <FormSelect
+                name="gender"
+                control={control}
+                rules={{ required: "Gender is required" }}
+                errors={errors}
+                placeholder="Select Gender"
+                options={[
+                  { value: "Male", label: "Male" },
+                  { value: "Female", label: "Female" },
+                  { value: "Other", label: "Other" },
+                ]}
+              />
               {errors.gender && (
                 <p className="mt-1 text-sm text-destructive">
                   {errors.gender.message}
@@ -180,17 +184,20 @@ const EmployeePayrollIndexCreate = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Department
               </label>
-              <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary transition-all duration-200"
-                {...register("department", { required: "Department is required" })}
-              >
-                <option value="">Select Department</option>
-                <option value="Super Admin">Super Admin</option>
-                <option value="HR">HR</option>
-                <option value="Finance">Finance</option>
-                <option value="IT">IT</option>
-                <option value="Operations">Operations</option>
-              </select>
+              <FormSelect
+                name="department"
+                control={control}
+                rules={{ required: "Department is required" }}
+                errors={errors}
+                placeholder="Select Department"
+                options={[
+                  { value: "Super Admin", label: "Super Admin" },
+                  { value: "HR", label: "HR" },
+                  { value: "Finance", label: "Finance" },
+                  { value: "IT", label: "IT" },
+                  { value: "Operations", label: "Operations" },
+                ]}
+              />
               {errors.department && (
                 <p className="mt-1 text-sm text-destructive">
                   {errors.department.message}
@@ -202,15 +209,14 @@ const EmployeePayrollIndexCreate = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Designation
               </label>
-              <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary transition-all duration-200"
-                {...register("designationId", { required: "Designation is required" })}
-              >
-                <option value="">Select Designation</option>
-                {designations.map((d) => (
-                  <option key={d.id} value={d.id}>{d.name}</option>
-                ))}
-              </select>
+              <FormSelect
+                name="designationId"
+                control={control}
+                rules={{ required: "Designation is required" }}
+                errors={errors}
+                placeholder="Select Designation"
+                options={designations.map((d) => ({ value: String(d.id), label: String(d.name) }))}
+              />
               {errors.designationId && (
                 <p className="mt-1 text-sm text-destructive">
                   {errors.designationId.message}
@@ -266,15 +272,18 @@ const EmployeePayrollIndexCreate = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Status
               </label>
-              <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary transition-all duration-200"
-                {...register("status", { required: "Status is required" })}
-              >
-                <option value="">Select Status</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-                <option value="Retired">Retired</option>
-              </select>
+              <FormSelect
+                name="status"
+                control={control}
+                rules={{ required: "Status is required" }}
+                errors={errors}
+                placeholder="Select Status"
+                options={[
+                  { value: "Active", label: "Active" },
+                  { value: "Inactive", label: "Inactive" },
+                  { value: "Retired", label: "Retired" },
+                ]}
+              />
               {errors.status && (
                 <p className="mt-1 text-sm text-destructive">
                   {errors.status.message}

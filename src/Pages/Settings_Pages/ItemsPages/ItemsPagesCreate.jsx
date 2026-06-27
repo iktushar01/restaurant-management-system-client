@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -58,7 +59,7 @@ const ItemsPagesCreate = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="   mx-auto p-6">
       <div className="flex items-center mb-6">
         <Link to="/WorkPeriod/inventory/items" className="flex items-center group transition-all duration-200">
           <button className="flex items-center px-4 py-2.5 rounded-lg border border-border bg-card text-foreground hover:bg-muted/40 hover:shadow-sm transition-all duration-200 group-hover:-translate-x-1 cursor-pointer">
@@ -79,36 +80,52 @@ const ItemsPagesCreate = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Category</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none"
-                {...register("categoryId", { required: "Category is required" })}>
-                <option value="">Select Category</option>
-                {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-              </select>
+              <FormSelect
+                name="categoryId"
+                control={control}
+                rules={{ required: "Category is required" }}
+                errors={errors}
+                placeholder="Select Category"
+                options={[
+                ]}
+              />
               {errors.categoryId && <p className="mt-1 text-sm text-destructive">{errors.categoryId.message}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Sub Category</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none"
-                {...register("subCategoryId", { required: "Sub Category is required" })} disabled={!categoryId}>
-                <option value="">Select Sub Category</option>
-                {subCategories.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-              </select>
+              <FormSelect
+                name="subCategoryId"
+                control={control}
+                rules={{ required: "Sub Category is required" }}
+                errors={errors}
+                placeholder="Select Sub Category"
+                options={[
+                ]}
+              />
               {errors.subCategoryId && <p className="mt-1 text-sm text-destructive">{errors.subCategoryId.message}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Brand (optional)</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none" {...register("brandId")}>
-                <option value="">Select Brand</option>
-                {brands.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
-              </select>
+              <FormSelect
+                name="brandId"
+                control={control}
+                errors={errors}
+                placeholder="Select Brand"
+                options={[
+                ]}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Unit</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none"
-                {...register("unitId", { required: "Unit is required" })}>
-                <option value="">Select Unit</option>
-                {units.map((u) => <option key={u.id} value={u.id}>{u.name}</option>)}
-              </select>
+              <FormSelect
+                name="unitId"
+                control={control}
+                rules={{ required: "Unit is required" }}
+                errors={errors}
+                placeholder="Select Unit"
+                options={[
+                ]}
+              />
               {errors.unitId && <p className="mt-1 text-sm text-destructive">{errors.unitId.message}</p>}
             </div>
             <div className="md:col-span-2">

@@ -84,7 +84,7 @@ const BankTransactionIndexById = () => {
   ];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6   mx-auto">
       <div className="mt-6 bg-muted/40 border border-border rounded-xl shadow-xs overflow-hidden mb-6">
         <div className="px-5 py-4 border-b border-border">
           <h3 className="font-semibold text-foreground">Account Information</h3>

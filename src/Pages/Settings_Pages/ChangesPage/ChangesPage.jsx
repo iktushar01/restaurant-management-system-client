@@ -57,11 +57,11 @@ const ChargesPage = () => {
   };
 
   if (loading) {
-    return <div className="p-6 max-w-7xl mx-auto text-muted-foreground">Loading...</div>;
+    return <div className="p-6    mx-auto text-muted-foreground">Loading...</div>;
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6    mx-auto">
       <h1 className="text-xl font-bold text-foreground mb-6 bg-destructive/10 p-6 rounded-2xl">Charges</h1>
 
       {error && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{error}</div>}

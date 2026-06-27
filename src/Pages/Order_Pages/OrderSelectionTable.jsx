@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import FormSelect, { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { toast } from "sonner";
 import { orderService } from "../../services/orderService";
 
@@ -103,11 +104,12 @@ const OrderSelectionTable = ({ selectedItems, setSelectedItems, orderDetails, on
                     <input type="number" min="1" value={item.quantity} onChange={(e) => handleChange(item.id, "quantity", e.target.value)} className="w-16 p-1.5 border rounded-md text-center" />
                   </td>
                   <td className="p-3">
-                    <select value={item.sideDish || ""} onChange={(e) => handleChange(item.id, "sideDish", e.target.value)} className="w-full p-1.5 border rounded-md">
-                      <option value="">~Select~</option>
-                      <option value="Extra Sauce">Extra Sauce</option>
-                      <option value="Spicy">Spicy</option>
-                    </select>
+                    <SelectField
+                      value={item.sideDish || ""}
+                      onValueChange={(v) => handleChange(item.id, "sideDish", v)}
+                      placeholder="~Select~"
+                      options={[{ value: "Extra Sauce", label: "Extra Sauce" }, { value: "Spicy", label: "Spicy" }]}
+                    />
                   </td>
                   <td className="p-3">
                     <input type="text" value={item.note || ""} onChange={(e) => handleChange(item.id, "note", e.target.value)} className="w-full p-1.5 border rounded-md" placeholder="Note" />

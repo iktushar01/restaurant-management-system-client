@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -92,25 +93,28 @@ const InventoryHomeMoveStock = () => {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-foreground mb-1">Item</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-300 outline-none"
-                {...register("itemId", { required: "Item is required" })}>
-                <option value="">--Select Item--</option>
-                {items.map((item) => (
-                  <option key={item.id} value={item.id}>{item.name}</option>
-                ))}
-              </select>
+              <FormSelect
+                name="itemId"
+                control={control}
+                rules={{ required: "Item is required" }}
+                errors={errors}
+                placeholder="--Select Item--"
+                options={items.map((item) => ({ value: String(item.id), label: String(item.name) }))}
+              />
               {errors.itemId && <p className="mt-1 text-sm text-destructive">{errors.itemId.message}</p>}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">From Location</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-300 outline-none" disabled={!itemId}
-                {...register("fromLocationId", { required: "From location is required" })}>
-                <option value="">--Select--</option>
-                {stockRows.map((row) => (
-                  <option key={row.locationId} value={row.locationId}>{row.location} ({row.stockFormatted})</option>
-                ))}
-              </select>
+              <FormSelect
+                name="fromLocationId"
+                control={control}
+                rules={{ required: "From location is required" }}
+                errors={errors}
+                placeholder="--Select--"
+                options={[
+                ]}
+              />
               {errors.fromLocationId && <p className="mt-1 text-sm text-destructive">{errors.fromLocationId.message}</p>}
             </div>
 
@@ -133,13 +137,14 @@ const InventoryHomeMoveStock = () => {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">To Location</label>
-              <select className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-300 outline-none"
-                {...register("toLocationId", { required: "To location is required" })}>
-                <option value="">--Select--</option>
-                {stockLocations.map((loc) => (
-                  <option key={loc.id} value={loc.id}>{loc.name}</option>
-                ))}
-              </select>
+              <FormSelect
+                name="toLocationId"
+                control={control}
+                rules={{ required: "To location is required" }}
+                errors={errors}
+                placeholder="--Select--"
+                options={stockLocations.map((loc) => ({ value: String(loc.id), label: String(loc.name) }))}
+              />
               {errors.toLocationId && <p className="mt-1 text-sm text-destructive">{errors.toLocationId.message}</p>}
             </div>
 

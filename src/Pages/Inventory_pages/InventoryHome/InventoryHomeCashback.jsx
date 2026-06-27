@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import FormSelect from "@/Shared/FormSelect/FormSelect";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -96,20 +97,17 @@ const InventoryHomeCashback = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Supplier Name
               </label>
-              <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none transition-all"
-                {...register("supplierName", {
+              <FormSelect
+                name="supplierName"
+                control={control}
+                rules={{
                   required: "Supplier is required",
-                })}
-                onChange={handleSupplierChange}
-              >
-                <option value="">--Select Supplier--</option>
-                {suppliers.map((supplier) => (
-                  <option key={supplier.id} value={supplier.id}>
-                    {supplier.name}
-                  </option>
-                ))}
-              </select>
+                }}
+                errors={errors}
+                placeholder="--Select Supplier--"
+                options={[
+                ]}
+              />
               {errors.supplierName && (
                 <p className="mt-1 text-sm text-destructive">
                   {errors.supplierName.message}
@@ -121,19 +119,15 @@ const InventoryHomeCashback = () => {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Memo No
               </label>
-              <select
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring outline-none transition-all"
-                {...register("memoNo", { required: "Memo number is required" })}
-                onChange={handleMemoChange}
-                disabled={!selectedSupplier}
-              >
-                <option value="">--Select Memo--</option>
-                {selectedSupplier?.memos.map((memo) => (
-                  <option key={memo.id} value={memo.id}>
-                    {memo.no}
-                  </option>
-                ))}
-              </select>
+              <FormSelect
+                name="memoNo"
+                control={control}
+                rules={{ required: "Memo number is required" }}
+                errors={errors}
+                placeholder="--Select Memo--"
+                options={[
+                ]}
+              />
               {errors.memoNo && (
                 <p className="mt-1 text-sm text-destructive">
                   {errors.memoNo.message}

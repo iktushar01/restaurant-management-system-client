@@ -110,7 +110,7 @@ function SidebarProvider({
           ...style,
         }}
         className={cn(
-          "group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar",
+          "group/sidebar-wrapper flex w-full min-h-svh flex-col has-data-[variant=inset]:bg-sidebar",
           className
         )}
         {...props}

@@ -15,30 +15,37 @@ const tabs = [
 const RestaurantDashboardIndex = () => {
   const [activeTab, setActiveTab] = useState("seating");
   const [orders, setOrders] = useState([]);
+  const [stats, setStats] = useState(null);
   const [loadingOrders, setLoadingOrders] = useState(true);
+  const [loadingStats, setLoadingStats] = useState(true);
 
-  const fetchOrders = useCallback(async () => {
+  const fetchDashboard = useCallback(async () => {
     try {
-      const res = await dashboardService.getCurrentOrders();
-      setOrders(res.data || []);
+      const [ordersRes, statsRes] = await Promise.all([
+        dashboardService.getCurrentOrders(),
+        dashboardService.getStats(),
+      ]);
+      setOrders(ordersRes.data || []);
+      setStats(statsRes.data || null);
     } catch (err) {
       console.error(err);
     } finally {
       setLoadingOrders(false);
+      setLoadingStats(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchOrders();
-    const interval = setInterval(fetchOrders, 15000);
+    fetchDashboard();
+    const interval = setInterval(fetchDashboard, 15000);
     return () => clearInterval(interval);
-  }, [fetchOrders]);
+  }, [fetchDashboard]);
 
   const tableOrderMap = buildTableOrderMap(orders);
 
   return (
     <div className="w-full min-h-[calc(100vh-8rem)] bg-background text-foreground">
-      <RestaurantDashboard />
+      <RestaurantDashboard stats={stats} loading={loadingStats} />
 
       <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8 pb-8 space-y-5">
         <div
@@ -87,7 +94,7 @@ const RestaurantDashboardIndex = () => {
             <RestaurantDashboardCurrentOrder
               orders={orders}
               loading={loadingOrders}
-              onRefresh={fetchOrders}
+              onRefresh={fetchDashboard}
             />
           )}
         </div>

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import {
   clampPosition,
   DEFAULT_TABLE_SIZE,
+  FLOOR_PLAN_CANVAS_CLASS,
   getLocationTypeLabel,
   getLocationZoneClasses,
   getTableStatusClasses,
@@ -48,28 +49,13 @@ function TableCard({ table, orderInfo }) {
   );
 }
 
-function ReadOnlyFloorPlan({ canvas, locations, tables, tableOrderMap, className, minHeight }) {
+function ReadOnlyFloorPlan({ canvas, locations, tables, tableOrderMap, className }) {
   return (
-    <div
-      className={cn(
-        "overflow-auto rounded-xl border border-border bg-[#0a0a0a] shadow-inner",
-        className
-      )}
-      style={{ minHeight, maxHeight: 520 }}
-    >
+    <div className={cn(FLOOR_PLAN_CANVAS_CLASS, className)}>
       <div
         className="relative"
         style={{ width: canvas.width, height: canvas.height, minWidth: canvas.width }}
       >
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, rgba(250,204,21,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(250,204,21,0.08) 1px, transparent 1px)",
-            backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`,
-          }}
-        />
-
         {locations.map((location) => (
           <div
             key={location.id}
@@ -380,32 +366,16 @@ const DineFloorPlanCanvas = ({
         tables={tables}
         tableOrderMap={tableOrderMap}
         className={className}
-        minHeight={minHeight}
       />
     );
   }
 
   return (
-    <div
-      className={cn(
-        "overflow-auto rounded-xl border border-border bg-[#0a0a0a] shadow-inner",
-        className
-      )}
-      style={{ minHeight, maxHeight: 720 }}
-    >
+    <div className={cn(FLOOR_PLAN_CANVAS_CLASS, className)}>
       <div
         className="relative"
         style={{ width: canvas.width, height: canvas.height, minWidth: canvas.width }}
       >
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, rgba(250,204,21,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(250,204,21,0.08) 1px, transparent 1px)",
-            backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`,
-          }}
-        />
-
         {locations.map((location) => (
           <Rnd
             key={location.id}

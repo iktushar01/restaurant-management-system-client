@@ -78,13 +78,13 @@ export function getOrderStatusBadgeClass(statusRaw) {
 export function getOrderStatusTableClasses(statusRaw) {
   switch (statusRaw) {
     case ORDER_STATUS.PENDING:
-      return "bg-amber-400 text-black border-amber-500 shadow-amber-400/30 ring-2 ring-amber-300/50";
+      return "bg-amber-400 text-amber-950 border-amber-500 shadow-amber-400/30 ring-2 ring-amber-300/50 dark:bg-amber-500 dark:text-amber-950";
     case ORDER_STATUS.PREPARING:
-      return "bg-orange-500 text-white border-orange-600 shadow-orange-500/30 ring-2 ring-orange-400/50";
+      return "bg-orange-500 text-white border-orange-600 shadow-orange-500/30 ring-2 ring-orange-400/50 dark:bg-orange-600 dark:border-orange-500";
     case ORDER_STATUS.READY:
-      return "bg-sky-500 text-white border-sky-600 shadow-sky-500/30 ring-2 ring-sky-400/50";
+      return "bg-sky-500 text-white border-sky-600 shadow-sky-500/30 ring-2 ring-sky-400/50 dark:bg-sky-600 dark:border-sky-500";
     case ORDER_STATUS.SERVED:
-      return "bg-violet-500 text-white border-violet-600 shadow-violet-500/30 ring-2 ring-violet-400/50";
+      return "bg-violet-500 text-white border-violet-600 shadow-violet-500/30 ring-2 ring-violet-400/50 dark:bg-violet-600 dark:border-violet-500";
     default:
       return null;
   }

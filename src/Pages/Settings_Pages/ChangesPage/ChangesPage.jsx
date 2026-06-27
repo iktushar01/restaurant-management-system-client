@@ -62,7 +62,7 @@ const ChargesPage = () => {
 
   return (
     <div className="p-6    mx-auto">
-      <h1 className="text-xl font-bold text-foreground mb-6 bg-destructive/10 p-6 rounded-2xl">Charges</h1>
+      <h1 className="text-xl font-bold text-foreground mb-6 bg-muted/40 p-6 rounded-2xl border border-border">Charges</h1>
 
       {error && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{error}</div>}
 
@@ -81,7 +81,7 @@ const ChargesPage = () => {
                 onChange={(e) => setVat(parseFloat(e.target.value) || 0)}
                 step="0.01"
                 min="0"
-                className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus-visible:ring-ring focus-visible:border-ring"
                 autoFocus
               />
             </div>
@@ -97,7 +97,7 @@ const ChargesPage = () => {
                 onChange={(e) => setServiceCharge(parseFloat(e.target.value) || 0)}
                 step="0.01"
                 min="0"
-                className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus-visible:ring-ring focus-visible:border-ring"
               />
             </div>
 
@@ -105,7 +105,7 @@ const ChargesPage = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-4 py-2 bg-amber-500 text-primary-foreground font-medium rounded-md hover:bg-amber-600 transition-colors disabled:opacity-60"
+                className="px-4 py-2 bg-primary text-primary-foreground font-medium rounded-md hover:bg-primary/90 transition-colors disabled:opacity-60"
               >
                 {submitting ? 'Updating...' : 'Update'}
               </button>
@@ -134,7 +134,7 @@ const ChargesPage = () => {
 
             <button
               onClick={() => setIsEditing(true)}
-              className="px-4 py-2 bg-amber-500 text-primary-foreground font-medium rounded-md hover:bg-amber-600 transition-colors"
+              className="px-4 py-2 bg-primary text-primary-foreground font-medium rounded-md hover:bg-primary/90 transition-colors"
             >
               Update
             </button>

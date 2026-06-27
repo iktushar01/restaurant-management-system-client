@@ -82,10 +82,10 @@ const WorkPeriodPage = () => {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <button onClick={handleStart} disabled={!!activePeriod} className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-success text-primary-foreground font-medium rounded-lg hover:bg-green-600 disabled:opacity-50 cursor-pointer text-sm sm:text-base">
+          <button onClick={handleStart} disabled={!!activePeriod} className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-success text-success-foreground font-medium rounded-lg hover:bg-success/90 disabled:opacity-50 cursor-pointer text-sm sm:text-base">
             <FaPlay className="mr-2" /> Start Work Period
           </button>
-          <button onClick={handleEnd} disabled={!activePeriod} className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-destructive text-primary-foreground font-medium rounded-lg hover:bg-red-600 disabled:opacity-50 cursor-pointer text-sm sm:text-base">
+          <button onClick={handleEnd} disabled={!activePeriod} className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-destructive text-destructive-foreground font-medium rounded-lg hover:bg-destructive/90 disabled:opacity-50 cursor-pointer text-sm sm:text-base">
             <FaStop className="mr-2" /> End Work Period
           </button>
         </div>
@@ -101,7 +101,7 @@ const WorkPeriodPage = () => {
         <div className="bg-card rounded-xl shadow-sm border border-border p-12 text-center mt-8">
           <FaClock className="text-primary text-3xl mx-auto mb-4" />
           <h3 className="text-lg font-medium text-foreground mb-2">No work periods found</h3>
-          <button onClick={handleStart} className="px-5 py-2.5 bg-amber-500 text-primary-foreground font-medium rounded-lg inline-flex items-center mt-4">
+          <button onClick={handleStart} className="px-5 py-2.5 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 inline-flex items-center mt-4">
             <FaPlus className="mr-2" /> Start Work Period
           </button>
         </div>

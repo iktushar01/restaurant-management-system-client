@@ -70,7 +70,7 @@ const DineCanvasPage = () => {
                   ? "text-destructive"
                   : saveState === "saving"
                     ? "text-muted-foreground"
-                    : "text-emerald-500"
+                    : "text-success"
               }`}
             >
               {saveStateLabels[saveState]}
@@ -99,13 +99,11 @@ const DineCanvasPage = () => {
           <span className="flex items-center gap-1.5">
             <span className="size-3 rounded bg-red-500" /> Occupied
           </span>
-          <span className="hidden sm:inline">• Snap grid: 10px</span>
         </div>
 
         <DineFloorPlanCanvas
           key={canvasKey}
           onSaveStateChange={setSaveState}
-          minHeight={640}
         />
       </div>
     </div>

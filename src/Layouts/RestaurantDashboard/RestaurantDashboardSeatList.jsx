@@ -22,7 +22,6 @@ const RestaurantDashboardSeatList = ({ tableOrderMap = {} }) => {
         <DineFloorPlanCanvas
           readOnly
           tableOrderMap={tableOrderMap}
-          minHeight={560}
           className="w-full"
         />
       </div>

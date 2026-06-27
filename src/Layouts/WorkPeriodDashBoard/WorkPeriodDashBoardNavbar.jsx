@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
-  ChevronDownIcon,
-  ChevronLeftIcon,
   ChevronRightIcon,
   ClipboardListIcon,
   CoinsIcon,
@@ -22,21 +20,28 @@ import {
   UtensilsCrossedIcon,
   WarehouseIcon,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarRail,
+  SidebarSeparator,
+  SidebarTrigger,
+  useSidebar,
+} from "@/components/ui/sidebar";
 
 const menuItems = [
   {
@@ -56,7 +61,6 @@ const menuItems = [
   },
   {
     name: "Dine",
-    path: "/dine",
     icon: UtensilsCrossedIcon,
     subRoutes: [
       { name: "Floor Plan", path: "/WorkPeriod/dine", icon: TableIcon },
@@ -71,7 +75,6 @@ const menuItems = [
   },
   {
     name: "Inventory",
-    path: "/inventory",
     icon: PackageIcon,
     subRoutes: [
       { name: "Category", path: "/WorkPeriod/inventory/category", icon: WarehouseIcon },
@@ -100,154 +103,116 @@ const menuItems = [
   },
 ];
 
-const linkClass = ({ isActive }) =>
-  cn(
-    "flex items-center rounded-lg px-3 py-2.5 text-sm transition-colors min-h-[44px] md:min-h-0",
-    isActive
-      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-      : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-  );
-
-export const WorkPeriodSidebarNav = ({
-  isCollapsed = false,
-  onNavigate,
-  className,
-}) => {
+function WorkPeriodSidebarMenu() {
   const location = useLocation();
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  const handleNavigate = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
 
   return (
-    <ScrollArea className={cn("flex-1 px-2 py-4", className)}>
-      <ul className="space-y-1">
-        {menuItems.map((item) => {
-          const Icon = item.icon;
-          const isSectionActive = item.subRoutes?.some(
+    <SidebarMenu>
+      {menuItems.map((item) => {
+        const Icon = item.icon;
+
+        if (item.subRoutes) {
+          const isSectionActive = item.subRoutes.some(
             (sub) => location.pathname === sub.path
           );
 
-          if (item.subRoutes) {
-            return (
-              <li key={item.name}>
-                <Collapsible defaultOpen={isSectionActive}>
-                  <CollapsibleTrigger
-                    render={
-                      <Button
-                        variant="ghost"
-                        className={cn(
-                          "w-full justify-between px-3 py-2.5 h-auto min-h-[44px] md:min-h-0 font-normal text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                          isSectionActive &&
-                            "bg-sidebar-accent text-sidebar-accent-foreground"
-                        )}
-                      />
-                    }
-                  >
-                    <span className="flex items-center gap-3">
-                      <Icon className="size-4 shrink-0" />
-                      {!isCollapsed && item.name}
-                    </span>
-                    {!isCollapsed && (
-                      <ChevronDownIcon className="size-4 shrink-0 opacity-70 [[data-panel-open]_&]:rotate-180 transition-transform" />
-                    )}
-                  </CollapsibleTrigger>
-                  {!isCollapsed && (
-                    <CollapsibleContent>
-                      <ul className="ml-4 mt-1 space-y-1 border-l border-sidebar-border pl-2">
-                        {item.subRoutes.map((subItem) => {
-                          const SubIcon = subItem.icon;
-                          return (
-                            <li key={subItem.name}>
-                              <NavLink
-                                to={subItem.path}
-                                className={linkClass}
-                                onClick={onNavigate}
-                              >
-                                <SubIcon className="mr-2 size-3.5 shrink-0" />
-                                {subItem.name}
-                              </NavLink>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </CollapsibleContent>
-                  )}
-                </Collapsible>
-              </li>
-            );
-          }
-
           return (
-            <li key={item.name}>
-              <NavLink
-                to={item.path}
-                className={cn(linkClass, "gap-3")}
-                title={isCollapsed ? item.name : undefined}
-                onClick={onNavigate}
+            <SidebarMenuItem key={item.name}>
+              <Collapsible
+                defaultOpen={isSectionActive}
+                className="group/collapsible"
               >
-                <Icon className="size-4 shrink-0" />
-                {!isCollapsed && <span>{item.name}</span>}
-              </NavLink>
-            </li>
-          );
-        })}
-      </ul>
-    </ScrollArea>
-  );
-};
+                <CollapsibleTrigger
+                  render={
+                    <SidebarMenuButton
+                      tooltip={item.name}
+                      isActive={isSectionActive}
+                    />
+                  }
+                >
+                  <Icon />
+                  <span>{item.name}</span>
+                  <ChevronRightIcon className="ml-auto size-4 transition-transform group-data-[panel-open]/collapsible:rotate-90" />
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    {item.subRoutes.map((subItem) => {
+                      const SubIcon = subItem.icon;
+                      const isActive = location.pathname === subItem.path;
 
-export const WorkPeriodMobileSidebar = ({ open, onOpenChange }) => {
-  return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        side="left"
-        className="w-[min(100vw-2rem,20rem)] p-0 gap-0 bg-sidebar text-sidebar-foreground border-sidebar-border"
-      >
-        <SheetHeader className="border-b border-sidebar-border px-4 py-4">
-          <SheetTitle className="text-lg font-bold text-sidebar-foreground">
-            DineFlow
-          </SheetTitle>
-        </SheetHeader>
-        <WorkPeriodSidebarNav
-          isCollapsed={false}
-          onNavigate={() => onOpenChange(false)}
-          className="h-[calc(100vh-4.5rem)]"
-        />
-      </SheetContent>
-    </Sheet>
+                      return (
+                        <SidebarMenuSubItem key={subItem.path}>
+                          <SidebarMenuSubButton
+                            render={<NavLink to={subItem.path} onClick={handleNavigate} />}
+                            isActive={isActive}
+                          >
+                            <SubIcon />
+                            <span>{subItem.name}</span>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      );
+                    })}
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </Collapsible>
+            </SidebarMenuItem>
+          );
+        }
+
+        const isActive = location.pathname === item.path;
+
+        return (
+          <SidebarMenuItem key={item.path}>
+            <SidebarMenuButton
+              render={<NavLink to={item.path} onClick={handleNavigate} />}
+              isActive={isActive}
+              tooltip={item.name}
+            >
+              <Icon />
+              <span>{item.name}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        );
+      })}
+    </SidebarMenu>
   );
-};
+}
 
 const WorkPeriodDashBoardNavbar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
   return (
-    <aside
-      className={cn(
-        "hidden md:flex flex-col shrink-0 h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border transition-all duration-300",
-        isCollapsed ? "w-16" : "w-64"
-      )}
+    <Sidebar
+      collapsible="icon"
+      variant="sidebar"
+      className="[&_[data-slot=sidebar-container]]:top-16 [&_[data-slot=sidebar-container]]:bottom-auto [&_[data-slot=sidebar-container]]:h-[calc(100svh-4rem)]"
     >
-      <div className="p-4 flex items-center justify-between gap-2">
-        {!isCollapsed && (
-          <h1 className="text-lg font-bold truncate">DineFlow</h1>
-        )}
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          aria-label={isCollapsed ? "Expand menu" : "Collapse menu"}
-          className="text-sidebar-foreground hover:bg-sidebar-accent shrink-0 ml-auto"
-        >
-          {isCollapsed ? (
-            <ChevronRightIcon className="size-4" />
-          ) : (
-            <ChevronLeftIcon className="size-4" />
-          )}
-        </Button>
-      </div>
+      <SidebarHeader>
+        <div className="flex items-center gap-2 px-1 py-1">
+          <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden group-data-[collapsible=icon]:hidden">
+            <span className="truncate text-base font-semibold">DineFlow</span>
+          </div>
+          <SidebarTrigger className="hidden shrink-0 md:flex" />
+        </div>
+      </SidebarHeader>
 
-      <Separator className="bg-sidebar-border" />
+      <SidebarSeparator />
 
-      <WorkPeriodSidebarNav isCollapsed={isCollapsed} />
-    </aside>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <WorkPeriodSidebarMenu />
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarRail />
+    </Sidebar>
   );
 };
 

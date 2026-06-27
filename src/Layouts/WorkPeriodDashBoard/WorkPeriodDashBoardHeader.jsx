@@ -5,11 +5,11 @@ import {
   ClockIcon,
   HomeIcon,
   LogOutIcon,
-  MenuIcon,
   UserIcon,
   UtensilsCrossedIcon,
 } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const WorkPeriodDashBoardHeader = ({ onMenuClick }) => {
+const WorkPeriodDashBoardHeader = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [username] = useState("John Doe");
 
@@ -49,15 +49,9 @@ const WorkPeriodDashBoardHeader = ({ onMenuClick }) => {
     <header className="h-16 bg-primary text-primary-foreground shadow-md">
       <div className="flex justify-between items-center h-full px-4 sm:px-6 lg:px-8 w-full mx-auto">
         <div className="flex items-center gap-2 sm:gap-4 min-w-0">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className="md:hidden text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground shrink-0"
-            onClick={onMenuClick}
-            aria-label="Open navigation menu"
-          >
-            <MenuIcon className="size-5" />
-          </Button>
+          <SidebarTrigger
+            className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground md:hidden"
+          />
 
           <div className="flex sm:hidden items-center gap-2 min-w-0">
             <UtensilsCrossedIcon className="size-5 shrink-0" />

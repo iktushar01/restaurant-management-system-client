@@ -51,6 +51,7 @@ const menuItems = [
     path: "/dine",
     icon: UtensilsCrossedIcon,
     subRoutes: [
+      { name: "Floor Plan", path: "/WorkPeriod/dine", icon: TableIcon },
       { name: "Dining Location", path: "/WorkPeriod/dine/location", icon: TableIcon },
       { name: "Tables", path: "/WorkPeriod/dine/tables", icon: TableIcon },
     ],

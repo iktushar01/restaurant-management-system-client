@@ -147,6 +147,10 @@ export const router = createBrowserRouter([
         element:<PurchaseDetails/>
       },
       {
+        path:"/inventory/purchase-details/create",
+        element:<InventoryPurchase/>
+      },
+      {
         path:"/inventory",
         element:<InventoryHomeIndex/>
       },

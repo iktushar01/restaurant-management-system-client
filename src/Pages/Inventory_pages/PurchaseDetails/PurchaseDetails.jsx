@@ -67,6 +67,12 @@ const PurchaseDetails = () => {
             Manage your purchase memos
           </p>
         </div>
+        <Link to="create" className="w-full sm:w-auto">
+          <button className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-gradient-to-r bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus-visible:ring-ring focus:ring-offset-2 text-sm sm:text-base">
+            <FaPlus className="mr-2" />
+            Add New Memo
+          </button>
+        </Link>
       </div>
 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">

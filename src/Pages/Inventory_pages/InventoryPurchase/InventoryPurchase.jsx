@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { formatMoney } from "@/lib/currency";
 import FormSelect, { SelectField } from "@/Shared/FormSelect/FormSelect";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { inventoryService } from "../../../services/inventoryService";
 
 const InventoryPurchase = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const returnPath = location.pathname.includes("/inventory/purchase-details")
+    ? "/inventory/purchase-details"
+    : "/inventory";
   const [vendors, setVendors] = useState([]);
   const [catalogItems, setCatalogItems] = useState([]);
   const [items, setItems] = useState([{ id: Date.now(), itemId: "", quantity: 0, price: 0 }]);
@@ -71,7 +75,7 @@ const InventoryPurchase = () => {
           price: Number(i.price) || 0,
         })),
       });
-      navigate("/inventory");
+      navigate(returnPath);
     } catch (err) {
       setSubmitError(err.message || "Failed to create purchase");
     } finally {
@@ -197,7 +201,7 @@ const InventoryPurchase = () => {
           </div>
 
           <div className="mt-8 flex justify-end space-x-3">
-            <Link to="/inventory" className="px-5 py-2.5 border border-border rounded-lg text-foreground hover:bg-muted/40">Cancel</Link>
+            <Link to={returnPath} className="px-5 py-2.5 border border-border rounded-lg text-foreground hover:bg-muted/40">Cancel</Link>
             <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-gradient-to-r bg-primary text-primary-foreground text-foreground font-medium rounded-lg disabled:opacity-60">
               {submitting ? "Saving..." : "Purchase"}
             </button>

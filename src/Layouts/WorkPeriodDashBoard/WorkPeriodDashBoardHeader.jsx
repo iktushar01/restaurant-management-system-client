@@ -5,6 +5,7 @@ import {
   ClockIcon,
   HomeIcon,
   LogOutIcon,
+  MenuIcon,
   UserIcon,
   UtensilsCrossedIcon,
 } from "lucide-react";
@@ -20,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const WorkPeriodDashBoardHeader = () => {
+const WorkPeriodDashBoardHeader = ({ onMenuClick }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [username] = useState("John Doe");
 
@@ -47,8 +48,23 @@ const WorkPeriodDashBoardHeader = () => {
   return (
     <header className="h-16 bg-primary text-primary-foreground shadow-md">
       <div className="flex justify-between items-center h-full px-4 sm:px-6 lg:px-8 w-full mx-auto">
-        <div className="flex items-center gap-4">
-          <div className="hidden sm:flex items-center gap-2">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="md:hidden text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground shrink-0"
+            onClick={onMenuClick}
+            aria-label="Open navigation menu"
+          >
+            <MenuIcon className="size-5" />
+          </Button>
+
+          <div className="flex sm:hidden items-center gap-2 min-w-0">
+            <UtensilsCrossedIcon className="size-5 shrink-0" />
+            <span className="font-bold text-base truncate">DineFlow</span>
+          </div>
+
+          <div className="hidden sm:flex items-center gap-2 shrink-0">
             <UtensilsCrossedIcon className="size-6" />
             <span className="font-bold text-xl">DineFlow</span>
           </div>
@@ -64,10 +80,10 @@ const WorkPeriodDashBoardHeader = () => {
           </Button>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-4">
-          <div className="flex items-center font-medium bg-primary-foreground/10 px-3 py-2 rounded-lg">
-            <ClockIcon className="mr-2 size-4" />
-            <span className="tabular-nums text-sm sm:text-base">
+        <div className="flex items-center gap-1.5 sm:gap-4 shrink-0">
+          <div className="flex items-center font-medium bg-primary-foreground/10 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg">
+            <ClockIcon className="mr-1.5 sm:mr-2 size-4 shrink-0" />
+            <span className="tabular-nums text-xs sm:text-base">
               {formatTime(currentTime)}
             </span>
           </div>

@@ -36,7 +36,7 @@ const InventoryHomeStockOut = () => {
   }, [itemId]);
 
   useEffect(() => {
-    const row = stockRows.find((r) => r.locationId === locationId);
+    const row = stockRows.find((r) => String(r.locationId) === String(locationId));
     setAvailableStock(row ? row.stock : 0);
   }, [locationId, stockRows]);
 
@@ -91,8 +91,13 @@ const InventoryHomeStockOut = () => {
                 rules={{ required: "Location is required" }}
                 errors={errors}
                 placeholder="--Select--"
-                options={[
-                ]}
+                options={stockRows
+                  .filter((row) => row.stock > 0)
+                  .map((row) => ({
+                    value: String(row.locationId),
+                    label: `${row.location} (${row.stockFormatted})`,
+                  }))}
+                disabled={stockRows.length === 0}
               />
               {errors.locationId && <p className="mt-1 text-sm text-destructive">{errors.locationId.message}</p>}
             </div>

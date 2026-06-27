@@ -12,7 +12,13 @@ const InventoryHomeCashback = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue, control } = useForm();
+    watch,
+    setValue,
+    control,
+  } = useForm();
+
+  const supplierId = watch("supplierName");
+  const memoId = watch("memoNo");
 
   const [suppliers, setSuppliers] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
@@ -25,6 +31,26 @@ const InventoryHomeCashback = () => {
       .then((res) => setSuppliers(res.data || []))
       .catch(() => setSuppliers([]));
   }, []);
+
+  useEffect(() => {
+    const supplier = suppliers.find((s) => String(s.id) === String(supplierId));
+    setSelectedSupplier(supplier || null);
+    setSelectedMemo(null);
+    setValue("memoNo", "");
+    setValue("totalReceivable", 0);
+    setValue("paid", "");
+  }, [supplierId, suppliers, setValue]);
+
+  useEffect(() => {
+    if (!selectedSupplier || !memoId) {
+      setSelectedMemo(null);
+      setValue("totalReceivable", 0);
+      return;
+    }
+    const memo = selectedSupplier.memos.find((m) => String(m.id) === String(memoId));
+    setSelectedMemo(memo || null);
+    setValue("totalReceivable", memo ? memo.payable : 0);
+  }, [memoId, selectedSupplier, setValue]);
 
   const onSubmit = async (data) => {
     setSubmitError("");
@@ -43,25 +69,6 @@ const InventoryHomeCashback = () => {
       setSubmitError(err.message || "Failed to record cash back");
     } finally {
       setSubmitting(false);
-    }
-  };
-
-  const handleSupplierChange = (e) => {
-    const supplierId = e.target.value;
-    const supplier = suppliers.find((s) => s.id === supplierId);
-    setSelectedSupplier(supplier || null);
-    setSelectedMemo(null);
-    setValue("memoNo", "");
-    setValue("totalReceivable", 0);
-    setValue("paid", "");
-  };
-
-  const handleMemoChange = (e) => {
-    const memoId = e.target.value;
-    if (selectedSupplier) {
-      const memo = selectedSupplier.memos.find((m) => m.id === memoId);
-      setSelectedMemo(memo || null);
-      setValue("totalReceivable", memo ? memo.payable : 0);
     }
   };
 
@@ -104,8 +111,10 @@ const InventoryHomeCashback = () => {
                 }}
                 errors={errors}
                 placeholder="--Select Supplier--"
-                options={[
-                ]}
+                options={suppliers.map((s) => ({
+                  value: String(s.id),
+                  label: s.name,
+                }))}
               />
               {errors.supplierName && (
                 <p className="mt-1 text-sm text-destructive">
@@ -124,8 +133,11 @@ const InventoryHomeCashback = () => {
                 rules={{ required: "Memo number is required" }}
                 errors={errors}
                 placeholder="--Select Memo--"
-                options={[
-                ]}
+                options={(selectedSupplier?.memos || []).map((m) => ({
+                  value: String(m.id),
+                  label: m.no,
+                }))}
+                disabled={!selectedSupplier}
               />
               {errors.memoNo && (
                 <p className="mt-1 text-sm text-destructive">

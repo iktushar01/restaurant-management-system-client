@@ -69,8 +69,10 @@ const InventoryHomeStockIn = () => {
                 rules={{ required: "Item is required" }}
                 errors={errors}
                 placeholder="--Select Item--"
-                options={[
-                ]}
+                options={items.map((item) => ({
+                  value: String(item.id),
+                  label: item.item || item.name,
+                }))}
               />
               {errors.itemId && <p className="mt-1 text-sm text-destructive">{errors.itemId.message}</p>}
             </div>

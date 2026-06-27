@@ -35,7 +35,7 @@ const InventoryHomeLocation = () => {
     { header: "Stock", accessor: "stockFormatted" },
   ];
 
-  const selectedName = locations.find((l) => l.id === selectedLocationId)?.name;
+  const selectedName = locations.find((l) => String(l.id) === String(selectedLocationId))?.name;
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -61,7 +61,10 @@ const InventoryHomeLocation = () => {
               value={selectedLocationId}
               onValueChange={(v) => setSelectedLocationId(v)}
               placeholder="--Select Location--"
-              options={[]}
+              options={locations.map((loc) => ({
+                value: String(loc.id),
+                label: loc.name,
+              }))}
             />
           </div>
 

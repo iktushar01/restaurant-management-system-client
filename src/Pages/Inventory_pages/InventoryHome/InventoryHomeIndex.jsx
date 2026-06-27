@@ -35,7 +35,14 @@ const InventoryHomeIndex = () => {
   };
 
   const columns = [
-    { header: "SL No", accessor: "id" },
+    {
+      header: "SL No",
+      accessor: "slNo",
+      render: (row) => {
+        const idx = items.findIndex((item) => item.id === row.id);
+        return idx >= 0 ? startIndex + idx + 1 : "-";
+      },
+    },
     { header: "Category", accessor: "category" },
     { header: "SubCategory", accessor: "subCategory" },
     {

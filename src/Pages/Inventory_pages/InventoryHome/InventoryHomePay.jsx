@@ -13,7 +13,12 @@ const InventoryHomePay = () => {
     handleSubmit,
     formState: { errors },
     watch,
-    setValue, control } = useForm();
+    setValue,
+    control,
+  } = useForm();
+
+  const supplierId = watch("supplierName");
+  const memoId = watch("memoNo");
 
   const [suppliers, setSuppliers] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
@@ -27,7 +32,27 @@ const InventoryHomePay = () => {
       .catch(() => setSuppliers([]));
   }, []);
 
-  const onSubmit = async (data) => {
+  useEffect(() => {
+    const supplier = suppliers.find((s) => String(s.id) === String(supplierId));
+    setSelectedSupplier(supplier || null);
+    setSelectedMemo(null);
+    setValue("memoNo", "");
+    setValue("totalPayable", 0);
+    setValue("due", 0);
+  }, [supplierId, suppliers, setValue]);
+
+  useEffect(() => {
+    if (!selectedSupplier || !memoId) {
+      setSelectedMemo(null);
+      setValue("totalPayable", 0);
+      setValue("due", 0);
+      return;
+    }
+    const memo = selectedSupplier.memos.find((m) => String(m.id) === String(memoId));
+    setSelectedMemo(memo || null);
+    setValue("totalPayable", memo ? memo.payable : 0);
+    setValue("due", memo ? memo.payable : 0);
+  }, [memoId, selectedSupplier, setValue]);
     setSubmitError("");
     setSubmitting(true);
     try {
@@ -48,27 +73,7 @@ const InventoryHomePay = () => {
     }
   };
 
-  const handleSupplierChange = (e) => {
-    const supplierId = e.target.value;
-    const supplier = suppliers.find((s) => s.id === supplierId);
-    setSelectedSupplier(supplier || null);
-    setSelectedMemo(null);
-    setValue("memoNo", "");
-    setValue("totalPayable", 0);
-    setValue("due", 0);
-  };
-
-  const handleMemoChange = (e) => {
-    const memoId = e.target.value;
-    if (selectedSupplier) {
-      const memo = selectedSupplier.memos.find((m) => m.id === memoId);
-      setSelectedMemo(memo || null);
-      setValue("totalPayable", memo ? memo.payable : 0);
-      setValue("due", memo ? memo.payable : 0);
-    }
-  };
-
-  const handleDiscountChange = (e) => {
+  const onSubmit = async (data) => {
     const discount = parseFloat(e.target.value) || 0;
     const totalPayable = selectedMemo ? selectedMemo.payable : 0;
     const paid = watch("paid") || 0;
@@ -121,8 +126,10 @@ const InventoryHomePay = () => {
                 }}
                 errors={errors}
                 placeholder="--Select Supplier--"
-                options={[
-                ]}
+                options={suppliers.map((s) => ({
+                  value: String(s.id),
+                  label: s.name,
+                }))}
               />
               {errors.supplierName && (
                 <p className="mt-1 text-sm text-destructive">
@@ -141,8 +148,11 @@ const InventoryHomePay = () => {
                 rules={{ required: "Memo number is required" }}
                 errors={errors}
                 placeholder="--Select Memo--"
-                options={[
-                ]}
+                options={(selectedSupplier?.memos || []).map((m) => ({
+                  value: String(m.id),
+                  label: m.no,
+                }))}
+                disabled={!selectedSupplier}
               />
               {errors.memoNo && (
                 <p className="mt-1 text-sm text-destructive">

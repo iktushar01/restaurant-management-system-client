@@ -12,6 +12,7 @@ import {
   FaShoppingCart
 } from "react-icons/fa";
 
+import { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { foodService } from "../../services/foodService";
 
 const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1626645735466-5f6ce3c27459?w=500&auto=format&fit=crop&q=60";
@@ -200,21 +201,19 @@ const FoodMenuTable = ({ onAddItem }) => {
             </div>
 
             {/* Category Filter */}
-            <div className="relative">
+            <div className="relative w-full">
+              <SelectField
+                value={selectedCategory}
+                onValueChange={setSelectedCategory}
+                className="w-full pl-10"
+                options={categories.map((category) => ({
+                  value: String(category),
+                  label: String(category),
+                }))}
+              />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FaFilter className="text-muted-foreground" />
               </div>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="pl-10 pr-8 py-2.5 appearance-none border border-border rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-border w-full bg-card transition-all"
-              >
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
             </div>
           </div>
         </div>

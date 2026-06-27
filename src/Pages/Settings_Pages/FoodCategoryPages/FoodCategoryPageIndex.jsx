@@ -1,41 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaCheck } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
+import { foodCategoryService } from "../../../services/foodCategoryService";
 
 const FoodCategoryPageIndex = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  
-  // Sample food category data matching the image
-  const [categories, setCategories] = useState([
-    { id: 1, name: "Appetizer (Thai)", note: "", serialNo: 1 },
-    { id: 2, name: "Salad (Thai)", note: "", serialNo: 2 },
-    { id: 3, name: "Soup (Thai)", note: "", serialNo: 3 },
-    { id: 4, name: "Rice (Thai)", note: "", serialNo: 4 },
-    { id: 5, name: "Noodles (Thai)", note: "", serialNo: 5 },
-    { id: 6, name: "Beef (Thai)", note: "", serialNo: 6 },
-    { id: 7, name: "Chicken (Thai)", note: "", serialNo: 7 },
-    { id: 8, name: "Seafood (Thai)", note: "", serialNo: 8 },
-    { id: 9, name: "Vegetarian (Thai)", note: "", serialNo: 9 },
-    { id: 10, name: "Dessert (Thai)", note: "", serialNo: 10 },
-  ]);
+  const [categories, setCategories] = useState([]);
+  const [totalEntries, setTotalEntries] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const filteredCategories = categories.filter((category) =>
-    category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    category.note.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const fetchCategories = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const response = await foodCategoryService.getAll({
+        search: searchTerm,
+        page: currentPage,
+        limit: entriesToShow,
+      });
+      setCategories(response.data || []);
+      setTotalEntries(response.meta?.total || 0);
+      setTotalPages(response.meta?.totalPages || 0);
+    } catch (err) {
+      setError(err.message || "Failed to load categories");
+    } finally {
+      setLoading(false);
+    }
+  }, [searchTerm, currentPage, entriesToShow]);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredCategories.length / entriesToShow);
-  const startIndex = (currentPage - 1) * entriesToShow;
-  const paginatedCategories = filteredCategories.slice(startIndex, startIndex + entriesToShow);
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
-  // Delete category function
-  const handleDeleteCategory = (id) => {
+  const startIndex = totalEntries > 0 ? (currentPage - 1) * entriesToShow : 0;
+
+  const handleDeleteCategory = async (id) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
-      setCategories(categories.filter(category => category.id !== id));
+      try {
+        await foodCategoryService.delete(id);
+        fetchCategories();
+      } catch (err) {
+        alert(err.message || "Failed to delete category");
+      }
     }
   };
 
@@ -171,16 +182,23 @@ const FoodCategoryPageIndex = () => {
       </div>
 
       {/* ✅ Reusable Table */}
-      <ReusableTable 
-        columns={columns} 
-        data={paginatedCategories} 
-        actions={actions} 
-      />
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>
+      )}
+      {loading ? (
+        <div className="text-center py-12 text-gray-500">Loading categories...</div>
+      ) : (
+        <ReusableTable 
+          columns={columns} 
+          data={categories} 
+          actions={actions} 
+        />
+      )}
 
       {/* Table info and pagination */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 text-sm text-gray-700">
         <div>
-          Showing {filteredCategories.length > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, filteredCategories.length)} of {filteredCategories.length} entries
+          Showing {totalEntries > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, totalEntries)} of {totalEntries} entries
         </div>
         <div className="flex space-x-2 mt-2 md:mt-0">
           <button 
@@ -209,7 +227,7 @@ const FoodCategoryPageIndex = () => {
         </div>
       </div>
 
-      {categories.length === 0 && (
+      {!loading && categories.length === 0 && !error && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 md:p-12 text-center mt-8">
           <h3 className="text-lg font-medium text-gray-900 mb-2">
             No categories found

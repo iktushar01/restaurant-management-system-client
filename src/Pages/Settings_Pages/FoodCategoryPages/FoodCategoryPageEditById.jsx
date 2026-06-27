@@ -1,35 +1,64 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
+import { foodCategoryService } from "../../../services/foodCategoryService";
 
 const FoodCategoryPageEditById = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue
+    setValue,
   } = useForm();
 
-  // Pre-fill form with existing category data (in a real app, this would come from API)
-  React.useEffect(() => {
-    // Simulating fetching category data
-    const categoryData = {
-      name: "Appetizer (Thai)",
-      note: "",
-      serialNo: 1
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const response = await foodCategoryService.getById(id);
+        const category = response.data;
+        setValue("name", category.name);
+        setValue("note", category.note || "");
+        setValue("serialNo", category.serialNo);
+      } catch (err) {
+        setSubmitError(err.message || "Failed to load category");
+      } finally {
+        setLoading(false);
+      }
     };
-    
-    // Set form values
-    setValue("name", categoryData.name);
-    setValue("note", categoryData.note);
-    setValue("serialNo", categoryData.serialNo);
-  }, [setValue]);
 
-  const onSubmit = (data) => {
-    console.log("Category Form Data:", data);
-    // Add your API call here
+    fetchCategory();
+  }, [id, setValue]);
+
+  const onSubmit = async (data) => {
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await foodCategoryService.update(id, {
+        name: data.name,
+        note: data.note || "",
+        serialNo: Number(data.serialNo),
+      });
+      navigate("/WorkPeriod/foodCategory/index");
+    } catch (err) {
+      setSubmitError(err.message || "Failed to update category");
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl min-h-screen mx-auto p-6 text-center text-gray-500">
+        Loading category...
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl min-h-screen mx-auto p-6">
@@ -56,6 +85,9 @@ const FoodCategoryPageEditById = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          {submitError && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>
+          )}
           <div className="grid grid-cols-1 gap-6">
             
             {/* Category Name Input */}
@@ -130,9 +162,10 @@ const FoodCategoryPageEditById = () => {
             </Link>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
+              disabled={submitting}
+              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer disabled:opacity-60"
             >
-              Save
+              {submitting ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

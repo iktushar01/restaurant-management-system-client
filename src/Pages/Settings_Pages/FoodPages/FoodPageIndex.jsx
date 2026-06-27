@@ -1,47 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaUtensils } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
+import { foodService } from "../../../services/foodService";
 
 const FoodPageIndex = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  
-  // Sample food data matching the image
-  const [foods, setFoods] = useState([
-    { id: 1, category: "Appetizer (Thai)", foodNo: "01", foodName: "Chicken Saizy", serialNo: 1, availability: "Available", quantity: 395.00, price: 395.00 },
-    { id: 2, category: "Appetizer (Thai)", foodNo: "02", foodName: "Fried/Grilled Chicken Wings", serialNo: 2, availability: "Available", quantity: 330.00, price: 330.00 },
-    { id: 3, category: "Appetizer (Thai)", foodNo: "03", foodName: "Fish Finger (Fish Chup Pang Tod)", serialNo: 3, availability: "Available", quantity: 360.00, price: 360.00 },
-    { id: 4, category: "Appetizer (Thai)", foodNo: "04", foodName: "Butter Fried Prawn", serialNo: 4, availability: "Available", quantity: 380.00, price: 380.00 },
-    { id: 5, category: "Appetizer (Thai)", foodNo: "05", foodName: "Drums of Haven", serialNo: 5, availability: "Available", quantity: 360.00, price: 360.00 },
-    { id: 6, category: "Appetizer (Thai)", foodNo: "06", foodName: "Tempura Vegetable", serialNo: 6, availability: "Available", quantity: 280.00, price: 280.00 },
-    { id: 7, category: "Appetizer (Thai)", foodNo: "07", foodName: "Tempura Mixed", serialNo: 7, availability: "Available", quantity: 380.00, price: 380.00 },
-    { id: 8, category: "Appetizer (Thai)", foodNo: "08", foodName: "Royal Spring Roll", serialNo: 8, availability: "Available", quantity: 320.00, price: 320.00 },
-    { id: 9, category: "Salad (Thai)", foodNo: "09", foodName: "Lab Kai (Chicken Salad)", serialNo: 9, availability: "Available", quantity: 425.00, price: 425.00 },
-    { id: 10, category: "Salad (Thai)", foodNo: "10", foodName: "Mixed Seafood Salad (Yan Talay)", serialNo: 10, availability: "Available", quantity: 450.00, price: 450.00 },
-    { id: 11, category: "Salad (Thai)", foodNo: "11", foodName: "Cashewnut Salad (Sauç)", serialNo: 11, availability: "Available", quantity: 390.00, price: 390.00 },
-    { id: 12, category: "Salad (Thai)", foodNo: "12", foodName: "Papaya Salad (Som Tam)", serialNo: 12, availability: "Available", quantity: 325.00, price: 325.00 },
-    { id: 13, category: "Soup (Thai)", foodNo: "13", foodName: "Tom Yam Soup (Clear)", serialNo: 13, availability: "Available", quantity: 400.00, price: 400.00 },
-    { id: 14, category: "Soup (Thai)", foodNo: "14", foodName: "Mixed Tom Yam Soup (Cloudy)", serialNo: 14, availability: "Available", quantity: 450.00, price: 450.00 },
-    { id: 15, category: "Soup (Thai)", foodNo: "15", foodName: "King Prawn Soup (Clear/Cloudy)", serialNo: 15, availability: "Available", quantity: 550.00, price: 550.00 },
-  ]);
+  const [foods, setFoods] = useState([]);
+  const [totalEntries, setTotalEntries] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const filteredFoods = foods.filter((food) =>
-    food.foodName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    food.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    food.foodNo.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const fetchFoods = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const response = await foodService.getAll({
+        search: searchTerm,
+        page: currentPage,
+        limit: entriesToShow,
+      });
+      setFoods(response.data || []);
+      setTotalEntries(response.meta?.total || 0);
+      setTotalPages(response.meta?.totalPages || 0);
+    } catch (err) {
+      setError(err.message || "Failed to load food items");
+    } finally {
+      setLoading(false);
+    }
+  }, [searchTerm, currentPage, entriesToShow]);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredFoods.length / entriesToShow);
-  const startIndex = (currentPage - 1) * entriesToShow;
-  const paginatedFoods = filteredFoods.slice(startIndex, startIndex + entriesToShow);
+  useEffect(() => {
+    fetchFoods();
+  }, [fetchFoods]);
 
-  // Delete food function
-  const handleDeleteFood = (id) => {
+  const startIndex = totalEntries > 0 ? (currentPage - 1) * entriesToShow : 0;
+
+  const handleDeleteFood = async (id) => {
     if (window.confirm("Are you sure you want to delete this food item?")) {
-      setFoods(foods.filter(food => food.id !== id));
+      try {
+        await foodService.delete(id);
+        fetchFoods();
+      } catch (err) {
+        alert(err.message || "Failed to delete food item");
+      }
     }
   };
 
@@ -206,16 +211,23 @@ const FoodPageIndex = () => {
       </div>
 
       {/* ✅ Reusable Table */}
-      <ReusableTable 
-        columns={columns} 
-        data={paginatedFoods} 
-        actions={actions} 
-      />
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>
+      )}
+      {loading ? (
+        <div className="text-center py-12 text-gray-500">Loading food items...</div>
+      ) : (
+        <ReusableTable 
+          columns={columns} 
+          data={foods} 
+          actions={actions} 
+        />
+      )}
 
       {/* Table info and pagination */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 text-sm text-gray-700">
         <div>
-          Showing {filteredFoods.length > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, filteredFoods.length)} of {filteredFoods.length} entries
+          Showing {totalEntries > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + entriesToShow, totalEntries)} of {totalEntries} entries
         </div>
         <div className="flex space-x-2 mt-2 md:mt-0">
           <button 
@@ -244,7 +256,7 @@ const FoodPageIndex = () => {
         </div>
       </div>
 
-      {foods.length === 0 && (
+      {!loading && foods.length === 0 && !error && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 md:p-12 text-center mt-8">
           <h3 className="text-lg font-medium text-gray-900 mb-2">
             No food items found

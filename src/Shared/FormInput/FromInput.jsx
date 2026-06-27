@@ -1,4 +1,7 @@
 import React from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 const FormInput = ({
   label,
@@ -9,26 +12,23 @@ const FormInput = ({
   rules,
   errors,
 }) => {
-  return (
-    <div className="flex flex-col gap-1 w-full">
-      {label && (
-        <label htmlFor={name} className="text-sm font-medium text-gray-700">
-          {label}
-        </label>
-      )}
+  const hasError = Boolean(errors?.[name]);
 
-      <input
+  return (
+    <div className="flex flex-col gap-1.5 w-full">
+      {label && <Label htmlFor={name}>{label}</Label>}
+
+      <Input
         id={name}
         type={type}
         placeholder={placeholder}
+        aria-invalid={hasError}
+        className={cn(hasError && "border-destructive")}
         {...(register ? register(name, rules) : {})}
-        className={`border rounded-lg px-3 py-2 outline-none 
-          focus:ring-2 focus:ring-yellow-500
-          ${errors?.[name] ? "border-red-500" : "border-gray-300"}`}
       />
 
-      {errors?.[name] && (
-        <span className="text-red-500 text-xs">{errors[name].message}</span>
+      {hasError && (
+        <span className="text-destructive text-xs">{errors[name].message}</span>
       )}
     </div>
   );

@@ -1,30 +1,31 @@
 import React from "react";
-import { FaInfoCircle } from "react-icons/fa";
+import { InfoIcon } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { cn } from "@/lib/utils";
+
+const variantClasses = {
+  info: "border-primary/30 bg-primary/5 text-foreground",
+  success: "border-success/30 bg-success/10 text-foreground",
+  warning: "border-primary/40 bg-primary/10 text-foreground",
+  danger: "border-destructive/30 bg-destructive/10 text-destructive",
+};
 
 const InfoCard = ({
   title,
   value,
-  icon: Icon = FaInfoCircle, // eslint-disable-line no-unused-vars
+  icon: Icon = InfoIcon,
   variant = "info",
   className = "",
 }) => {
-  const variants = {
-    info: "bg-blue-50 border-blue-200 text-blue-800",
-    success: "bg-green-50 border-green-200 text-green-800",
-    warning: "bg-yellow-50 border-yellow-200 text-yellow-800",
-    danger: "bg-red-50 border-red-200 text-red-800",
-  };
-
   return (
-    <div className={`flex items-center p-4 rounded-lg border ${variants[variant]} ${className}`}>
-      <Icon className="mr-3 text-2xl" />
-      <div>
-        <p className="text-sm font-medium">{title}</p>
-        <p className="text-lg font-bold">{value}</p>
-      </div>
-    </div>
+    <Alert className={cn(variantClasses[variant], className)}>
+      <Icon />
+      <AlertTitle>{title}</AlertTitle>
+      <AlertDescription className="text-lg font-bold text-foreground">
+        {value}
+      </AlertDescription>
+    </Alert>
   );
 };
 
 export default InfoCard;
-

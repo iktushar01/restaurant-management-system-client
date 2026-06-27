@@ -44,9 +44,6 @@ importers:
       react-icons:
         specifier: ^5.5.0
         version: 5.6.0(react@19.2.7)
-      react-responsive-modal:
-        specifier: ^7.1.0
-        version: 7.2.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react-router:
         specifier: ^7.8.1
         version: 7.18.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -273,16 +270,6 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
-
-  '@bedrock-layout/use-forwarded-ref@2.0.17':
-    resolution: {integrity: sha512-4meaaQjg2ZtP9eg0F2LsL0tENmxZ6CTNz4tLheOOyKjqTSjM11yKjSOsMwaEJ8uRyQf+XBDFBmb/IfpHAuCqug==}
-    peerDependencies:
-      react: ^16.8 || ^17 || ^18
-
-  '@bedrock-layout/use-stateful-ref@2.0.17':
-    resolution: {integrity: sha512-pzVUYMTa32E9dGa2xadOFej96gYJEHg+Qh4Tg0fMj6zYT4y5LZpE+XkCiPcFafR3kTFhqSGfjRTIJbnSyeEAxQ==}
-    peerDependencies:
-      react: ^16.8 || ^17 || ^18
 
   '@dotenvx/dotenvx@1.75.1':
     resolution: {integrity: sha512-/BITOC9dmS/edY2zQwZNicQ059O6RKabtQfyEafV0nGtfYRNHYy1DIPiYVcov40+tob9hfmBnbR963dS+EQ1DQ==}
@@ -986,9 +973,6 @@ packages:
     resolution: {integrity: sha512-2cGmJupaNgg+QUwVLAucDuWuoMZ6EX9iHDRswZ5lsNYEmwPaRknMPCLZz07yTzVq/83p4o/wzbDZbBrTvGGTIw==}
     engines: {node: '>=18'}
 
-  body-scroll-lock@3.1.5:
-    resolution: {integrity: sha512-Yi1Xaml0EvNA0OYWxXiYNqY24AfWkbA6w5vxE7GWxtKfzIbZM+Qw+aSmkgsbWzbHiy/RCSkUZBplVxTA+E4jJg==}
-
   brace-expansion@1.1.15:
     resolution: {integrity: sha512-EwOCDEex4quD37XhqM3omwtMoJjr//isUZz1JopUNWms+4Z2ViyM/k1YIRePpoVNnQhENnxtFjLaxNHrT7xIUg==}
 
@@ -1038,9 +1022,6 @@ packages:
 
   class-variance-authority@0.7.1:
     resolution: {integrity: sha512-Ka+9Trutv7G8M6WT6SeiRWz792K5qEqIGEGzXKhAE6xOWAY6pPH8U+9IY3oCMv6kqTmLsv7Xh/2w2RigkePMsg==}
-
-  classnames@2.5.1:
-    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
 
   cli-cursor@5.0.0:
     resolution: {integrity: sha512-aCj4O5wKyszjMmDT4tZj93kxyydN/K5zPWSCe6/0AV/AA1pqe5ZBIw0a2ZfPQV7lL5/yb5HsUreJ6UFAF1tEQw==}
@@ -2140,12 +2121,6 @@ packages:
     resolution: {integrity: sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw==}
     engines: {node: '>=0.10.0'}
 
-  react-responsive-modal@7.2.0:
-    resolution: {integrity: sha512-wj5YDreHH6AKv1BclNiwaXvQBsQyDwPrjXu5ksAB3zPinlE8NUPLu93QAuH9iX8tD0dr4BOGkVme10mJnpbGgA==}
-    peerDependencies:
-      react: ^16.8.0 || ^17 || ^18 || ^19
-      react-dom: ^16.8.0 || ^17 || ^18 || ^19
-
   react-router-dom@7.18.0:
     resolution: {integrity: sha512-Fi0yY6kgtKae/Th2xibdWK0KSdYZ4B53Gyf6wRtomOKWgpNm7H7+DyfDhncdz9FKbpS+1jmDhg3F4WoGJ+yFOA==}
     engines: {node: '>=20.0.0'}
@@ -2779,15 +2754,6 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.17
 
-  '@bedrock-layout/use-forwarded-ref@2.0.17(react@19.2.7)':
-    dependencies:
-      '@bedrock-layout/use-stateful-ref': 2.0.17(react@19.2.7)
-      react: 19.2.7
-
-  '@bedrock-layout/use-stateful-ref@2.0.17(react@19.2.7)':
-    dependencies:
-      react: 19.2.7
-
   '@dotenvx/dotenvx@1.75.1':
     dependencies:
       '@dotenvx/primitives': 0.8.0
@@ -3378,8 +3344,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  body-scroll-lock@3.1.5: {}
-
   brace-expansion@1.1.15:
     dependencies:
       balanced-match: 1.0.2
@@ -3431,8 +3395,6 @@ snapshots:
   class-variance-authority@0.7.1:
     dependencies:
       clsx: 2.1.1
-
-  classnames@2.5.1: {}
 
   cli-cursor@5.0.0:
     dependencies:
@@ -4439,14 +4401,6 @@ snapshots:
   react-is@16.13.1: {}
 
   react-refresh@0.18.0: {}
-
-  react-responsive-modal@7.2.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
-    dependencies:
-      '@bedrock-layout/use-forwarded-ref': 2.0.17(react@19.2.7)
-      body-scroll-lock: 3.1.5
-      classnames: 2.5.1
-      react: 19.2.7
-      react-dom: 19.2.7(react@19.2.7)
 
   react-router-dom@7.18.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:

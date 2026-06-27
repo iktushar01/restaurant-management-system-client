@@ -2,9 +2,9 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-const PageBanner = ({ title, subtitle, bgColor, children }) => {
+const PageHeader = ({ title, subtitle, children, className }) => {
   return (
-    <Card className={cn("border-none shadow-sm bg-muted/40", bgColor)}>
+    <Card className={cn("border-none shadow-sm bg-muted/40", className)}>
       <CardContent className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 sm:p-6">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
@@ -22,4 +22,4 @@ const PageBanner = ({ title, subtitle, bgColor, children }) => {
   );
 };
 
-export default PageBanner;
+export default PageHeader;

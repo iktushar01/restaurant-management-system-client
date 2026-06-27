@@ -1,60 +1,72 @@
-import React from 'react';
-import { FaClipboardList, FaUtensils, FaTimesCircle, FaCheckCircle } from 'react-icons/fa';
+import React from "react";
+import {
+  CheckCircleIcon,
+  ClipboardListIcon,
+  UtensilsCrossedIcon,
+  XCircleIcon,
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
+const statCards = [
+  {
+    label: "In Order",
+    value: "12",
+    icon: ClipboardListIcon,
+    accent: "border-l-primary text-primary",
+    iconBg: "bg-primary/10",
+  },
+  {
+    label: "Currently Served",
+    value: "8",
+    icon: UtensilsCrossedIcon,
+    accent: "border-l-success text-success",
+    iconBg: "bg-success/10",
+  },
+  {
+    label: "Cancelled",
+    value: "3",
+    icon: XCircleIcon,
+    accent: "border-l-destructive text-destructive",
+    iconBg: "bg-destructive/10",
+  },
+  {
+    label: "Completed",
+    value: "15",
+    icon: CheckCircleIcon,
+    accent: "border-l-accent-foreground text-foreground",
+    iconBg: "bg-accent",
+  },
+];
 
 const RestaurantDashboard = () => {
-    return (
-        <div className="bg-gray-50 p-4">
-           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
-            <div className='bg-white p-5 rounded-xl shadow-md border-l-4 border-blue-500'>
-               <div className='flex justify-between items-center'>
+  return (
+    <div className="bg-background p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {statCards.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <Card
+              key={stat.label}
+              className={cn("border-l-4 shadow-sm", stat.accent.split(" ")[0])}
+            >
+              <CardContent className="flex justify-between items-center p-5">
                 <div>
-                 <p className="text-3xl font-bold text-gray-800">12</p>
-                 <p className="text-gray-600">In Order</p>
+                  <p className="text-3xl font-bold text-foreground">
+                    {stat.value}
+                  </p>
+                  <p className="text-muted-foreground">{stat.label}</p>
                 </div>
-                <div className="bg-blue-100 p-3 rounded-full">
-                    <FaClipboardList className="text-blue-500 text-xl" />
+                <div className={cn("p-3 rounded-full", stat.iconBg)}>
+                  <Icon className={cn("size-5", stat.accent.split(" ").slice(1).join(" "))} />
                 </div>
-               </div>
-            </div>
-            
-            <div className='bg-white p-5 rounded-xl shadow-md border-l-4 border-green-500'>
-               <div className='flex justify-between items-center'>
-                <div>
-                 <p className="text-3xl font-bold text-gray-800">8</p>
-                 <p className="text-gray-600">Currently Served</p>
-                </div>
-                <div className="bg-green-100 p-3 rounded-full">
-                    <FaUtensils className="text-green-500 text-xl" />
-                </div>
-               </div>
-            </div>
-            
-            <div className='bg-white p-5 rounded-xl shadow-md border-l-4 border-red-500'>
-               <div className='flex justify-between items-center'>
-                <div>
-                 <p className="text-3xl font-bold text-gray-800">3</p>
-                 <p className="text-gray-600">Cancelled</p>
-                </div>
-                <div className="bg-red-100 p-3 rounded-full">
-                    <FaTimesCircle className="text-red-500 text-xl" />
-                </div>
-               </div>
-            </div>
-            
-            <div className='bg-white p-5 rounded-xl shadow-md border-l-4 border-purple-500'>
-               <div className='flex justify-between items-center'>
-                <div>
-                 <p className="text-3xl font-bold text-gray-800">15</p>
-                 <p className="text-gray-600">Completed</p>
-                </div>
-                <div className="bg-purple-100 p-3 rounded-full">
-                    <FaCheckCircle className="text-purple-500 text-xl" />
-                </div>
-               </div>
-            </div>
-           </div>
-        </div>
-    );
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+    </div>
+  );
 };
 
 export default RestaurantDashboard;

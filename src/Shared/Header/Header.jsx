@@ -1,13 +1,22 @@
-import React, { useState, useEffect, useRef } from "react";
-import { FaChevronDown, FaUser, FaSignOutAlt, FaClock } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { ClockIcon, ChevronDownIcon, LogOutIcon, UserIcon } from "lucide-react";
+import { ModeToggle } from "@/components/mode-toggle";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [username] = useState("John Doe"); // Replace with actual user data
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const [username] = useState("John Doe");
 
-  // Update time every second
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -16,31 +25,10 @@ const Header = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   const handleLogout = () => {
-    // Add your logout logic here
     console.log("User logged out");
-    setDropdownOpen(false);
   };
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
-  // Format time with seconds
   const formatTime = (date) => {
     return date.toLocaleTimeString([], {
       hour: "2-digit",
@@ -50,61 +38,54 @@ const Header = () => {
   };
 
   return (
-    <header className="h-14 bg-yellow-400 shadow-md ">
-      <div className=" flex justify-between items-center h-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <h2 className="text-black text-xl sm:text-2xl font-bold tracking-tight truncate">
+    <header className="h-14 bg-primary text-primary-foreground shadow-md">
+      <div className="flex justify-between items-center h-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight truncate">
           DineFlow
         </h2>
 
-        <div className="flex items-center space-x-4 sm:space-x-6">
-          {/* Time display - adjusts for different screen sizes */}
-          <div className="flex items-center text-black font-medium">
-            <FaClock className="hidden sm:block mr-2" />
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="hidden sm:flex items-center font-medium">
+            <ClockIcon className="mr-2 size-4" />
             <span className="tabular-nums text-sm sm:text-base">
               {formatTime(currentTime)}
             </span>
           </div>
 
-          {/* User dropdown */}
-          <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={toggleDropdown}
-              className="flex items-center text-black font-medium focus:outline-none hover:text-yellow-700 transition-colors"
-              aria-label="User menu"
+          <ModeToggle className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground" />
+
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                />
+              }
             >
-              <span className="hidden sm:inline truncate max-w-[120px]">
+              <span className="hidden sm:inline truncate max-w-[120px] mr-1">
                 {username}
               </span>
-              <span className="sm:hidden">
-                <FaUser />
-              </span>
-              <FaChevronDown
-                className={`ml-1 sm:ml-2 transition-transform ${
-                  dropdownOpen ? "rotate-180" : ""
-                }`}
-                size={14}
-              />
-            </button>
-
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
-                <a
-                  href="#profile"
-                  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  <FaUser className="mr-2" />
-                  Profile
-                </a>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  <FaSignOutAlt className="mr-2" />
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
+              <Avatar className="size-7 sm:hidden">
+                <AvatarFallback className="bg-primary-foreground/20 text-primary-foreground text-xs">
+                  {username.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+              <ChevronDownIcon className="size-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuLabel>{username}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <UserIcon />
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOutIcon />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

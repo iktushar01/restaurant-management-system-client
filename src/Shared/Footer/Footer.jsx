@@ -1,16 +1,11 @@
-// src/Shared/Footer/Footer.jsx
-import React from 'react';
+import React from "react";
+import { Separator } from "@/components/ui/separator";
 
 const Footer = () => {
   return (
-    <footer style={{ 
-      backgroundColor: '#2D3748', 
-      color: 'white', 
-      padding: '1rem', 
-      marginTop: '2rem',
-      textAlign: 'center'
-    }}>
-      <div>
+    <footer className="mt-8 bg-muted text-muted-foreground">
+      <Separator />
+      <div className="px-4 py-4 text-center text-sm">
         <p>&copy; {new Date().getFullYear()} Restaurant Management System</p>
       </div>
     </footer>

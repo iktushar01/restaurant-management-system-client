@@ -1,12 +1,19 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router/dom";
-import { router } from './Router/Router.jsx';
+import ConfirmDialogProvider from "@/Shared/ConfirmDialog/ConfirmDialog";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
+import { router } from "./Router/Router.jsx";
+import "./index.css";
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
-)
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <ConfirmDialogProvider>
+        <RouterProvider router={router} />
+        <Toaster />
+      </ConfirmDialogProvider>
+    </ThemeProvider>
+  </StrictMode>
+);

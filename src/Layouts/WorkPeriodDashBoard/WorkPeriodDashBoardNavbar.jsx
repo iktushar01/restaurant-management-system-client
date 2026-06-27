@@ -1,229 +1,197 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import {
-  FaChevronLeft,
-  FaChevronRight,
-  FaUtensils,
-  FaHamburger,
-  FaList,
-  FaUserTie,
-  FaBoxes,
-  FaBuilding,
-  FaMoneyBill,
-  FaCashRegister,
-  FaChair,
-  FaTable,
-  FaWarehouse,
-  FaSitemap,
-  FaTags,
-  FaBalanceScale,
-  FaMapMarkerAlt,
-  FaClipboardList,
-  FaTruck,
-} from "react-icons/fa";
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ClipboardListIcon,
+  CoinsIcon,
+  FactoryIcon,
+  HamburgerIcon,
+  ListIcon,
+  MapPinIcon,
+  PackageIcon,
+  ScaleIcon,
+  ShoppingCartIcon,
+  NetworkIcon,
+  TableIcon,
+  TagIcon,
+  TruckIcon,
+  UserIcon,
+  UtensilsCrossedIcon,
+  WarehouseIcon,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+
+const menuItems = [
+  {
+    name: "Work Period",
+    path: "/WorkPeriod/Index",
+    icon: ShoppingCartIcon,
+  },
+  {
+    name: "Foods",
+    path: "/WorkPeriod/foods/index",
+    icon: HamburgerIcon,
+  },
+  {
+    name: "Food Category",
+    path: "/WorkPeriod/foodCategory/index",
+    icon: ListIcon,
+  },
+  {
+    name: "Dine",
+    path: "/dine",
+    icon: UtensilsCrossedIcon,
+    subRoutes: [
+      { name: "Dining Location", path: "/WorkPeriod/dine/location", icon: TableIcon },
+      { name: "Tables", path: "/WorkPeriod/dine/tables", icon: TableIcon },
+    ],
+  },
+  {
+    name: "Waiter",
+    path: "/WorkPeriod/RestaurantDineWaiter/Index",
+    icon: UserIcon,
+  },
+  {
+    name: "Inventory",
+    path: "/inventory",
+    icon: PackageIcon,
+    subRoutes: [
+      { name: "Category", path: "/WorkPeriod/inventory/category", icon: WarehouseIcon },
+      { name: "Sub Category", path: "/WorkPeriod/inventory/sub-category", icon: NetworkIcon },
+      { name: "Items", path: "/WorkPeriod/inventory/items", icon: ClipboardListIcon },
+      { name: "Brands", path: "/WorkPeriod/inventory/brands", icon: TagIcon },
+      { name: "Stock Locations", path: "/WorkPeriod/inventory/stock-locations", icon: MapPinIcon },
+      { name: "Units", path: "/WorkPeriod/inventory/units", icon: ScaleIcon },
+      { name: "Vendors", path: "/WorkPeriod/inventory/vendors", icon: TruckIcon },
+    ],
+  },
+  {
+    name: "Property",
+    path: "/WorkPeriod/PropertyInformation",
+    icon: FactoryIcon,
+  },
+  {
+    name: "Charges",
+    path: "/WorkPeriod/Settings/Update",
+    icon: CoinsIcon,
+  },
+];
+
+const linkClass = ({ isActive }) =>
+  cn(
+    "flex items-center rounded-lg px-3 py-2.5 text-sm transition-colors",
+    isActive
+      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+      : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+  );
 
 const WorkPeriodDashBoardNavbar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [expandedSections, setExpandedSections] = useState({
-    Dine: false,
-    Inventory: false,
-  });
-
-  const toggleSection = (section) => {
-    setExpandedSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
-  };
-
-  const menuItems = [
-    {
-      name: "Work Period",
-      path: "/WorkPeriod/Index",
-      icon: <FaCashRegister className="w-5 h-5" />,
-    },
-    {
-      name: "Foods",
-      path: "/WorkPeriod/foods/index",
-      icon: <FaHamburger className="w-5 h-5" />,
-    },
-    {
-      name: "Food Category",
-      path: "/WorkPeriod/foodCategory/index",
-      icon: <FaList className="w-5 h-5" />,
-    },
-    {
-      name: "Dine",
-      path: "/dine",
-      icon: <FaUtensils className="w-5 h-5" />,
-      subRoutes: [
-        {
-          name: "Dining Location",
-          path: "/WorkPeriod/dine/location",
-          icon: <FaChair className="w-4 h-4" />,
-        },
-        {
-          name: "Tables",
-          path: "/WorkPeriod/dine/tables",
-          icon: <FaTable className="w-4 h-4" />,
-        },
-      ],
-    },
-    {
-      name: "Waiter",
-      path: "/WorkPeriod/RestaurantDineWaiter/Index",
-      icon: <FaUserTie className="w-5 h-5" />,
-    },
-    {
-      name: "Inventory",
-      path: "/inventory",
-      icon: <FaBoxes className="w-5 h-5" />,
-      subRoutes: [
-        {
-          name: "Category",
-          path: "/WorkPeriod/inventory/category",
-          icon: <FaWarehouse className="w-4 h-4" />,
-        },
-        {
-          name: "Sub Category",
-          path: "/WorkPeriod/inventory/sub-category",
-          icon: <FaSitemap className="w-4 h-4" />,
-        },
-        {
-          name: "Items",
-          path: "/WorkPeriod/inventory/items",
-          icon: <FaClipboardList className="w-4 h-4" />,
-        },
-        {
-          name: "Brands",
-          path: "/WorkPeriod/inventory/brands",
-          icon: <FaTags className="w-4 h-4" />,
-        },
-        {
-          name: "Stock Locations",
-          path: "/WorkPeriod/inventory/stock-locations",
-          icon: <FaMapMarkerAlt className="w-4 h-4" />,
-        },
-        {
-          name: "Units",
-          path: "/WorkPeriod/inventory/units",
-          icon: <FaBalanceScale className="w-4 h-4" />,
-        },
-        {
-          name: "Vendors",
-          path: "/WorkPeriod/inventory/vendors",
-          icon: <FaTruck className="w-4 h-4" />,
-        },
-      ],
-    },
-    {
-      name: "Property",
-      path: "/WorkPeriod/PropertyInformation",
-      icon: <FaBuilding className="w-5 h-5" />,
-    },
-    {
-      name: "Charges",
-      path: "/WorkPeriod/Settings/Update",
-      icon: <FaMoneyBill className="w-5 h-5" />,
-    },
-  ];
+  const location = useLocation();
 
   return (
-    <div
-      className={`flex flex-col h-screen bg-gray-900 text-white ${
-        isCollapsed ? "w-20" : "w-64"
-      }  transition-all duration-300`}
+    <aside
+      className={cn(
+        "flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border transition-all duration-300",
+        isCollapsed ? "w-16" : "w-64"
+      )}
     >
-      {/* Logo section with toggle button */}
-      <div className="p-4 border-b border-gray-700 flex items-center justify-between">
-        {!isCollapsed && <h1 className="text-xl font-bold">DineFlow</h1>}
-        <button
+      <div className="p-4 flex items-center justify-between">
+        {!isCollapsed && <h1 className="text-lg font-bold">DineFlow</h1>}
+        <Button
+          variant="ghost"
+          size="icon-sm"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
           aria-label={isCollapsed ? "Expand menu" : "Collapse menu"}
+          className="text-sidebar-foreground hover:bg-sidebar-accent"
         >
           {isCollapsed ? (
-            <FaChevronRight className="w-4 h-4" />
+            <ChevronRightIcon className="size-4" />
           ) : (
-            <FaChevronLeft className="w-4 h-4" />
+            <ChevronLeftIcon className="size-4" />
           )}
-        </button>
+        </Button>
       </div>
 
-      {/* Navigation items */}
-      <nav className="flex-1 overflow-y-auto pt-5 pb-4">
-        <ul className="space-y-1 px-2">
-          {menuItems.map((item) => (
-            <li key={item.name}>
-              {item.subRoutes ? (
-                <>
-                  <button
-                    onClick={() => toggleSection(item.name)}
-                    className={`w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center justify-between ${
-                      expandedSections[item.name] ||
-                      window.location.pathname.includes(item.path)
-                        ? "bg-blue-700 text-white"
-                        : "text-gray-300 hover:bg-gray-800 hover:text-white"
-                    }`}
-                  >
-                    <div className="flex items-center">
-                      <span className="mr-3 text-blue-400">{item.icon}</span>
-                      {!isCollapsed && <span>{item.name}</span>}
-                    </div>
-                    {!isCollapsed && (
-                      <span
-                        className={`transform transition-transform ${
-                          expandedSections[item.name] ? "rotate-90" : ""
-                        }`}
-                      >
-                        <FaChevronRight className="w-3 h-3" />
-                      </span>
-                    )}
-                  </button>
+      <Separator className="bg-sidebar-border" />
 
-                  {/* Sub-routes */}
-                  {!isCollapsed && expandedSections[item.name] && (
-                    <ul className="ml-6 mt-1 space-y-1 border-l border-gray-700 pl-2">
-                      {item.subRoutes.map((subItem) => (
-                        <li key={subItem.name}>
-                          <NavLink
-                            to={subItem.path}
-                            className={({ isActive }) =>
-                              `flex items-center px-3 py-2 rounded-lg transition-colors text-sm ${
-                                isActive
-                                  ? "text-blue-300 bg-blue-900/30"
-                                  : "text-gray-400 hover:text-white hover:bg-gray-800"
-                              }`
-                            }
-                          >
-                            <span className="mr-2">{subItem.icon}</span>
-                            {subItem.name}
-                          </NavLink>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </>
-              ) : (
+      <ScrollArea className="flex-1 px-2 py-4">
+        <ul className="space-y-1">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            const isSectionActive = item.subRoutes?.some(
+              (sub) => location.pathname === sub.path
+            );
+
+            if (item.subRoutes) {
+              return (
+                <li key={item.name}>
+                  <Collapsible defaultOpen={isSectionActive}>
+                    <CollapsibleTrigger
+                      render={
+                        <Button
+                          variant="ghost"
+                          className={cn(
+                            "w-full justify-between px-3 py-2.5 h-auto font-normal text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                            isSectionActive &&
+                              "bg-sidebar-accent text-sidebar-accent-foreground"
+                          )}
+                        />
+                      }
+                    >
+                      <span className="flex items-center gap-3">
+                        <Icon className="size-4 shrink-0" />
+                        {!isCollapsed && item.name}
+                      </span>
+                      {!isCollapsed && <ChevronRightIcon className="size-3" />}
+                    </CollapsibleTrigger>
+                    {!isCollapsed && (
+                      <CollapsibleContent>
+                        <ul className="ml-4 mt-1 space-y-1 border-l border-sidebar-border pl-2">
+                          {item.subRoutes.map((subItem) => {
+                            const SubIcon = subItem.icon;
+                            return (
+                              <li key={subItem.name}>
+                                <NavLink to={subItem.path} className={linkClass}>
+                                  <SubIcon className="mr-2 size-3.5 shrink-0" />
+                                  {subItem.name}
+                                </NavLink>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </CollapsibleContent>
+                    )}
+                  </Collapsible>
+                </li>
+              );
+            }
+
+            return (
+              <li key={item.name}>
                 <NavLink
                   to={item.path}
-                  className={({ isActive }) =>
-                    `flex items-center px-4 py-3 rounded-lg transition-colors ${
-                      isActive
-                        ? "bg-blue-600 text-white"
-                        : "text-gray-300 hover:bg-gray-800 hover:text-white"
-                    }`
-                  }
+                  className={cn(linkClass, "px-3 py-2.5 gap-3")}
+                  title={isCollapsed ? item.name : undefined}
                 >
-                  <span className="mr-3 text-blue-400">{item.icon}</span>
+                  <Icon className="size-4 shrink-0" />
                   {!isCollapsed && <span>{item.name}</span>}
                 </NavLink>
-              )}
-            </li>
-          ))}
+              </li>
+            );
+          })}
         </ul>
-      </nav>
-    </div>
+      </ScrollArea>
+    </aside>
   );
 };
 

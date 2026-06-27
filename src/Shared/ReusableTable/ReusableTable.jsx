@@ -1,61 +1,71 @@
 import React from "react";
+import { Card } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 const ReusableTable = ({ columns, data, actions }) => {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <Card className="overflow-hidden py-0">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-yellow-400">
-            <tr>
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-primary hover:bg-primary">
               {columns.map((col, idx) => (
-                <th
+                <TableHead
                   key={idx}
-                  className={`px-6 py-4 text-left text-xs font-medium text-gray-900 uppercase tracking-wider ${
-                    col.align === "right" ? "text-right" : ""
-                  }`}
+                  className={cn(
+                    "text-primary-foreground font-medium uppercase tracking-wider",
+                    col.align === "right" && "text-right"
+                  )}
                 >
                   {col.header}
-                </th>
+                </TableHead>
               ))}
 
               {actions && (
-                <th className="px-6 py-4 text-right text-xs font-medium text-gray-900 uppercase tracking-wider">
+                <TableHead className="text-primary-foreground text-right font-medium uppercase tracking-wider">
                   Actions
-                </th>
+                </TableHead>
               )}
-            </tr>
-          </thead>
+            </TableRow>
+          </TableHeader>
 
-          <tbody className="bg-white divide-y divide-gray-200">
+          <TableBody>
             {data.map((row, rowIndex) => (
-              <tr
-                key={rowIndex}
-                className="hover:bg-gray-50 transition-colors duration-150"
-              >
+              <TableRow key={rowIndex} className="hover:bg-muted/50">
                 {columns.map((col, colIndex) => (
-                  <td
+                  <TableCell
                     key={colIndex}
-                    className={`px-6 py-4 whitespace-nowrap ${
-                      col.align === "right" ? "text-right" : ""
-                    }`}
+                    className={cn(col.align === "right" && "text-right")}
                   >
-                    <div className="text-sm text-gray-700">
+                    <div className="text-sm">
                       {col.render ? col.render(row) : row[col.accessor]}
                     </div>
-                  </td>
+                  </TableCell>
                 ))}
 
                 {actions && (
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex justify-end space-x-3">
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-3">
                       {actions.map((action, idx) =>
                         action.render ? (
                           <div key={idx}>{action.render(row)}</div>
                         ) : (
                           <button
                             key={idx}
+                            type="button"
                             onClick={() => action.onClick(row)}
-                            className={`transition-colors duration-200 flex items-center ${action.className}`}
+                            className={cn(
+                              "inline-flex items-center text-sm font-medium transition-colors hover:text-primary",
+                              action.className
+                            )}
                           >
                             {action.icon && <action.icon className="mr-1.5" />}
                             {action.label}
@@ -63,14 +73,14 @@ const ReusableTable = ({ columns, data, actions }) => {
                         )
                       )}
                     </div>
-                  </td>
+                  </TableCell>
                 )}
-              </tr>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
-    </div>
+    </Card>
   );
 };
 

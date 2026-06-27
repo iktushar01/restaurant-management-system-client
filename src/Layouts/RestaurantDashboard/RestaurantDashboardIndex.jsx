@@ -5,7 +5,7 @@ import RestaurantDashboardCurrentOrder from "./RestaurantDashboardCurrentOrder";
 
 const RestaurantDashboardIndex = () => {
   return (
-    <div>
+    <div className="bg-background text-foreground">
       <RestaurantDashboard />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
         <RestaurantDashboardSeatList />

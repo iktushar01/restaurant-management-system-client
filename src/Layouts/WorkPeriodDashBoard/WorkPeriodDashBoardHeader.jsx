@@ -1,14 +1,29 @@
-import React, { useState, useEffect, useRef } from "react";
-import { FaChevronDown, FaUser, FaSignOutAlt, FaClock, FaHome, FaUtensils } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import {
+  ChevronDownIcon,
+  ClockIcon,
+  HomeIcon,
+  LogOutIcon,
+  UserIcon,
+  UtensilsCrossedIcon,
+} from "lucide-react";
+import { ModeToggle } from "@/components/mode-toggle";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const WorkPeriodDashBoardHeader = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [username] = useState("John Doe"); // Replace with actual user data
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const [username] = useState("John Doe");
 
-  // Update time every second
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -17,31 +32,10 @@ const WorkPeriodDashBoardHeader = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   const handleLogout = () => {
-    // Add your logout logic here
     console.log("User logged out");
-    setDropdownOpen(false);
   };
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
-  // Format time with seconds
   const formatTime = (date) => {
     return date.toLocaleTimeString([], {
       hour: "2-digit",
@@ -51,77 +45,70 @@ const WorkPeriodDashBoardHeader = () => {
   };
 
   return (
-    <header className="h-16 bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg ">
+    <header className="h-16 bg-primary text-primary-foreground shadow-md">
       <div className="flex justify-between items-center h-full px-4 sm:px-6 lg:px-8 w-full mx-auto">
-        <div className="flex items-center">
-          {/* Logo/Brand */}
-          <div className="flex items-center">
-            <FaUtensils className="text-white text-2xl hidden sm:block" />
-            <span className="ml-2 text-white font-bold text-xl hidden sm:block">RestaurantPro</span>
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-2">
+            <UtensilsCrossedIcon className="size-6" />
+            <span className="font-bold text-xl">DineFlow</span>
           </div>
-          
-          <Link 
-            to="/RestaurantDashboard/Index" 
-            className="ml-6 flex items-center text-white font-medium hover:text-blue-200 transition-colors"
+
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+            render={<Link to="/RestaurantDashboard/Index" />}
           >
-            <FaHome className="mr-1 text-2xl" />
+            <HomeIcon className="size-4" />
             <span className="hidden sm:inline">Dashboard</span>
-          </Link>
+          </Button>
         </div>
 
-        <div className="flex items-center space-x-4 sm:space-x-6">
-          {/* Time display - adjusts for different screen sizes */}
-          <div className="flex items-center text-white font-medium bg-blue-600/40 px-3 py-2 rounded-lg backdrop-blur-sm">
-            <FaClock className="mr-2" />
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center font-medium bg-primary-foreground/10 px-3 py-2 rounded-lg">
+            <ClockIcon className="mr-2 size-4" />
             <span className="tabular-nums text-sm sm:text-base">
               {formatTime(currentTime)}
             </span>
           </div>
 
-          {/* User dropdown */}
-          <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={toggleDropdown}
-              className="flex items-center text-white font-medium focus:outline-none hover:bg-blue-600 transition-all bg-blue-600/40 px-3 py-2 rounded-lg backdrop-blur-sm"
-              aria-label="User menu"
+          <ModeToggle className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground" />
+
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                />
+              }
             >
-              <div className="bg-blue-700 rounded-full p-1 mr-2">
-                <FaUser className="text-white text-sm" />
-              </div>
+              <Avatar className="size-7 mr-2">
+                <AvatarFallback className="bg-primary-foreground/20 text-primary-foreground text-xs">
+                  {username.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
               <span className="hidden sm:inline truncate max-w-[120px]">
                 {username}
               </span>
-              <FaChevronDown
-                className={`ml-1 sm:ml-2 transition-transform ${
-                  dropdownOpen ? "rotate-180" : ""
-                }`}
-                size={14}
-              />
-            </button>
-
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200 overflow-hidden">
-                <div className="px-4 py-2 border-b border-gray-100 bg-gray-50">
-                  <p className="text-xs text-gray-500">Signed in as</p>
-                  <p className="text-sm font-medium text-gray-800 truncate">{username}</p>
-                </div>
-                <a
-                  href="#profile"
-                  className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
-                >
-                  <FaUser className="mr-3 text-blue-500" />
-                  Profile
-                </a>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors"
-                >
-                  <FaSignOutAlt className="mr-3 text-blue-500" />
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
+              <ChevronDownIcon className="size-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuLabel>
+                <span className="text-xs text-muted-foreground block">Signed in as</span>
+                {username}
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <UserIcon />
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOutIcon />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

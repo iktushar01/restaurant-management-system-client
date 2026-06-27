@@ -126,7 +126,7 @@ const EmployeeSalaryPayableDetails = () => {
                     <tr key={item.id} className="border-b border-border hover:bg-muted/40">
                       <td className="px-4 py-2 text-sm text-foreground border border-border">{index + 1}</td>
                       <td className="px-4 py-2 text-sm text-foreground border border-border">{item.particular}</td>
-                      <td className="px-4 py-2 text-sm text-foreground border border-border">€{formatMoney(item.amount)}</td>
+                      <td className="px-4 py-2 text-sm text-foreground border border-border">{formatMoney(item.amount)}</td>
                     </tr>
                   ))}
                   <tr className="bg-muted/40 font-medium">
@@ -155,7 +155,7 @@ const EmployeeSalaryPayableDetails = () => {
                     <tr key={item.id} className="border-b border-border hover:bg-muted/40">
                       <td className="px-4 py-2 text-sm text-foreground border border-border">{index + 1}</td>
                       <td className="px-4 py-2 text-sm text-foreground border border-border">{item.particular}</td>
-                      <td className="px-4 py-2 text-sm text-foreground border border-border">€{formatMoney(item.amount)}</td>
+                      <td className="px-4 py-2 text-sm text-foreground border border-border">{formatMoney(item.amount)}</td>
                     </tr>
                   ))}
                   <tr className="bg-muted/40 font-medium">
@@ -191,7 +191,7 @@ const EmployeeSalaryPayableDetails = () => {
                     <tr key={item.id} className="border-b border-border hover:bg-muted/40">
                       <td className="px-4 py-2 text-sm text-foreground border border-border">{index + 1}</td>
                       <td className="px-4 py-2 text-sm text-foreground border border-border">{item.particular}</td>
-                      <td className="px-4 py-2 text-sm text-foreground border border-border">€{formatMoney(item.amount)}</td>
+                      <td className="px-4 py-2 text-sm text-foreground border border-border">{formatMoney(item.amount)}</td>
                     </tr>
                   ))}
                   <tr className="bg-muted/40 font-medium">
@@ -220,7 +220,7 @@ const EmployeeSalaryPayableDetails = () => {
                     <tr key={item.id} className="border-b border-border hover:bg-muted/40">
                       <td className="px-4 py-2 text-sm text-foreground border border-border">{index + 1}</td>
                       <td className="px-4 py-2 text-sm text-foreground border border-border">{item.particular}</td>
-                      <td className="px-4 py-2 text-sm text-foreground border border-border">€{formatMoney(item.amount)}</td>
+                      <td className="px-4 py-2 text-sm text-foreground border border-border">{formatMoney(item.amount)}</td>
                     </tr>
                   ))}
                   <tr className="bg-muted/40 font-medium">
@@ -241,7 +241,7 @@ const EmployeeSalaryPayableDetails = () => {
               </div>
               <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
                 <h3 className="text-lg font-bold text-foreground">Due</h3>
-                <p className="text-xl font-bold text-destructive">€ {formatMoney(due)}</p>
+                <p className="text-xl font-bold text-destructive">{formatMoney(due)}</p>
               </div>
             </div>
           </div>

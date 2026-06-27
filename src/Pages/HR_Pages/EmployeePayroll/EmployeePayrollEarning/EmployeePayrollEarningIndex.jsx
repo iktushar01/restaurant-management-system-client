@@ -44,7 +44,7 @@ const EmployeePayrollEarningIndex = () => {
     {
       header: "Amount",
       accessor: "amount",
-      render: (row) => {formatMoney(Number(row.amount).toLocaleString())},
+      render: (row) => formatMoney(Number(row.amount).toLocaleString())},
     },
     { header: "Month Name", accessor: "monthName" },
     { header: "Year Name", accessor: "yearName" },

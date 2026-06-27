@@ -138,7 +138,7 @@ const OrderSelectionTable = ({
                         <div className="font-medium">{item.name || item.foodName}</div>
                         <div className="text-xs text-muted-foreground">#{item.foodNumber || item.foodNo}</div>
                       </td>
-                      <td className="p-3 whitespace-nowrap">{formatMoney(formatMoney(item.price))}</td>
+                      <td className="p-3 whitespace-nowrap">{formatMoney(item.price))}</td>
                       <td className="p-3">
                         <Input
                           type="number"
@@ -202,7 +202,7 @@ const OrderSelectionTable = ({
                     </Button>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-primary">{formatMoney(formatMoney(item.price))}</span>
+                    <span className="font-semibold text-primary">{formatMoney(item.price))}</span>
                     <div className="flex items-center gap-2">
                       <Button type="button" variant="outline" size="icon-sm" onClick={() => adjustQty(item.id, -1)}>
                         <MinusIcon className="size-3" />
@@ -233,7 +233,7 @@ const OrderSelectionTable = ({
         <div className="mt-4 pt-4 border-t border-border shrink-0 space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground">Total</span>
-            <span className="text-2xl font-bold text-primary">{formatMoney(formatMoney(totalPrice))}</span>
+            <span className="text-2xl font-bold text-primary">{formatMoney(totalPrice))}</span>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <Button

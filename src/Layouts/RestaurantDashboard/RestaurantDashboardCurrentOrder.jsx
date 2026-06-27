@@ -113,7 +113,7 @@ const RestaurantDashboardCurrentOrder = () => {
                         <Badge variant="secondary">{order.status}</Badge>
                       </TableCell>
                       <TableCell>
-                        {formatMoney(formatMoney(order.billAmount))}
+                        {formatMoney(order.billAmount))}
                       </TableCell>
                       <TableCell className="text-muted-foreground max-w-xs truncate">
                         {order.items?.join(", ")}

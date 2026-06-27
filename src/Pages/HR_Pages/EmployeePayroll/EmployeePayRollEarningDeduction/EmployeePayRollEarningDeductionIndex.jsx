@@ -44,7 +44,7 @@ const EmployeePayRollEarningDeductionIndex = () => {
     {
       header: "Amount",
       accessor: "amount",
-      render: (row) => {formatMoney(formatMoney(row.amount))},
+      render: (row) => formatMoney(row.amount))},
     },
     { header: "Month Name", accessor: "monthName" },
     { header: "Year Name", accessor: "yearName" },

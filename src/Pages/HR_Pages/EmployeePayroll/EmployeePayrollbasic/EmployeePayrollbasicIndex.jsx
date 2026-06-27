@@ -43,7 +43,7 @@ const EmployeePayrollbasicIndex = () => {
     {
       header: "Basic",
       accessor: "basic",
-      render: (row) => (row.amount != null ? {formatMoney(row.amount)} : row.basic ? {formatMoney(row.basic)} : ""),
+      render: (row) => formatMoney(row.amount ?? row.basic ?? 0),
     },
     {
       header: "Month",

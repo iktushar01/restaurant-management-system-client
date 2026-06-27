@@ -33,7 +33,7 @@ const PurchaseDetails = () => {
     {
       header: "Total",
       accessor: "total",
-      render: (row) => {formatMoney(parseFloat(row.total).toLocaleString())},
+      render: (row) => formatMoney(parseFloat(row.total).toLocaleString())},
     },
     {
       header: "Purchase Date",

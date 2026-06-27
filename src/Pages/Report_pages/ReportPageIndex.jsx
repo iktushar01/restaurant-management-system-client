@@ -3,7 +3,7 @@ import { formatMoney } from "@/lib/currency";
 import { FiPrinter, FiDownload, FiChevronDown, FiChevronUp, FiDollarSign, FiPercent, FiHome, FiCreditCard, FiDollarSign as FiCash } from 'react-icons/fi';
 import { reportService } from '../../services/reportService';
 
-const formatCurrency = (value) => {formatMoney(Number(value || 0).toFixed(2))};
+
 
 const ReportPageIndex = () => {
   const [showSummary, setShowSummary] = useState(true);

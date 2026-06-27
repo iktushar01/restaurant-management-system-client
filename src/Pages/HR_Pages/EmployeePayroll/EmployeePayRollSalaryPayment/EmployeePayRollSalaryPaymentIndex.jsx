@@ -43,7 +43,7 @@ const EmployeePayRollSalaryPaymentIndex = () => {
     {
       header: "Amount",
       accessor: "amount",
-      render: (row) => {formatMoney(formatMoney(row.amount))},
+      render: (row) => formatMoney(row.amount))},
     },
     {
       header: "Month",

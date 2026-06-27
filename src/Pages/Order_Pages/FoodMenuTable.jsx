@@ -239,7 +239,7 @@ const FoodMenuTable = ({ onAddItem }) => {
                   <h3 className="font-semibold text-sm md:text-base line-clamp-2 leading-snug">{food.name}</h3>
                   <div className="mt-auto flex items-center justify-between gap-2">
                     <span className="text-base md:text-lg font-bold text-primary">
-                      {formatMoney(formatMoney(food.price))}
+                      {formatMoney(food.price))}
                     </span>
                     <Button
                       type="button"

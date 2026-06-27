@@ -110,7 +110,7 @@ const FoodPageRecipeAdd = () => {
               <div key={item.id} className="flex justify-between items-center p-3 bg-muted/40 rounded-lg border border-border hover:bg-primary/5 transition-colors">
                 <div>
                   <h3 className="font-medium text-foreground">{item.name}</h3>
-                  <p className="text-sm text-muted-foreground">{item.unit} • ৳ {item.price}</p>
+                  <p className="text-sm text-muted-foreground">{item.unit} • {item.price}</p>
                 </div>
                 <button
                   onClick={() => addItem(item)}
@@ -175,7 +175,7 @@ const FoodPageRecipeAdd = () => {
                           </div>
                         </td>
                         <td className="p-3 text-muted-foreground">{item.unit}</td>
-                        <td className="p-3 font-medium">৳ {(item.price * item.quantity).toFixed(2)}</td>
+                        <td className="p-3 font-medium">{(item.price * item.quantity).toFixed(2)}</td>
                         <td className="p-3 text-right">
                           <button
                             onClick={() => removeItem(item.id)}
@@ -234,20 +234,20 @@ const FoodPageRecipeAdd = () => {
               <div className="bg-primary/5 p-4 rounded-lg border border-border">
                 <div className="flex justify-between items-center py-2 border-b border-border">
                   <span className="text-muted-foreground">Total Item Cost</span>
-                  <span className="font-medium">৳ {totalItemCost.toFixed(2)}</span>
+                  <span className="font-medium">{totalItemCost.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-border">
                   <span className="text-muted-foreground">Other Costs</span>
-                  <span className="font-medium">৳ {Number(otherCost || 0).toFixed(2)}</span>
+                  <span className="font-medium">{Number(otherCost || 0).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-border font-semibold text-primary">
                   <span>Total Cost</span>
-                  <span>৳ {totalCost.toFixed(2)}</span>
+                  <span>{totalCost.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-border">
                   <span className="text-muted-foreground">Profit</span>
                   <span className={`font-medium ${profit >= 0 ? 'text-success' : 'text-destructive'}`}>
-                    ৳ {profit.toFixed(2)}
+                    {profit.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2">

@@ -11,7 +11,7 @@ const DineTableIndexCreate = () => {
   const [locations, setLocations] = useState([]);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, control } = useForm();
 
   useEffect(() => {
     dineLocationService.getAllSimple().then((res) => setLocations(res.data || [])).catch(() => {});

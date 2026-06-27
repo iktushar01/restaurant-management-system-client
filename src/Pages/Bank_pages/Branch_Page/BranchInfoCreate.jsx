@@ -11,7 +11,7 @@ const BranchInfoCreate = () => {
   const [banks, setBanks] = useState([]);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, control } = useForm();
 
   useEffect(() => {
     bankService.banks.getAll({ limit: 100 }).then((res) => setBanks(res.data || [])).catch(() => {});

@@ -27,8 +27,7 @@ const EmployeePayrollIndexEditById = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-    reset,
-  } = useForm();
+    reset, control } = useForm();
 
   useEffect(() => {
     Promise.all([

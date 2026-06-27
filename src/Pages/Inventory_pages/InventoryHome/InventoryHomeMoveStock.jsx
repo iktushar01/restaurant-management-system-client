@@ -14,7 +14,7 @@ const InventoryHomeMoveStock = () => {
   const [availableStock, setAvailableStock] = useState(0);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm();
+  const { register, handleSubmit, formState: { errors }, watch, setValue, control } = useForm();
   const itemId = watch("itemId");
   const fromLocationId = watch("fromLocationId");
 

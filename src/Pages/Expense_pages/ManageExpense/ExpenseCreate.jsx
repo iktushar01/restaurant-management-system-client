@@ -11,7 +11,7 @@ const ExpenseCreate = () => {
   const [heads, setHeads] = useState([]);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, control } = useForm();
 
   useEffect(() => {
     financeService.expenseHeads.getAll({ limit: 100 })

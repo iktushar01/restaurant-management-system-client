@@ -12,8 +12,7 @@ const InventoryHomeCashback = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
-  } = useForm();
+    setValue, control } = useForm();
 
   const [suppliers, setSuppliers] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState(null);

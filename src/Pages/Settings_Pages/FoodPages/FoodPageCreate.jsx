@@ -14,8 +14,7 @@ const FoodPageCreate = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    formState: { errors }, control } = useForm();
 
   useEffect(() => {
     foodCategoryService.getAllSimple().then((res) => {

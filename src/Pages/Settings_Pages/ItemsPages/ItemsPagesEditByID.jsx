@@ -15,7 +15,7 @@ const ItemsPagesEditByID = () => {
   const [loading, setLoading] = useState(true);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, watch, formState: { errors }, setValue } = useForm();
+  const { register, handleSubmit, watch, formState: { errors }, setValue, control } = useForm();
   const categoryId = watch("categoryId");
 
   useEffect(() => {

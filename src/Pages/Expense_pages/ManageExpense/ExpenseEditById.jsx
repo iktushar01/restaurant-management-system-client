@@ -18,7 +18,7 @@ const ExpenseEditById = () => {
   const [loading, setLoading] = useState(true);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors }, control } = useForm();
 
   useEffect(() => {
     Promise.all([

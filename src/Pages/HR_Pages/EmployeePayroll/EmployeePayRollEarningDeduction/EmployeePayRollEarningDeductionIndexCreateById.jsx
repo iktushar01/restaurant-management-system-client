@@ -16,8 +16,7 @@ const EmployeePayRollEarningDeductionIndexCreateById = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    formState: { errors }, control } = useForm();
 
   useEffect(() => {
     hrService.deductionHeads.getAll({ limit: 100 })

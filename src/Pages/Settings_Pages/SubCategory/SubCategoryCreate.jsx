@@ -10,7 +10,7 @@ const SubCategoryCreate = () => {
   const [categories, setCategories] = useState([]);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, control } = useForm();
 
   useEffect(() => {
     inventoryService.categories.getAll({ limit: 100 }).then((res) => setCategories(res.data || [])).catch(() => {});

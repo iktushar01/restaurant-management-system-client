@@ -14,7 +14,7 @@ const InventoryHomeStockOut = () => {
   const [availableStock, setAvailableStock] = useState(0);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  const { register, handleSubmit, formState: { errors }, watch, control } = useForm();
   const locationId = watch("locationId");
 
   useEffect(() => {

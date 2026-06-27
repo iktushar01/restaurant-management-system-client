@@ -12,7 +12,7 @@ const SubCategoryEditByID = () => {
   const [loading, setLoading] = useState(true);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+  const { register, handleSubmit, formState: { errors }, setValue, control } = useForm();
 
   useEffect(() => {
     const load = async () => {

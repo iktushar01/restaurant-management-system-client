@@ -22,8 +22,7 @@ const EventManageEditById = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
-  } = useForm();
+    setValue, control } = useForm();
 
   useEffect(() => {
     inventoryService.events.getById(id).then((res) => {

@@ -19,8 +19,7 @@ const FoodPageEditByID = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
-  } = useForm();
+    formState: { errors }, control } = useForm();
 
   useEffect(() => {
     Promise.all([

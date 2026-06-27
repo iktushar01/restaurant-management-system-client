@@ -11,7 +11,7 @@ const OtherIncomeIndexCreate = () => {
   const [heads, setHeads] = useState([]);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, control } = useForm();
 
   useEffect(() => {
     financeService.incomeHeads.getAll({ limit: 100 })

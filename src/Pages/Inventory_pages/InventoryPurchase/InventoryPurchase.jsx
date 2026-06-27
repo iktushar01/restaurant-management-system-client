@@ -114,7 +114,10 @@ const InventoryPurchase = () => {
                             value={item.itemId}
                             onValueChange={(v) => handleItemChange(item.id, "itemId", v)}
                             placeholder="Select item"
-                            options={[]}
+                            options={catalogItems.map((catalogItem) => ({
+                              value: String(catalogItem.id),
+                              label: catalogItem.name,
+                            }))}
                           />
                         </td>
                         <td className="border border-border px-4 py-2">
@@ -152,9 +155,14 @@ const InventoryPurchase = () => {
               <label className="block text-sm font-medium text-foreground mb-1">Supplier</label>
               <SelectField
                 value={purchaseMaster.vendorId}
-                onValueChange={(v) => setPurchaseMaster({ ...purchaseMaster, vendorId: v}
+                onValueChange={(v) =>
+                  setPurchaseMaster({ ...purchaseMaster, vendorId: v })
+                }
                 placeholder="Select supplier"
-                options={[]}
+                options={vendors.map((v) => ({
+                  value: String(v.id),
+                  label: v.name,
+                }))}
               />
             </div>
             <div>

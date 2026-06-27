@@ -22,8 +22,7 @@ const EmployeePayRollSalaryPaymentEditByID = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
-  } = useForm();
+    reset, control } = useForm();
 
   useEffect(() => {
     hrService.salaryPayments.getById(employeeId, id)

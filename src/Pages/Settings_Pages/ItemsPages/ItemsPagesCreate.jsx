@@ -13,7 +13,7 @@ const ItemsPagesCreate = () => {
   const [units, setUnits] = useState([]);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, watch, formState: { errors }, control } = useForm();
   const categoryId = watch("categoryId");
 
   useEffect(() => {

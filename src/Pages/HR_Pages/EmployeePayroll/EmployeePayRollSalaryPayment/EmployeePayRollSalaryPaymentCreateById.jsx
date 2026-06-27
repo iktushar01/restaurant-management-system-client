@@ -15,8 +15,7 @@ const EmployeePayRollSalaryPaymentCreateById = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    formState: { errors }, control } = useForm();
 
   const onSubmit = async (data) => {
     setSubmitError("");

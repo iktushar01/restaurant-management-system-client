@@ -11,7 +11,7 @@ const InventoryHomeStockIn = () => {
   const [stockLocations, setStockLocations] = useState([]);
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, control } = useForm();
 
   useEffect(() => {
     Promise.all([

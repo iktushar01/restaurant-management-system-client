@@ -23,8 +23,7 @@ const EmployeePayrollEarningIndexEditByID = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
-  } = useForm();
+    reset, control } = useForm();
 
   useEffect(() => {
     Promise.all([

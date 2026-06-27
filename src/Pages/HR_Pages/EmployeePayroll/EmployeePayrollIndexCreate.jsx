@@ -24,8 +24,7 @@ const EmployeePayrollIndexCreate = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    formState: { errors }, control } = useForm();
 
   useEffect(() => {
     hrService.designations.getAll({ limit: 100 })

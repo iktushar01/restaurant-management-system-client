@@ -16,8 +16,7 @@ const EmployeePayrollEarningCreateByID = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    formState: { errors }, control } = useForm();
 
   useEffect(() => {
     hrService.earningHeads.getAll({ limit: 100 })

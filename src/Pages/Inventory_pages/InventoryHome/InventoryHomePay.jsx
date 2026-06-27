@@ -13,8 +13,7 @@ const InventoryHomePay = () => {
     handleSubmit,
     formState: { errors },
     watch,
-    setValue,
-  } = useForm();
+    setValue, control } = useForm();
 
   const [suppliers, setSuppliers] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState(null);

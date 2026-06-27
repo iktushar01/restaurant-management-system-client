@@ -22,6 +22,42 @@ export function formatEventDate(dateString) {
   return part || dateString;
 }
 
+export function getEventCalendarColors(status) {
+  switch (status) {
+    case "Booked":
+      return { backgroundColor: "#facc15", borderColor: "#ca8a04", textColor: "#422006" };
+    case "Confirmed":
+      return { backgroundColor: "#0ea5e9", borderColor: "#0284c7", textColor: "#ffffff" };
+    case "Resolved":
+      return { backgroundColor: "#22c55e", borderColor: "#16a34a", textColor: "#ffffff" };
+    case "Cancelled":
+      return { backgroundColor: "#ef4444", borderColor: "#dc2626", textColor: "#ffffff" };
+    default:
+      return { backgroundColor: "#facc15", borderColor: "#ca8a04", textColor: "#422006" };
+  }
+}
+
+export function mapEventsToCalendar(events = []) {
+  return events
+    .map((e) => {
+      const start = new Date(e.dateISO || e.date);
+      if (Number.isNaN(start.getTime())) return null;
+      const colors = getEventCalendarColors(e.status);
+      return {
+        id: e.id,
+        title: e.subject || e.title,
+        start: start.toISOString(),
+        ...colors,
+        extendedProps: {
+          customerName: e.customerName,
+          status: e.status,
+          phone: e.phone,
+        },
+      };
+    })
+    .filter(Boolean);
+}
+
 export function toDatetimeLocal(dateStr) {
   const d = new Date(dateStr);
   if (Number.isNaN(d.getTime())) return "";

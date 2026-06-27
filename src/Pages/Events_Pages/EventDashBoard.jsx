@@ -1,35 +1,26 @@
 import React, { useState, useEffect, useMemo } from "react";
-import Calendar from "react-calendar";
-import {
-  CalendarDaysIcon,
-  CalendarIcon,
-  LayoutListIcon,
-  MenuIcon,
-  UsersIcon,
-  XIcon,
-} from "lucide-react";
-import "react-calendar/dist/Calendar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { CalendarDaysIcon, PlusIcon, UsersIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import EventCalendar from "@/components/events/EventCalendar";
 import { getEventStatusBadgeClass } from "@/lib/eventUtils";
 import { LoadingState } from "@/Shared/PageStates/PageStates";
 import PageHeader from "@/Shared/PageHeader/PageHeader";
 import PageLayout from "@/Shared/PageLayout/PageLayout";
 import { inventoryService } from "../../services/inventoryService";
 
-const VIEW_OPTIONS = [
-  { key: "month", label: "Month", icon: CalendarIcon },
-  { key: "week", label: "Week", icon: CalendarDaysIcon },
-  { key: "day", label: "Day", icon: CalendarDaysIcon },
-  { key: "agenda", label: "Agenda", icon: LayoutListIcon },
+const STATUS_LEGEND = [
+  { label: "Booked", className: "bg-[#facc15] border-[#ca8a04]" },
+  { label: "Confirmed", className: "bg-sky-500 border-sky-600" },
+  { label: "Resolved", className: "bg-emerald-500 border-emerald-600" },
+  { label: "Cancelled", className: "bg-red-500 border-red-600" },
 ];
 
-const EventCard = ({ event }) => (
-  <div className="flex items-start gap-3 p-3 rounded-lg border border-border bg-card hover:bg-muted/40 transition-colors">
-    <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
+const EventDetailCard = ({ event }) => (
+  <div className="flex items-start gap-3 p-3 rounded-lg border border-border bg-muted/30">
+    <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
       <UsersIcon className="size-4" />
     </div>
     <div className="flex-1 min-w-0">
@@ -39,187 +30,68 @@ const EventCard = ({ event }) => (
           {event.status}
         </Badge>
       </div>
-      <p className="text-sm text-muted-foreground mt-0.5">{event.customerName}</p>
+      <p className="text-sm text-muted-foreground">{event.customerName}</p>
       <p className="text-xs text-muted-foreground mt-1">
-        {event.date.toLocaleDateString(undefined, {
+        {event.date.toLocaleString(undefined, {
           weekday: "short",
           month: "short",
           day: "numeric",
-        })}{" "}
-        ·{" "}
-        {event.date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
       </p>
     </div>
   </div>
 );
 
 const EventDashBoard = () => {
-  const [date, setDate] = useState(new Date());
-  const [view, setView] = useState("month");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [events, setEvents] = useState([]);
+  const navigate = useNavigate();
+  const [rawEvents, setRawEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
     inventoryService.events
-      .getAll({ limit: 100 })
-      .then((res) => {
-        const mapped = (res.data || []).map((e) => ({
-          id: e.id,
-          title: e.subject,
-          customerName: e.customerName,
-          date: new Date(e.dateISO || e.date),
-          status: e.status,
-        }));
-        setEvents(mapped);
-      })
-      .catch(() => setEvents([]))
+      .getAll({ limit: 200 })
+      .then((res) => setRawEvents(res.data || []))
+      .catch(() => setRawEvents([]))
       .finally(() => setLoading(false));
   }, []);
 
-  const getDayEvents = (day) =>
-    events.filter(
-      (event) =>
-        event.date.getDate() === day.getDate() &&
-        event.date.getMonth() === day.getMonth() &&
-        event.date.getFullYear() === day.getFullYear()
-    );
+  const events = useMemo(
+    () =>
+      rawEvents.map((e) => ({
+        id: e.id,
+        subject: e.subject,
+        title: e.subject,
+        customerName: e.customerName,
+        phone: e.phone,
+        date: new Date(e.dateISO || e.date),
+        status: e.status,
+        dateISO: e.dateISO,
+      })),
+    [rawEvents]
+  );
 
-  const agendaEvents = useMemo(() => {
-    const startDate = new Date(date);
-    const endDate = new Date(date);
-    endDate.setDate(endDate.getDate() + 7);
-    return events
-      .filter((event) => event.date >= startDate && event.date <= endDate)
-      .sort((a, b) => a.date - b.date);
-  }, [events, date]);
+  const selectedDayEvents = useMemo(
+    () =>
+      events.filter(
+        (event) =>
+          event.date.getDate() === selectedDate.getDate() &&
+          event.date.getMonth() === selectedDate.getMonth() &&
+          event.date.getFullYear() === selectedDate.getFullYear()
+      ),
+    [events, selectedDate]
+  );
 
-  const weekDays = useMemo(() => {
-    const startOfWeek = new Date(date);
-    startOfWeek.setDate(date.getDate() - date.getDay());
-    return Array.from({ length: 7 }, (_, i) => {
-      const day = new Date(startOfWeek);
-      day.setDate(startOfWeek.getDate() + i);
-      return day;
-    });
-  }, [date]);
+  const upcomingEvents = useMemo(() => {
+    const now = new Date();
+    return events.filter((e) => e.date >= now).sort((a, b) => a.date - b.date).slice(0, 6);
+  }, [events]);
 
-  const renderView = () => {
-    switch (view) {
-      case "month":
-        return (
-          <Card>
-            <CardContent className="p-4 md:p-6 [&_.react-calendar]:w-full [&_.react-calendar]:border-0 [&_.react-calendar]:bg-transparent">
-              <Calendar
-                onChange={setDate}
-                value={date}
-                tileContent={({ date: tileDate, view: calView }) => {
-                  if (calView !== "month") return null;
-                  const count = getDayEvents(tileDate).length;
-                  if (!count) return null;
-                  return (
-                    <p className="text-[10px] font-semibold text-primary text-center mt-0.5">
-                      {count} evt
-                    </p>
-                  );
-                }}
-              />
-            </CardContent>
-          </Card>
-        );
-
-      case "week":
-        return (
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">
-                {weekDays[0].toLocaleDateString(undefined, { month: "short", day: "numeric" })}
-                {" – "}
-                {weekDays[6].toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="overflow-x-auto pb-4">
-              <div className="grid grid-cols-7 gap-2 min-w-[640px]">
-                {weekDays.map((day) => {
-                  const dayEvents = getDayEvents(day);
-                  const isSelected = day.toDateString() === date.toDateString();
-                  return (
-                    <button
-                      key={day.toISOString()}
-                      type="button"
-                      onClick={() => setDate(day)}
-                      className={cn(
-                        "rounded-lg border p-2 text-left min-h-[100px] transition-colors",
-                        isSelected
-                          ? "border-primary bg-primary/10"
-                          : "border-border bg-muted/30 hover:bg-muted/50"
-                      )}
-                    >
-                      <p className="text-xs font-medium text-muted-foreground">
-                        {day.toLocaleDateString(undefined, { weekday: "short" })}
-                      </p>
-                      <p className="text-lg font-bold">{day.getDate()}</p>
-                      <div className="mt-2 space-y-1">
-                        {dayEvents.slice(0, 2).map((ev) => (
-                          <p key={ev.id} className="text-[10px] truncate text-foreground">
-                            {ev.title}
-                          </p>
-                        ))}
-                        {dayEvents.length > 2 && (
-                          <p className="text-[10px] text-muted-foreground">+{dayEvents.length - 2} more</p>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        );
-
-      case "day": {
-        const dayEvents = getDayEvents(date);
-        return (
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">
-                {date.toLocaleDateString(undefined, {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {dayEvents.length === 0 ? (
-                <p className="text-sm text-muted-foreground py-8 text-center">No events on this day.</p>
-              ) : (
-                dayEvents.map((event) => <EventCard key={event.id} event={event} />)
-              )}
-            </CardContent>
-          </Card>
-        );
-      }
-
-      case "agenda":
-        return (
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Agenda — next 7 days</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {agendaEvents.length === 0 ? (
-                <p className="text-sm text-muted-foreground py-8 text-center">No upcoming events.</p>
-              ) : (
-                agendaEvents.map((event) => <EventCard key={event.id} event={event} />)
-              )}
-            </CardContent>
-          </Card>
-        );
-
-      default:
-        return null;
+  const handleEventClick = (fcEvent) => {
+    if (fcEvent?.id) {
+      navigate(`/events/edit/${fcEvent.id}`);
     }
   };
 
@@ -233,65 +105,100 @@ const EventDashBoard = () => {
 
   return (
     <PageLayout className="p-4 md:p-6 lg:px-8 space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <PageHeader
           title="Event Calendar"
-          subtitle="View and plan upcoming bookings"
+          subtitle="Month, week, day & agenda views — click an event to edit"
           className="flex-1 border shadow-sm"
         />
-        <div className="flex gap-2 shrink-0">
-          <Button variant="outline" className="md:hidden" onClick={() => setMobileMenuOpen((v) => !v)}>
-            {mobileMenuOpen ? <XIcon className="size-4" /> : <MenuIcon className="size-4" />}
-          </Button>
-          <Button render={<Link to="/events/create" />}>Create Event</Button>
-        </div>
+        <Button render={<Link to="/events/create" />} className="shrink-0 gap-2">
+          <PlusIcon className="size-4" />
+          Create Event
+        </Button>
       </div>
 
-      <div
-        className={cn(
-          "flex flex-wrap gap-2",
-          mobileMenuOpen ? "flex" : "hidden md:flex"
-        )}
-      >
-        {VIEW_OPTIONS.map((btn) => {
-          const Icon = btn.icon;
-          return (
-            <Button
-              key={btn.key}
-              variant={view === btn.key ? "default" : "outline"}
-              size="sm"
-              onClick={() => {
-                setView(btn.key);
-                setMobileMenuOpen(false);
-              }}
-              className="gap-1.5"
-            >
-              <Icon className="size-4" />
-              {btn.label}
-            </Button>
-          );
-        })}
+      <div className="flex flex-wrap items-center gap-4 rounded-lg border border-border bg-muted/30 px-4 py-3">
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
+          <CalendarDaysIcon className="size-3.5" />
+          Legend
+        </span>
+        {STATUS_LEGEND.map((item) => (
+          <div key={item.label} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <span className={`size-3 rounded-sm border ${item.className}`} />
+            {item.label}
+          </div>
+        ))}
       </div>
 
-      {renderView()}
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Upcoming Events</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {events
-            .filter((e) => e.date >= new Date())
-            .sort((a, b) => a.date - b.date)
-            .slice(0, 5)
-            .map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          {events.filter((e) => e.date >= new Date()).length === 0 && (
-            <p className="text-sm text-muted-foreground text-center py-6">No upcoming events scheduled.</p>
-          )}
+      <Card className="overflow-hidden shadow-sm">
+        <CardContent className="p-3 sm:p-4 md:p-6">
+          <EventCalendar
+            events={rawEvents}
+            onEventClick={handleEventClick}
+            onDateSelect={setSelectedDate}
+          />
         </CardContent>
       </Card>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">
+              {selectedDate.toLocaleDateString(undefined, {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {selectedDayEvents.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-6 text-center">
+                No events on this day.
+              </p>
+            ) : (
+              selectedDayEvents.map((event) => (
+                <button
+                  key={event.id}
+                  type="button"
+                  onClick={() => navigate(`/events/edit/${event.id}`)}
+                  className="w-full text-left"
+                >
+                  <EventDetailCard event={event} />
+                </button>
+              ))
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">Upcoming Events</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {upcomingEvents.length === 0 ? (
+              <div className="text-center py-6 space-y-3">
+                <p className="text-sm text-muted-foreground">No upcoming events scheduled.</p>
+                <Button variant="outline" size="sm" render={<Link to="/events/create" />}>
+                  Schedule first event
+                </Button>
+              </div>
+            ) : (
+              upcomingEvents.map((event) => (
+                <button
+                  key={event.id}
+                  type="button"
+                  onClick={() => navigate(`/events/edit/${event.id}`)}
+                  className="w-full text-left"
+                >
+                  <EventDetailCard event={event} />
+                </button>
+              ))
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </PageLayout>
   );
 };

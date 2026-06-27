@@ -1,19 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import FormSelect, { SelectField } from "@/Shared/FormSelect/FormSelect";
-import { dineTableService } from '../../services/dineTableService';
-import { waiterService } from '../../services/waiterService';
+import React, { useState, useEffect } from "react";
+import { SelectField } from "@/Shared/FormSelect/FormSelect";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChevronDownIcon, ChevronUpIcon, ClipboardListIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { dineTableService } from "../../services/dineTableService";
+import { waiterService } from "../../services/waiterService";
 
 const ORDER_TYPES = [
-  { label: 'Dine In', value: 'DINE_IN' },
-  { label: 'Takeaway', value: 'TAKEAWAY' },
-  { label: 'Delivery', value: 'DELIVERY' },
+  { label: "Dine In", value: "DINE_IN" },
+  { label: "Takeaway", value: "TAKEAWAY" },
+  { label: "Delivery", value: "DELIVERY" },
 ];
 
 const OrderManagement = ({ orderDetails, setOrderDetails }) => {
   const [showTableDropdown, setShowTableDropdown] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const [tables, setTables] = useState([]);
   const [waiters, setWaiters] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const needsTable = orderDetails.orderType === "DINE_IN";
 
   useEffect(() => {
     const load = async () => {
@@ -25,7 +35,7 @@ const OrderManagement = ({ orderDetails, setOrderDetails }) => {
         setTables(tablesRes.data || []);
         setWaiters(waitersRes.data || []);
       } catch (err) {
-        console.error('Failed to load order options:', err);
+        console.error("Failed to load order options:", err);
       } finally {
         setLoading(false);
       }
@@ -33,118 +43,179 @@ const OrderManagement = ({ orderDetails, setOrderDetails }) => {
     load();
   }, []);
 
+  useEffect(() => {
+    if (!needsTable && orderDetails.tableIds.length > 0) {
+      setOrderDetails((prev) => ({ ...prev, tableIds: [] }));
+    }
+  }, [needsTable, orderDetails.tableIds.length, setOrderDetails]);
+
   const handleChange = (field, value) => {
-    setOrderDetails(prev => ({ ...prev, [field]: value }));
+    setOrderDetails((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleTableSelect = (tableId) => {
-    setOrderDetails(prev => {
+    setOrderDetails((prev) => {
       const updatedTables = prev.tableIds.includes(tableId)
-        ? prev.tableIds.filter(t => t !== tableId)
+        ? prev.tableIds.filter((t) => t !== tableId)
         : [...prev.tableIds, tableId];
       return { ...prev, tableIds: updatedTables };
     });
   };
 
   const selectedTableLabels = tables
-    .filter(t => orderDetails.tableIds.includes(t.id))
-    .map(t => t.tableNo);
+    .filter((t) => orderDetails.tableIds.includes(t.id))
+    .map((t) => t.tableNo);
 
   if (loading) {
     return (
-      <div className="w-full mx-auto p-6 bg-card rounded-xl shadow-md text-center text-muted-foreground">
-        Loading order options...
-      </div>
+      <Card className="w-full border-border shadow-sm">
+        <CardContent className="py-10 text-center text-muted-foreground">
+          Loading order options...
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="w-full mx-auto p-6 bg-card rounded-xl shadow-md">
-      <h2 className="text-2xl font-bold text-foreground mb-6 py-6 rounded-3xl text-center bg-destructive/10 p-6">Order Management</h2>
-      
-      <div className="flex flex-wrap gap-6 mb-6">
-        <div className="flex-1 min-w-[200px]">
-          <label className="block text-sm font-medium text-foreground mb-1">Order Type *</label>
-          <SelectField
-            value={orderDetails.orderType || ''}
-            onValueChange={(v) => handleChange("orderType", v)}
-            placeholder="Select Order Type"
-            options={[]}
-          />
+    <Card className="w-full border-border shadow-sm">
+      <CardHeader className="pb-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <CardTitle className="flex items-center gap-2 text-xl md:text-2xl">
+            <ClipboardListIcon className="size-5 text-primary" />
+            Order Details
+          </CardTitle>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="sm:hidden w-full"
+            onClick={() => setExpanded((v) => !v)}
+          >
+            {expanded ? "Hide details" : "Show details"}
+            {expanded ? <ChevronUpIcon className="size-4" /> : <ChevronDownIcon className="size-4" />}
+          </Button>
         </div>
+      </CardHeader>
 
-        <div className="flex-1 min-w-[200px]">
-          <label className="block text-sm font-medium text-foreground mb-1">Served By *</label>
-          <SelectField
-            value={orderDetails.waiterId || ''}
-            onValueChange={(v) => handleChange("waiterId", v)}
-            placeholder="Select Staff"
-            options={[]}
-          />
-        </div>
+      <CardContent className={cn(!expanded && "hidden sm:block")}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+          <div className="space-y-1.5">
+            <Label htmlFor="order-type">Order Type *</Label>
+            <SelectField
+              value={orderDetails.orderType || ""}
+              onValueChange={(v) => handleChange("orderType", v)}
+              placeholder="Select order type"
+              options={ORDER_TYPES.map((o) => ({ value: o.value, label: o.label }))}
+            />
+          </div>
 
-        <div className="flex-1 min-w-[200px] relative md:col-span-2">
-          <label className="block text-sm font-medium text-foreground mb-1">Alloted Tables *</label>
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setShowTableDropdown(!showTableDropdown)}
-              className="w-full p-3 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:outline-none text-left flex justify-between items-center bg-card"
-            >
-              <span>
-                {orderDetails.tableIds.length > 0
-                  ? `${orderDetails.tableIds.length} table(s): ${selectedTableLabels.join(', ')}`
-                  : "Select tables"}
-              </span>
-              <span>{showTableDropdown ? '▲' : '▼'}</span>
-            </button>
-            
-            {showTableDropdown && (
-              <div className="absolute z-10 w-full mt-1 bg-card border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                {tables.map((table) => (
-                  <div 
-                    key={table.id}
-                    className="flex items-center p-3 hover:bg-muted/40 cursor-pointer"
-                    onClick={() => handleTableSelect(table.id)}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={orderDetails.tableIds.includes(table.id)}
-                      onChange={() => handleTableSelect(table.id)}
-                      className="mr-3 h-4 w-4 text-primary"
+          <div className="space-y-1.5">
+            <Label htmlFor="waiter">Served By *</Label>
+            <SelectField
+              value={orderDetails.waiterId || ""}
+              onValueChange={(v) => handleChange("waiterId", v)}
+              placeholder="Select staff"
+              options={waiters.map((w) => ({ value: w.id, label: w.name }))}
+            />
+          </div>
+
+          {needsTable && (
+            <div className="space-y-1.5 sm:col-span-2 lg:col-span-1 relative">
+              <Label>Allotted Tables *</Label>
+              <div className="relative">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowTableDropdown(!showTableDropdown)}
+                  className="w-full justify-between h-10 font-normal"
+                >
+                  <span className="truncate text-left">
+                    {orderDetails.tableIds.length > 0
+                      ? `${orderDetails.tableIds.length} table(s): ${selectedTableLabels.join(", ")}`
+                      : "Select tables"}
+                  </span>
+                  {showTableDropdown ? (
+                    <ChevronUpIcon className="size-4 shrink-0" />
+                  ) : (
+                    <ChevronDownIcon className="size-4 shrink-0" />
+                  )}
+                </Button>
+
+                {showTableDropdown && (
+                  <>
+                    <button
+                      type="button"
+                      className="fixed inset-0 z-40 sm:hidden"
+                      aria-label="Close table list"
+                      onClick={() => setShowTableDropdown(false)}
                     />
-                    <span>{table.tableNo} ({table.location}) - {table.status}</span>
-                  </div>
-                ))}
+                    <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg max-h-56 overflow-y-auto">
+                      {tables.length === 0 ? (
+                        <p className="p-3 text-sm text-muted-foreground">No tables available</p>
+                      ) : (
+                        tables.map((table) => (
+                          <label
+                            key={table.id}
+                            className="flex items-center gap-3 p-3 hover:bg-muted/50 cursor-pointer border-b border-border last:border-0"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={orderDetails.tableIds.includes(table.id)}
+                              onChange={() => handleTableSelect(table.id)}
+                              className="size-4 rounded border-border text-primary focus:ring-ring"
+                            />
+                            <span className="text-sm">
+                              {table.tableNo}{" "}
+                              <span className="text-muted-foreground">({table.location})</span>
+                              {" · "}
+                              <span
+                                className={
+                                  table.status === "Vacant"
+                                    ? "text-emerald-500"
+                                    : table.status === "Occupied"
+                                      ? "text-destructive"
+                                      : "text-amber-500"
+                                }
+                              >
+                                {table.status}
+                              </span>
+                            </span>
+                          </label>
+                        ))
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
-            )}
+            </div>
+          )}
+
+          <div className="space-y-1.5">
+            <Label htmlFor="persons">No. of Persons</Label>
+            <Input
+              id="persons"
+              type="number"
+              min="1"
+              value={orderDetails.persons || ""}
+              onChange={(e) => handleChange("persons", e.target.value)}
+              placeholder="Guests count"
+            />
           </div>
         </div>
 
-        <div className="flex-1 min-w-[200px]">
-          <label className="block text-sm font-medium text-foreground mb-1">No. of Persons</label>
-          <input
-            type="number"
-            min="1"
-            value={orderDetails.persons || ''}
-            onChange={(e) => handleChange("persons", e.target.value)}
-            className="w-full p-3 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary"
-            placeholder="Enter number of persons"
+        <div className="mt-4 space-y-1.5">
+          <Label htmlFor="notes">Order Notes</Label>
+          <Textarea
+            id="notes"
+            value={orderDetails.notes || ""}
+            onChange={(e) => handleChange("notes", e.target.value)}
+            rows={2}
+            placeholder="Special instructions, allergies, etc."
+            className="resize-none"
           />
         </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-foreground mb-1">Order Notes</label>
-        <textarea
-          value={orderDetails.notes || ''}
-          onChange={(e) => handleChange("notes", e.target.value)}
-          className="w-full p-3 border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus:border-primary"
-          rows={3}
-          placeholder="Any special instructions..."
-        />
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

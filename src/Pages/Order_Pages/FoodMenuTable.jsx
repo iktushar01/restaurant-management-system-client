@@ -1,21 +1,22 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import { 
-  FaSearch, 
-  FaImage, 
-  FaPlus, 
-  FaFilter, 
+import {
+  FaSearch,
+  FaPlus,
   FaSortAmountDown,
   FaSortAmountUpAlt,
-  FaUtensils,
   FaArrowUp,
   FaTimes,
-  FaShoppingCart
+  FaShoppingCart,
 } from "react-icons/fa";
-
 import { SelectField } from "@/Shared/FormSelect/FormSelect";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { UtensilsCrossedIcon } from "lucide-react";
 import { foodService } from "../../services/foodService";
 
-const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1626645735466-5f6ce3c27459?w=500&auto=format&fit=crop&q=60";
+const DEFAULT_IMAGE =
+  "https://images.unsplash.com/photo-1626645735466-5f6ce3c27459?w=500&auto=format&fit=crop&q=60";
 
 const FoodMenuTable = ({ onAddItem }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -25,13 +26,13 @@ const FoodMenuTable = ({ onAddItem }) => {
     direction: "ascending",
   });
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [selectedItemsCount, setSelectedItemsCount] = useState(0);
   const [foodItems, setFoodItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const gridRef = useRef(null);
 
   useEffect(() => {
-    foodService.getAllSimple()
+    foodService
+      .getAllSimple()
       .then((res) => {
         const mapped = (res.data || []).map((f) => ({
           id: f.id,
@@ -47,13 +48,11 @@ const FoodMenuTable = ({ onAddItem }) => {
       .finally(() => setLoading(false));
   }, []);
 
-  // Get unique categories
-  const categories = useMemo(() => [
-    "All",
-    ...new Set(foodItems.map((item) => item.category)),
-  ], [foodItems]);
+  const categories = useMemo(
+    () => ["All", ...new Set(foodItems.map((item) => item.category))],
+    [foodItems]
+  );
 
-  // Request sort
   const requestSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -62,19 +61,15 @@ const FoodMenuTable = ({ onAddItem }) => {
     setSortConfig({ key, direction });
   };
 
-  // Sort items
   const sortedItems = useMemo(() => {
-    let sortableItems = [...foodItems];
+    const sortableItems = [...foodItems];
     if (sortConfig.key !== null) {
       sortableItems.sort((a, b) => {
-        // Handle numeric sorting for price and foodNumber
         if (sortConfig.key === "price" || sortConfig.key === "foodNumber") {
           const aValue = parseFloat(a[sortConfig.key]);
           const bValue = parseFloat(b[sortConfig.key]);
           return sortConfig.direction === "ascending" ? aValue - bValue : bValue - aValue;
         }
-        
-        // Handle string sorting for name and category
         if (a[sortConfig.key] < b[sortConfig.key]) {
           return sortConfig.direction === "ascending" ? -1 : 1;
         }
@@ -87,257 +82,199 @@ const FoodMenuTable = ({ onAddItem }) => {
     return sortableItems;
   }, [foodItems, sortConfig]);
 
-  // Filter items
-  const filteredItems = useMemo(() => {
-    return sortedItems.filter(
-      (item) =>
-        (item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.foodNumber.toLowerCase().includes(searchTerm.toLowerCase())) &&
-        (selectedCategory === "All" || item.category === selectedCategory)
-    );
-  }, [sortedItems, searchTerm, selectedCategory]);
+  const filteredItems = useMemo(
+    () =>
+      sortedItems.filter(
+        (item) =>
+          (item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.foodNumber.toLowerCase().includes(searchTerm.toLowerCase())) &&
+          (selectedCategory === "All" || item.category === selectedCategory)
+      ),
+    [sortedItems, searchTerm, selectedCategory]
+  );
 
-  // Handle scroll to top
   const scrollToTop = () => {
-    if (gridRef.current) {
-      gridRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    gridRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Handle scroll events
   useEffect(() => {
-    const handleScroll = () => {
-      if (gridRef.current) {
-        setShowScrollTop(gridRef.current.scrollTop > 300);
-      }
-    };
+    const node = gridRef.current;
+    if (!node) return undefined;
 
-    if (gridRef.current) {
-      gridRef.current.addEventListener('scroll', handleScroll);
-    }
+    const handleScroll = () => setShowScrollTop(node.scrollTop > 200);
+    node.addEventListener("scroll", handleScroll);
+    return () => node.removeEventListener("scroll", handleScroll);
+  }, [loading, filteredItems.length]);
 
-    return () => {
-      if (gridRef.current) {
-        gridRef.current.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
-
-  // Enhanced add item function
   const handleAddItem = (food) => {
     onAddItem(food);
-    setSelectedItemsCount(prev => prev + 1);
-    
-    // Show a quick visual feedback
-    const addButton = document.getElementById(`add-btn-${food.id}`);
-    if (addButton) {
-      addButton.classList.add('bg-success');
-      setTimeout(() => {
-        addButton.classList.remove('bg-success');
-      }, 300);
-    }
   };
 
-  // Clear search
   const clearSearch = () => {
     setSearchTerm("");
     setSelectedCategory("All");
   };
 
-  // Sort indicator component
   const SortIndicator = ({ columnKey }) => {
     if (sortConfig.key !== columnKey) {
-      return <FaSortAmountDown className="inline ml-1 text-muted-foreground" />;
+      return <FaSortAmountDown className="inline ml-1 text-muted-foreground size-3" />;
     }
     return sortConfig.direction === "ascending" ? (
-      <FaSortAmountDown className="inline ml-1 text-primary" />
+      <FaSortAmountDown className="inline ml-1 text-primary size-3" />
     ) : (
-      <FaSortAmountUpAlt className="inline ml-1 text-primary" />
+      <FaSortAmountUpAlt className="inline ml-1 text-primary size-3" />
     );
   };
 
-  return (
-    <div className="bg-card rounded-2xl shadow-lg p-4 md:p-6 flex flex-col h-full">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
-        <div>
-          <h2 className="text-2xl md:text-2xl font-semibold text-foreground mb-2 flex items-center
-             mr-2 " >Food Menu
-          </h2>
-          <p className="text-muted-foreground text-sm">
-            {filteredItems.length} items found
-            {searchTerm && ` for "${searchTerm}"`}
-            {selectedCategory !== "All" && ` in ${selectedCategory}`}
-          </p>
-        </div>
+  const sortButtons = [
+    { key: "name", label: "Name" },
+    { key: "price", label: "Price" },
+    { key: "category", label: "Category" },
+    { key: "foodNumber", label: "No." },
+  ];
 
-        <div className="flex items-center mt-4 md:mt-0">
-          <div className="bg-primary/10 text-foreground px-3 py-1.5 rounded-lg flex items-center mr-4">
-            <FaShoppingCart className="mr-2" />
-            <span className="font-semibold">{selectedItemsCount}</span>
+  return (
+    <Card className="w-full h-full border-border shadow-sm flex flex-col min-h-[480px]">
+      <CardHeader className="pb-3 shrink-0 space-y-4">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+          <div>
+            <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+              <UtensilsCrossedIcon className="size-5 text-primary" />
+              Food Menu
+            </CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">
+              {filteredItems.length} items
+              {searchTerm && ` matching "${searchTerm}"`}
+            </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3">
-            {/* Search Input */}
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaSearch className="text-muted-foreground" />
-              </div>
-              <input
+
+          <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto lg:min-w-[420px]">
+            <div className="relative flex-1">
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground size-3.5" />
+              <Input
                 type="text"
                 placeholder="Search food..."
-                className="pl-10 pr-4 py-2.5 border border-border rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-border w-full transition-all"
+                className="pl-9 pr-9"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               {searchTerm && (
                 <button
+                  type="button"
                   onClick={clearSearch}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                 >
-                  <FaTimes className="text-muted-foreground hover:text-muted-foreground" />
+                  <FaTimes className="size-3.5" />
                 </button>
               )}
             </div>
-
-            {/* Category Filter */}
-            <div className="relative w-full">
-              <SelectField
-                value={selectedCategory}
-                onValueChange={setSelectedCategory}
-                className="w-full pl-10"
-                options={categories.map((category) => ({
-                  value: String(category),
-                  label: String(category),
-                }))}
-              />
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaFilter className="text-muted-foreground" />
-              </div>
-            </div>
+            <SelectField
+              value={selectedCategory}
+              onValueChange={setSelectedCategory}
+              className="w-full sm:w-44"
+              options={categories.map((category) => ({
+                value: String(category),
+                label: String(category),
+              }))}
+            />
           </div>
         </div>
-      </div>
 
-      {/* Sorting Controls */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        <span className="text-sm text-muted-foreground mr-2 flex items-center">Sort by:</span>
-        <button
-          onClick={() => requestSort("name")}
-          className={`px-3 py-1.5 rounded-lg text-sm flex items-center ${sortConfig.key === "name" ? "bg-primary/10 text-primary" : "bg-muted text-foreground"}`}
-        >
-          Name <SortIndicator columnKey="name" />
-        </button>
-        <button
-          onClick={() => requestSort("price")}
-          className={`px-3 py-1.5 rounded-lg text-sm flex items-center ${sortConfig.key === "price" ? "bg-primary/10 text-primary" : "bg-muted text-foreground"}`}
-        >
-          Price <SortIndicator columnKey="price" />
-        </button>
-        <button
-          onClick={() => requestSort("category")}
-          className={`px-3 py-1.5 rounded-lg text-sm flex items-center ${sortConfig.key === "category" ? "bg-primary/10 text-primary" : "bg-muted text-foreground"}`}
-        >
-          Category <SortIndicator columnKey="category" />
-        </button>
-        <button
-          onClick={() => requestSort("foodNumber")}
-          className={`px-3 py-1.5 rounded-lg text-sm flex items-center ${sortConfig.key === "foodNumber" ? "bg-primary/10 text-primary" : "bg-muted text-foreground"}`}
-        >
-          Number <SortIndicator columnKey="foodNumber" />
-        </button>
-      </div>
+        <div className="flex flex-wrap gap-2">
+          <span className="text-xs text-muted-foreground self-center mr-1">Sort:</span>
+          {sortButtons.map(({ key, label }) => (
+            <Button
+              key={key}
+              type="button"
+              size="sm"
+              variant={sortConfig.key === key ? "secondary" : "outline"}
+              onClick={() => requestSort(key)}
+              className="h-8 text-xs"
+            >
+              {label}
+              <SortIndicator columnKey={key} />
+            </Button>
+          ))}
+        </div>
+      </CardHeader>
 
-      {/* Food Items Grid with Fixed Height and Scroll */}
-      <div 
-        ref={gridRef}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 overflow-y-auto flex-grow relative"
-        style={{ maxHeight: '60vh' }}
-      >
-        {loading ? (
-          <div className="col-span-full text-center py-12 text-muted-foreground">Loading menu...</div>
-        ) : filteredItems.length === 0 ? (
-          <div className="col-span-full text-center py-12 bg-muted/40 rounded-2xl">
-            <div className="w-24 h-24 mx-auto bg-muted rounded-full flex items-center justify-center mb-4">
-              <FaSearch className="text-4xl text-muted-foreground" />
+      <CardContent className="flex flex-col flex-1 min-h-0 pt-0 relative">
+        <div
+          ref={gridRef}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-4 overflow-y-auto flex-1 min-h-[320px] max-h-[min(70vh,720px)] pr-1"
+        >
+          {loading ? (
+            <div className="col-span-full py-16 text-center text-muted-foreground">Loading menu...</div>
+          ) : filteredItems.length === 0 ? (
+            <div className="col-span-full py-12 text-center rounded-xl border border-dashed border-border bg-muted/20">
+              <p className="text-foreground font-medium mb-1">No items found</p>
+              <p className="text-sm text-muted-foreground mb-4">Try a different search or category</p>
+              <Button type="button" variant="outline" size="sm" onClick={clearSearch}>
+                Clear filters
+              </Button>
             </div>
-            <h3 className="text-xl font-semibold text-foreground mb-2">No items found</h3>
-            <p className="text-muted-foreground mb-4">Try adjusting your search or filter criteria</p>
-            <button
-              onClick={clearSearch}
-              className="px-4 py-2 bg-primary/50 text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-            >
-              Clear Search
-            </button>
-          </div>
-        ) : (
-          filteredItems.map((food) => (
-            <div
-              key={food.id}
-              className="bg-card rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border border-border flex flex-col"
-            >
-              {/* Food Image */}
-              <div className="relative h-40 overflow-hidden">
-                <img
-                  src={food.image}
-                  alt={food.name}
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                />
-                <div className="absolute top-3 left-3 bg-primary/50 text-primary-foreground text-xs font-bold px-2.5 py-1 rounded-full">
-                  #{food.foodNumber}
-                </div>
-                <div className="absolute top-3 right-3 bg-card/90 backdrop-blur-sm text-foreground text-xs font-medium px-2 py-1 rounded-lg">
-                  {food.category.split(' ')[0]}
-                </div>
-              </div>
-
-              {/* Food Details */}
-              <div className="p-4 flex-grow">
-                <h3 className="font-semibold text-foreground mb-1 line-clamp-1">{food.name}</h3>
-                <p className="text-sm text-muted-foreground mb-3 line-clamp-1">{food.category}</p>
-                <div className="flex justify-between items-center mt-4">
-                  <span className="text-lg font-bold text-primary">
-                    ฿{food.price.toFixed(2)}
+          ) : (
+            filteredItems.map((food) => (
+              <article
+                key={food.id}
+                className="group rounded-xl border border-border bg-card overflow-hidden hover:border-primary/40 hover:shadow-md transition-all flex flex-col"
+              >
+                <div className="relative aspect-[4/3] sm:aspect-[16/10] overflow-hidden bg-muted">
+                  <img
+                    src={food.image}
+                    alt={food.name}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    #{food.foodNumber}
                   </span>
-                  <button
-                    id={`add-btn-${food.id}`}
-                    onClick={() => handleAddItem(food)}
-                    className="px-3 py-2 bg-gradient-to-r bg-primary text-primary-foreground rounded-full text-sm hover:bg-primary/90 transition-all flex items-center shadow-md hover:shadow-lg"
-                  >
-                    <FaPlus/>
-                  </button>
+                  <span className="absolute top-2 right-2 bg-background/90 text-foreground text-[10px] px-2 py-0.5 rounded-md max-w-[45%] truncate">
+                    {food.category}
+                  </span>
                 </div>
-              </div>
-            </div>
-          ))
-        )}
 
-        {/* Scroll to Top Button */}
+                <div className="p-3 flex flex-col flex-1 gap-2">
+                  <h3 className="font-semibold text-sm md:text-base line-clamp-2 leading-snug">{food.name}</h3>
+                  <div className="mt-auto flex items-center justify-between gap-2">
+                    <span className="text-base md:text-lg font-bold text-primary">
+                      ฿{food.price.toFixed(2)}
+                    </span>
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={() => handleAddItem(food)}
+                      className="gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
+                    >
+                      <FaPlus className="size-3" />
+                      Add
+                    </Button>
+                  </div>
+                </div>
+              </article>
+            ))
+          )}
+        </div>
+
         {showScrollTop && (
-          <button
+          <Button
+            type="button"
+            size="icon"
             onClick={scrollToTop}
-            className="fixed bottom-6 right-6 bg-primary/50 text-primary-foreground p-3 rounded-full shadow-lg hover:bg-primary/90 transition-colors z-10"
+            className="absolute bottom-4 right-4 rounded-full shadow-lg z-10"
             aria-label="Scroll to top"
           >
             <FaArrowUp />
-          </button>
+          </Button>
         )}
-      </div>
 
-      {/* Pagination or Load More for very large datasets would go here */}
-      {filteredItems.length > 0 && (
-        <div className="mt-4 pt-4 border-t border-border flex justify-between items-center">
-          <p className="text-sm text-muted-foreground">
-            Showing {filteredItems.length} of {foodItems.length} items
+        {filteredItems.length > 0 && (
+          <p className="text-xs text-muted-foreground mt-3 shrink-0">
+            Showing {filteredItems.length} of {foodItems.length} menu items
           </p>
-          <div className="flex space-x-2">
-            <button className="px-3 py-1.5 bg-muted text-foreground rounded-lg text-sm">
-              Load More
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 

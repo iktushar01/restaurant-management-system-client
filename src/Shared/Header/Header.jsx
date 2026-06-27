@@ -18,10 +18,7 @@ const Header = () => {
   const [username] = useState("John Doe");
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -29,27 +26,27 @@ const Header = () => {
     console.log("User logged out");
   };
 
-  const formatTime = (date) => {
-    return date.toLocaleTimeString([], {
+  const formatTime = (date) =>
+    date.toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
     });
-  };
 
   return (
-    <header className="h-14 bg-primary text-primary-foreground shadow-md">
-      <div className="w-full max-w-none px-4 sm:px-6 lg:px-8">
-        <h2 className="text-xl sm:text-2xl font-bold tracking-tight truncate">
+    <header className="sticky top-0 z-50 h-14 shrink-0 bg-primary text-primary-foreground shadow-md">
+      <div className="flex h-full w-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <Link
+          to="/RestaurantDashboard/Index"
+          className="text-xl sm:text-2xl font-bold tracking-tight hover:opacity-90 transition-opacity shrink-0"
+        >
           DineFlow
-        </h2>
+        </Link>
 
-        <div className="flex items-center gap-2 sm:gap-4">
-          <div className="hidden sm:flex items-center font-medium">
-            <ClockIcon className="mr-2 size-4" />
-            <span className="tabular-nums text-sm sm:text-base">
-              {formatTime(currentTime)}
-            </span>
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+          <div className="hidden sm:flex items-center font-medium tabular-nums text-sm">
+            <ClockIcon className="mr-2 size-4 opacity-90" />
+            {formatTime(currentTime)}
           </div>
 
           <ModeToggle className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground" />
@@ -59,19 +56,17 @@ const Header = () => {
               render={
                 <Button
                   variant="ghost"
-                  className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                  className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground gap-1.5"
                 />
               }
             >
-              <span className="hidden sm:inline truncate max-w-[120px] mr-1">
-                {username}
-              </span>
+              <span className="hidden sm:inline truncate max-w-[140px]">{username}</span>
               <Avatar className="size-7 sm:hidden">
                 <AvatarFallback className="bg-primary-foreground/20 text-primary-foreground text-xs">
                   {username.charAt(0)}
                 </AvatarFallback>
               </Avatar>
-              <ChevronDownIcon className="size-4" />
+              <ChevronDownIcon className="size-4 opacity-80" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuLabel>{username}</DropdownMenuLabel>

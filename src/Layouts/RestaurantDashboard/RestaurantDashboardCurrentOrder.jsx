@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { formatMoney } from "@/lib/currency";
-import { BanknoteIcon, ClipboardListIcon, XIcon } from "lucide-react";
+import { BanknoteIcon, XIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -68,17 +68,13 @@ const RestaurantDashboardCurrentOrder = () => {
 
   return (
     <Card className="w-full border-border shadow-sm overflow-hidden">
-      <CardHeader className="pb-3 border-b border-border">
-        <CardTitle className="text-lg md:text-xl flex items-center gap-2">
-          <ClipboardListIcon className="size-5 text-primary" />
-          Current Orders
-          {!loading && (
-            <Badge variant="secondary" className="ml-2 font-normal">
-              {orders.length} active
-            </Badge>
-          )}
-        </CardTitle>
-      </CardHeader>
+      {!loading && orders.length > 0 && (
+        <div className="flex items-center justify-end px-4 py-2 border-b border-border bg-muted/30">
+          <Badge variant="secondary" className="font-normal">
+            {orders.length} active
+          </Badge>
+        </div>
+      )}
 
       {loading ? (
         <CardContent className="p-10 text-center text-muted-foreground">

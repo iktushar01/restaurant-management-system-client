@@ -21,7 +21,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -32,16 +31,8 @@ import {
 import { cn } from "@/lib/utils";
 
 const menuItems = [
-  {
-    name: "Dashboard",
-    icon: HomeIcon,
-    path: "/RestaurantDashboard/Index",
-  },
-  {
-    name: "Order",
-    icon: ShoppingBagIcon,
-    path: "/RestaurantOrder/Orders",
-  },
+  { name: "Dashboard", icon: HomeIcon, path: "/RestaurantDashboard/Index" },
+  { name: "Order", icon: ShoppingBagIcon, path: "/RestaurantOrder/Orders" },
   {
     name: "Event",
     icon: CalendarIcon,
@@ -73,10 +64,7 @@ const menuItems = [
       { name: "Add Deduction Heading", path: "/hr/deduction-heading/Index" },
       { name: "Employee Payroll", path: "/hr/HrEmployeePayroll/Index" },
       { name: "Employee Salary Payable", path: "/hr/salary-payable/Index" },
-      {
-        name: "Grand Employee Salary Payable",
-        path: "/hr/grand-salary/Index",
-      },
+      { name: "Grand Employee Salary Payable", path: "/hr/grand-salary/Index" },
     ],
   },
   {
@@ -124,18 +112,14 @@ const menuItems = [
       { name: "Daily Statement", path: "/report/daily" },
     ],
   },
-  {
-    name: "Settings",
-    icon: SettingsIcon,
-    path: "/WorkPeriod/Index",
-  },
+  { name: "Settings", icon: SettingsIcon, path: "/WorkPeriod/Index" },
 ];
 
-const navLinkClass = ({ isActive }) =>
+const navItemClass = (isActive) =>
   cn(
-    "flex items-center gap-1.5 rounded-md px-3 py-2 text-sm transition-colors whitespace-nowrap",
+    "flex w-full items-center justify-center gap-1.5 rounded-md px-2 py-2.5 text-xs lg:text-sm font-medium transition-colors whitespace-nowrap",
     isActive
-      ? "bg-accent text-accent-foreground font-medium"
+      ? "bg-primary text-primary-foreground shadow-sm"
       : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
   );
 
@@ -147,38 +131,42 @@ const DesktopNavItem = ({ item }) => {
 
   if (!item.subMenu) {
     return (
-      <NavLink to={item.path} className={navLinkClass}>
-        <Icon className="size-4" />
-        <span>{item.name}</span>
-      </NavLink>
+      <div className="flex-1 min-w-0">
+        <NavLink to={item.path} className={({ isActive }) => navItemClass(isActive)}>
+          <Icon className="size-4 shrink-0" />
+          <span className="truncate">{item.name}</span>
+        </NavLink>
+      </div>
     );
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            variant="ghost"
-            className={cn(
-              "h-auto px-3 py-2 font-normal",
-              isSubmenuActive && "bg-accent text-accent-foreground"
-            )}
-          />
-        }
-      >
-        <Icon className="size-4" />
-        <span>{item.name}</span>
-        <ChevronDownIcon className="size-4" />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
-        {item.subMenu.map((subItem) => (
-          <DropdownMenuItem key={subItem.path} render={<NavLink to={subItem.path} />}>
-            {subItem.name}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex-1 min-w-0">
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              variant="ghost"
+              className={cn(
+                "h-auto w-full gap-1.5 px-2 py-2.5 text-xs lg:text-sm font-medium",
+                isSubmenuActive && "bg-primary text-primary-foreground shadow-sm"
+              )}
+            />
+          }
+        >
+          <Icon className="size-4 shrink-0" />
+          <span className="truncate">{item.name}</span>
+          <ChevronDownIcon className="size-3.5 shrink-0 opacity-70" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="center">
+          {item.subMenu.map((subItem) => (
+            <DropdownMenuItem key={subItem.path} render={<NavLink to={subItem.path} />}>
+              {subItem.name}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 };
 
@@ -188,11 +176,7 @@ const MobileNavItem = ({ item, onNavigate }) => {
 
   if (!item.subMenu) {
     return (
-      <NavLink
-        to={item.path}
-        className={navLinkClass}
-        onClick={onNavigate}
-      >
+      <NavLink to={item.path} className={({ isActive }) => navItemClass(isActive)} onClick={onNavigate}>
         <Icon className="size-4" />
         <span>{item.name}</span>
       </NavLink>
@@ -218,7 +202,7 @@ const MobileNavItem = ({ item, onNavigate }) => {
             <NavLink
               key={subItem.path}
               to={subItem.path}
-              className={navLinkClass}
+              className={({ isActive }) => navItemClass(isActive)}
               onClick={onNavigate}
             >
               {subItem.name}
@@ -234,14 +218,14 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <nav className="bg-card text-card-foreground border-b border-border shadow-sm">
-      <div className="w-full max-w-none px-4 sm:px-6 lg:px-8">
+    <nav className="sticky top-14 z-40 w-full bg-card text-card-foreground border-b border-border shadow-sm">
+      <div className="w-full px-2 sm:px-4 lg:px-6">
         <div className="flex justify-between items-center py-3 md:hidden">
-          <span className="text-lg font-medium">Menu</span>
+          <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+            Navigation
+          </span>
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger
-              render={<Button variant="outline" size="icon-sm" />}
-            >
+            <SheetTrigger render={<Button variant="outline" size="icon-sm" />}>
               <MenuIcon className="size-4" />
               <span className="sr-only">Open menu</span>
             </SheetTrigger>
@@ -262,13 +246,12 @@ const Navbar = () => {
           </Sheet>
         </div>
 
-        <div className="hidden md:flex flex-wrap justify-start gap-1 py-2">
+        <div className="hidden md:flex w-full items-stretch gap-0.5 py-1.5">
           {menuItems.map((item) => (
             <DesktopNavItem key={item.name} item={item} />
           ))}
         </div>
       </div>
-      <Separator />
     </nav>
   );
 };

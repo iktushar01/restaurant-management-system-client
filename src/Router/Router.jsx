@@ -191,11 +191,23 @@ export const router = createBrowserRouter([
         element: <EventManage />,
       },
       {
-        path: "/event/manage/Create",
+        path: "/events/create",
         element: <EventManageCreate />,
       },
       {
+        path: "/event/manage/create",
+        element: <EventManageCreate />,
+      },
+      {
+        path: "/event/manage/Create",
+        element: <Navigate to="/events/create" replace />,
+      },
+      {
         path: "/events/edit/:id",
+        element: <EventManageEditById />,
+      },
+      {
+        path: "/event/manage/edit/:id",
         element: <EventManageEditById />,
       },
       {

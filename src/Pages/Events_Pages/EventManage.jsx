@@ -1,208 +1,200 @@
 import React, { useState } from "react";
 import { formatMoney } from "@/lib/currency";
-import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
-import { toast } from "sonner";
+import { formatEventDate, getEventStatusBadgeClass } from "@/lib/eventUtils";
 import { Link } from "react-router-dom";
-import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
+import { FaEdit, FaPlus, FaSearch, FaTrash } from "react-icons/fa";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { SelectField } from "@/Shared/FormSelect/FormSelect";
+import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
+import { EmptyState, LoadingState } from "@/Shared/PageStates/PageStates";
+import PageHeader from "@/Shared/PageHeader/PageHeader";
+import PageLayout from "@/Shared/PageLayout/PageLayout";
+import ReusableTable from "@/Shared/ReusableTable/ReusableTable";
+import { ErrorBanner } from "@/Shared/ErrorBanner/ErrorBanner";
 import { inventoryService } from "../../services/inventoryService";
 import { useApiList } from "../../hooks/useApiList";
+import { toast } from "sonner";
 
 const EventManage = () => {
+  const { confirm } = useConfirmDialog();
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data: events, totalEntries, totalPages, loading, error, refetch } = useApiList(
-    inventoryService.events.getAll,
-    { searchTerm, currentPage, entriesToShow }
-  );
+  const { data: events, totalEntries, totalPages, loading, error, refetch } =
+    useApiList(inventoryService.events.getAll, { searchTerm, currentPage, entriesToShow });
 
   const handleDelete = async (id) => {
-    const ok = await confirm({ description: "Are you sure you want to delete this event?" });
+    const ok = await confirm({
+      title: "Delete event?",
+      description: "This event will be permanently removed.",
+      confirmLabel: "Delete",
+    });
     if (!ok) return;
     try {
-        await inventoryService.events.delete(id);
-        refetch();
-      } catch (err) {
-        toast.error(err.message || "Failed to delete event");
-      }
+      await inventoryService.events.delete(id);
+      toast.success("Event deleted");
+      refetch();
+    } catch (err) {
+      toast.error(err.message || "Failed to delete event");
+    }
   };
 
-  const formatDate = (dateString) => dateString.split(",")[0] || dateString.split(" ")[0];
-
   const columns = [
-    { header: "SL No", accessor: "id" },
     { header: "Subject", accessor: "subject" },
-    { header: "Customer Name", accessor: "customerName" },
+    { header: "Customer", accessor: "customerName" },
     { header: "Phone", accessor: "phone" },
     {
       header: "Date",
       accessor: "date",
-      render: (row) => formatDate(row.date),
+      render: (row) => formatEventDate(row.date),
     },
-    { header: "No Of Person", accessor: "noOfPerson" },
+    { header: "Guests", accessor: "noOfPerson" },
     {
-      header: "Advance Amount",
+      header: "Advance",
       accessor: "advanceAmount",
       render: (row) => formatMoney(row.advanceAmount),
     },
     {
       header: "Menu",
       accessor: "menu",
-      render: (row) => row.menu || <span className="text-muted-foreground">Not specified</span>,
-    },
-    {
-      header: "Description",
-      accessor: "description",
-      render: (row) => row.description || <span className="text-muted-foreground">Not specified</span>,
+      render: (row) => row.menu || <span className="text-muted-foreground">—</span>,
     },
     {
       header: "Status",
       accessor: "status",
       render: (row) => (
-        <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${
-            row.status === "Booked"
-              ? "bg-primary/10 text-foreground"
-              : row.status === "Resolved"
-                ? "bg-success/10 text-success"
-                : "bg-muted text-foreground"
-          }`}
-        >
+        <Badge variant="outline" className={getEventStatusBadgeClass(row.status)}>
           {row.status}
-        </span>
+        </Badge>
+      ),
+    },
+  ];
+
+  const actions = [
+    {
+      label: "Edit",
+      render: (row) => (
+        <Link
+          to={`/events/edit/${row.id}`}
+          className="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80"
+        >
+          <FaEdit /> Edit
+        </Link>
+      ),
+    },
+    {
+      label: "Delete",
+      render: (row) => (
+        <button
+          type="button"
+          onClick={() => handleDelete(row.id)}
+          className="inline-flex items-center gap-1 text-sm text-destructive hover:text-destructive/80"
+        >
+          <FaTrash /> Delete
+        </button>
       ),
     },
   ];
 
   return (
-    <div className="p-6    mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 bg-muted/40 sm:bg-muted/40 p-4 sm:p-6 rounded-xl">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Event Management</h1>
-          <p className="text-muted-foreground text-sm sm:text-base mt-1">
-            Manage your organization's events and bookings
-          </p>
+    <PageLayout className="p-4 md:p-6 lg:px-8">
+      <PageHeader
+        title="Event Management"
+        subtitle="Manage bookings, parties, and scheduled events"
+      >
+        <Button render={<Link to="/events/create" />} className="w-full sm:w-auto">
+          <FaPlus className="mr-2" />
+          Create Event
+        </Button>
+      </PageHeader>
+
+      <ErrorBanner message={error} className="mb-4" />
+
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+        <div className="flex items-center gap-2 text-sm">
+          <span>Show</span>
+          <SelectField
+            value={entriesToShow}
+            onValueChange={(v) => {
+              setEntriesToShow(Number(v));
+              setCurrentPage(1);
+            }}
+            className="w-20"
+            options={[
+              { value: "10", label: "10" },
+              { value: "25", label: "25" },
+              { value: "50", label: "50" },
+            ]}
+          />
+          <span>entries</span>
         </div>
-        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          <div className="relative w-full sm:w-64">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FaSearch className="text-muted-foreground" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search events..."
-              className="pl-10 pr-4 py-2 w-full border border-border rounded-lg focus:ring-2 focus-visible:ring-ring focus-visible:border-ring focus:outline-none"
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1);
-              }}
-            />
-          </div>
-          <Link to="Create" className="w-full sm:w-auto">
-            <button className="w-full sm:w-auto flex items-center justify-center px-4 sm:px-6 py-2 bg-gradient-to-r bg-primary text-primary-foreground text-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus-visible:ring-ring focus:ring-offset-2 cursor-pointer text-sm sm:text-base">
+        <div className="relative w-full md:w-72">
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground size-3.5" />
+          <input
+            type="text"
+            placeholder="Search events..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="pl-9 pr-4 py-2 w-full border border-border rounded-md bg-background text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          />
+        </div>
+      </div>
+
+      {loading ? (
+        <LoadingState message="Loading events..." />
+      ) : events.length === 0 ? (
+        <EmptyState
+          title={searchTerm ? "No matching events" : "No events yet"}
+          description={
+            searchTerm
+              ? "Try a different search term."
+              : "Create your first event booking to get started."
+          }
+        >
+          {!searchTerm && (
+            <Button render={<Link to="/events/create" />}>
               <FaPlus className="mr-2" />
-              Create New Event
-            </button>
-          </Link>
-        </div>
-      </div>
-
-      {error && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{error}</div>}
-
-      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
-        {loading ? (
-          <div className="text-center py-12 text-muted-foreground">Loading events...</div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-border">
-              <thead className="bg-primary">
-                <tr>
-                  {columns.map((column, index) => (
-                    <th
-                      key={index}
-                      className="px-6 py-3 text-left text-xs font-medium text-foreground uppercase tracking-wider"
-                    >
-                      {column.header}
-                    </th>
-                  ))}
-                  <th className="px-6 py-3 text-left text-xs font-medium text-foreground uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-card divide-y divide-border">
-                {events.map((event) => (
-                  <tr key={event.id} className="hover:bg-muted/40">
-                    {columns.map((column, colIndex) => (
-                      <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                        {column.render ? column.render(event) : event[column.accessor]}
-                      </td>
-                    ))}
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex space-x-3">
-                      <Link
-                        to={`/events/edit/${event.id}`}
-                        className="text-primary hover:text-primary/80 flex items-center"
-                      >
-                        <FaEdit className="mr-1" /> Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(event.id)}
-                        className="text-destructive hover:text-destructive/80 flex items-center"
-                      >
-                        <FaTrash className="mr-1" /> Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {!loading && events.length === 0 && (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-medium text-foreground mb-2">
-              {searchTerm ? "No matching events found" : "No events found"}
-            </h3>
-            <p className="text-muted-foreground mb-6">
-              {searchTerm ? "Try adjusting your search terms" : "Get started by creating a new event"}
-            </p>
-            {!searchTerm && (
-              <Link to="Create">
-                <button className="px-5 py-2.5 bg-gradient-to-r bg-primary text-primary-foreground text-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus-visible:ring-ring focus:ring-offset-2 inline-flex items-center">
-                  <FaPlus className="mr-2" />
-                  Create New Event
-                </button>
-              </Link>
-            )}
-          </div>
-        )}
-      </div>
-
-      {totalPages > 1 && (
-        <div className="flex justify-center gap-2 mt-4">
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="px-3 py-1 border rounded-md disabled:opacity-50"
-          >
-            Previous
-          </button>
-          <span className="px-3 py-1 text-sm text-muted-foreground">
-            Page {currentPage} of {totalPages} ({totalEntries} events)
-          </span>
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 border rounded-md disabled:opacity-50"
-          >
-            Next
-          </button>
-        </div>
+              Create Event
+            </Button>
+          )}
+        </EmptyState>
+      ) : (
+        <>
+          <ReusableTable columns={columns} data={events} actions={actions} />
+          {totalPages > 1 && (
+            <div className="flex flex-wrap items-center justify-between gap-3 mt-4">
+              <p className="text-sm text-muted-foreground">{totalEntries} total events</p>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                >
+                  Previous
+                </Button>
+                <span className="text-sm text-muted-foreground">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage >= totalPages}
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          )}
+        </>
       )}
-    </div>
+    </PageLayout>
   );
 };
 

@@ -1,51 +1,74 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft, FiUpload } from "react-icons/fi";
+import { foodService } from "../../../services/foodService";
+import { foodCategoryService } from "../../../services/foodCategoryService";
 
 const FoodPageEditByID = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-    setValue,
   } = useForm();
 
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  // Pre-fill form with existing food data (in a real app, this would come from API)
-  React.useEffect(() => {
-    // Simulating fetching food data
-    const foodData = {
-      category: "Appetizer (Thai)",
-      foodNo: "01",
-      foodName: "Chicken Satay",
-      description: "6 Pcs",
-      quantity: "",
-      price: 395.0,
-      discount: "",
-      color: "#ff0000",
-      note: "",
-      serialNo: 1,
-      package: false,
-      availability: true,
-      vatApplicable: false,
-    };
-
-    // Set form values
-    Object.keys(foodData).forEach((key) => {
-      setValue(key, foodData[key]);
-    });
-  }, [setValue]);
+  useEffect(() => {
+    Promise.all([
+      foodCategoryService.getAllSimple(),
+      foodService.getById(id),
+    ])
+      .then(([catRes, foodRes]) => {
+        setCategories(catRes.data || []);
+        const food = foodRes.data;
+        reset({
+          categoryId: food.categoryId,
+          foodNo: food.foodNo,
+          foodName: food.foodName || food.name,
+          serialNo: food.serialNo,
+          price: food.price,
+          availability: food.availability === "Available",
+        });
+      })
+      .catch((err) => setSubmitError(err.message || "Failed to load food item"))
+      .finally(() => setLoading(false));
+  }, [id, reset]);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
 
-  const onSubmit = (data) => {
-    console.log("Food Form Data:", data);
-    // Add your API call here
+  const onSubmit = async (data) => {
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await foodService.update(id, {
+        categoryId: data.categoryId,
+        foodNo: data.foodNo,
+        name: data.foodName,
+        serialNo: Number(data.serialNo),
+        price: Number(data.price),
+        availability: data.availability ? "AVAILABLE" : "UNAVAILABLE",
+      });
+      navigate("/WorkPeriod/foods/index");
+    } catch (err) {
+      setSubmitError(err.message || "Failed to update food");
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  if (loading) {
+    return <div className="p-6 text-center text-gray-500">Loading...</div>;
+  }
 
   return (
     <div className="max-w-6xl min-h-screen mx-auto p-6">
@@ -70,6 +93,7 @@ const FoodPageEditByID = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          {submitError && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Basic Information Column */}
             <div className="space-y-6">
@@ -84,21 +108,18 @@ const FoodPageEditByID = () => {
                 </label>
                 <select
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 transition-all duration-200 outline-none"
-                  {...register("category", {
+                  {...register("categoryId", {
                     required: "Food category is required",
                   })}
                 >
-                  <option value="Appetizer (Thai)">Appetizer (Thai)</option>
-                  <option value="Salad (Thai)">Salad (Thai)</option>
-                  <option value="Soup (Thai)">Soup (Thai)</option>
-                  <option value="Main Course">Main Course</option>
-                  <option value="Dessert">Dessert</option>
-                  <option value="Cold Beverages">Cold Beverages</option>
-                  <option value="Hot Beverages">Hot Beverages</option>
+                  <option value="">Select a category</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
                 </select>
-                {errors.category && (
+                {errors.categoryId && (
                   <p className="mt-1 text-sm text-red-600">
-                    {errors.category.message}
+                    {errors.categoryId.message}
                   </p>
                 )}
               </div>
@@ -349,7 +370,6 @@ const FoodPageEditByID = () => {
                   <input
                     type="checkbox"
                     id="availability"
-                    defaultChecked
                     className="h-4 w-4 text-amber-500 focus:ring-amber-300 border-gray-300 rounded"
                     {...register("availability")}
                   />
@@ -388,9 +408,10 @@ const FoodPageEditByID = () => {
             </Link>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
+              disabled={submitting}
+              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer disabled:opacity-60"
             >
-              Save
+              {submitting ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

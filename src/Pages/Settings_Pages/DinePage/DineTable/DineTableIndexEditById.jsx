@@ -1,47 +1,67 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
+import { dineTableService } from "../../../services/dineTableService";
+import { dineLocationService } from "../../../services/dineLocationService";
+
+const STATUS_TO_API = { Vacant: "AVAILABLE", Occupied: "OCCUPIED", Reserved: "RESERVED" };
+const STATUS_FROM_API = { AVAILABLE: "Vacant", OCCUPIED: "Occupied", RESERVED: "Reserved" };
 
 const DineTableIndexEditById = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue
-  } = useForm();
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [locations, setLocations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-  // Pre-fill form with existing table data (in a real app, this would come from API)
-  React.useEffect(() => {
-    // Simulating fetching table data
-    const tableData = {
-      tableNo: "KABIN 1",
-      capacity: 4,
-      status: "Vacant",
-      location: "Central"
-    };
-    
-    // Set form values
-    setValue("tableNo", tableData.tableNo);
-    setValue("capacity", tableData.capacity);
-    setValue("status", tableData.status);
-    setValue("location", tableData.location);
-  }, [setValue]);
+  useEffect(() => {
+    Promise.all([
+      dineLocationService.getAllSimple(),
+      dineTableService.getById(id),
+    ])
+      .then(([locRes, tableRes]) => {
+        setLocations(locRes.data || []);
+        const table = tableRes.data;
+        reset({
+          tableNo: table.tableNo,
+          capacity: table.capacity,
+          status: STATUS_FROM_API[table.statusRaw] || table.status || "Vacant",
+          locationId: table.locationId,
+        });
+      })
+      .catch((err) => setSubmitError(err.message || "Failed to load table"))
+      .finally(() => setLoading(false));
+  }, [id, reset]);
 
-  const onSubmit = (data) => {
-    console.log("Table Form Data:", data);
-    // Add your API call here
+  const onSubmit = async (data) => {
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await dineTableService.update(id, {
+        locationId: data.locationId,
+        tableNo: data.tableNo,
+        capacity: Number(data.capacity),
+        status: STATUS_TO_API[data.status] || "AVAILABLE",
+      });
+      navigate("/WorkPeriod/dine/tables");
+    } catch (err) {
+      setSubmitError(err.message || "Failed to update table");
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  if (loading) return <div className="p-6 text-center text-gray-500">Loading...</div>;
 
   return (
     <div className="max-w-4xl min-h-screen mx-auto p-6">
       <div className="flex items-center mb-6">
-        <Link
-          to="/WorkPeriod/dine/tables"
-          className="flex items-center group transition-all duration-200"
-        >
+        <Link to="/WorkPeriod/dine/tables" className="flex items-center group transition-all duration-200">
           <button className="flex items-center px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 group-hover:-translate-x-1 cursor-pointer">
-            <FiArrowLeft className="mr-2 text-gray-600 group-hover:text-gray-900 transition-colors duration-200 " />
+            <FiArrowLeft className="mr-2 text-gray-600 group-hover:text-gray-900 transition-colors duration-200" />
             Back to Tables
           </button>
         </Link>
@@ -49,118 +69,67 @@ const DineTableIndexEditById = () => {
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6 bg-gradient-to-r from-yellow-200 to-yellow-400 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Update Table
-          </h2>
-          <p className="text-gray-700 mt-1">
-            Update the details below for this table
-          </p>
+          <h2 className="text-2xl font-bold text-gray-800">Update Table</h2>
+          <p className="text-gray-700 mt-1">Update the details below for this table</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          {submitError && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>}
           <div className="grid grid-cols-1 gap-6">
-            {/* Table No Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Table No
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Table No</label>
               <input
                 type="text"
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 transition-all duration-200 outline-none"
-                placeholder="Enter table number"
-                {...register("tableNo", { 
-                  required: "Table number is required",
-                  minLength: {
-                    value: 1,
-                    message: "Table number must be at least 1 character"
-                  }
-                })}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 outline-none"
+                {...register("tableNo", { required: "Table number is required" })}
               />
-              {errors.tableNo && (
-                <p className="mt-1 text-sm text-red-600">{errors.tableNo.message}</p>
-              )}
+              {errors.tableNo && <p className="mt-1 text-sm text-red-600">{errors.tableNo.message}</p>}
             </div>
 
-            {/* Capacity Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Capacity
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Capacity</label>
               <input
                 type="number"
                 min="1"
                 max="20"
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 transition-all duration-200 outline-none"
-                placeholder="Enter table capacity"
-                {...register("capacity", { 
-                  required: "Capacity is required",
-                  min: {
-                    value: 1,
-                    message: "Capacity must be at least 1"
-                  },
-                  max: {
-                    value: 20,
-                    message: "Capacity cannot exceed 20"
-                  }
-                })}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 outline-none"
+                {...register("capacity", { required: "Capacity is required", min: { value: 1, message: "Min 1" }, max: { value: 20, message: "Max 20" } })}
               />
-              {errors.capacity && (
-                <p className="mt-1 text-sm text-red-600">{errors.capacity.message}</p>
-              )}
+              {errors.capacity && <p className="mt-1 text-sm text-red-600">{errors.capacity.message}</p>}
             </div>
 
-            {/* Status Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Status
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
               <select
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 transition-all duration-200 outline-none"
-                {...register("status", { required: "Status selection is required" })}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 outline-none"
+                {...register("status", { required: "Status is required" })}
               >
                 <option value="Vacant">Vacant</option>
                 <option value="Occupied">Occupied</option>
                 <option value="Reserved">Reserved</option>
-                <option value="Cleaning">Cleaning</option>
               </select>
-              {errors.status && (
-                <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>
-              )}
+              {errors.status && <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>}
             </div>
 
-            {/* Dining Location Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Dining Location
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Dining Location</label>
               <select
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 transition-all duration-200 outline-none"
-                {...register("location", { required: "Dining location selection is required" })}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-amber-300 outline-none"
+                {...register("locationId", { required: "Dining location is required" })}
               >
-                <option value="Central">Central</option>
-                <option value="Terrace">Terrace</option>
-                <option value="Private Room">Private Room</option>
-                <option value="Bar Area">Bar Area</option>
-                <option value="Garden">Garden</option>
+                <option value="">Select a dining location</option>
+                {locations.map((loc) => (
+                  <option key={loc.id} value={loc.id}>{loc.name}</option>
+                ))}
               </select>
-              {errors.location && (
-                <p className="mt-1 text-sm text-red-600">{errors.location.message}</p>
-              )}
+              {errors.locationId && <p className="mt-1 text-sm text-red-600">{errors.locationId.message}</p>}
             </div>
           </div>
 
           <div className="mt-8 flex justify-end space-x-3">
-            <Link
-              to="/WorkPeriod/dine/tables"
-              className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2"
-            >
-              Close
-            </Link>
-            <button
-              type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 cursor-pointer"
-            >
-              Save
+            <Link to="/WorkPeriod/dine/tables" className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Close</Link>
+            <button type="submit" disabled={submitting} className="px-6 py-2.5 bg-gradient-to-r from-yellow-200 to-yellow-400 text-gray-900 font-medium rounded-lg disabled:opacity-60">
+              {submitting ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

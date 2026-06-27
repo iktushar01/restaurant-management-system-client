@@ -1,48 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiEdit2, FiSave, FiX, FiUpload, FiInfo } from 'react-icons/fi';
+import { propertyService } from '../../../services/propertyService';
+
+const emptyForm = {
+  propertyName: '',
+  propertyGrade: '',
+  city: '',
+  state: '',
+  phone: '',
+  email: '',
+  registrationVAT: '',
+  registrationCST: '',
+  propertyType: '',
+  address: '',
+  postalCode: '',
+  country: '',
+  fax: '',
+  website: '',
+  registrationTIN: '',
+  companyLogo: null,
+};
 
 const PropertyInformation = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    propertyName: 'DineFlow',
-    propertyGrade: '1st Grade',
-    city: 'Chittagong',
-    state: 'Chittagong',
-    phone: '+8801818699845',
-    email: 'email@email.com',
-    registrationVAT: '12345678',
-    registrationCST: '',
-    propertyType: 'First',
-    address: 'Chittagong, Bangladesh',
-    postalCode: '4000',
-    country: 'Bangladesh',
-    fax: '',
-    website: 'www.web.com',
-    registrationTIN: '',
-    companyLogo: null
-  });
+  const [formData, setFormData] = useState(emptyForm);
+  const [savedData, setSavedData] = useState(emptyForm);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [submitError, setSubmitError] = useState('');
+
+  useEffect(() => {
+    propertyService.get()
+      .then((res) => {
+        const data = { ...emptyForm, ...res.data, companyLogo: null };
+        setFormData(data);
+        setSavedData(data);
+      })
+      .catch((err) => setError(err.message || 'Failed to load property information'))
+      .finally(() => setLoading(false));
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      companyLogo: e.target.files[0]
-    }));
+    setFormData(prev => ({ ...prev, companyLogo: e.target.files[0] }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Save data logic here
-    console.log('Form data submitted:', formData);
+  const handleCancel = () => {
+    setFormData(savedData);
     setIsEditing(false);
+    setSubmitError('');
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitError('');
+    setSubmitting(true);
+    try {
+      const { companyLogo, ...payload } = formData;
+      const res = await propertyService.update(payload);
+      const data = { ...emptyForm, ...res.data, companyLogo: null };
+      setFormData(data);
+      setSavedData(data);
+      setIsEditing(false);
+    } catch (err) {
+      setSubmitError(err.message || 'Failed to update property');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center text-gray-500">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -62,7 +96,7 @@ const PropertyInformation = () => {
                 </button>
               ) : (
                 <button
-                  onClick={() => setIsEditing(false)}
+                  onClick={handleCancel}
                   className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-white/30 transition-all duration-200"
                 >
                   <FiX className="mr-2" />
@@ -74,8 +108,10 @@ const PropertyInformation = () => {
 
           {/* Content */}
           <div className="px-6 py-8 sm:px-8">
+            {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
             {isEditing ? (
               <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {submitError && <div className="md:col-span-2 p-3 bg-red-50 text-red-700 rounded-lg text-sm">{submitError}</div>}
                 {/* Left Column */}
                 <div className="space-y-5">
                   <div className="form-group">
@@ -276,10 +312,11 @@ const PropertyInformation = () => {
                 <div className="md:col-span-2 pt-6 border-t border-gray-200 flex justify-end">
                   <button
                     type="submit"
-                    className="flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                    disabled={submitting}
+                    className="flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-60"
                   >
                     <FiSave className="mr-2" />
-                    Update Information
+                    {submitting ? 'Saving...' : 'Update Information'}
                   </button>
                 </div>
               </form>
@@ -288,26 +325,26 @@ const PropertyInformation = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                   {/* Left Column - Display Mode */}
                   <div className="space-y-4">
-                    <InfoRow label="Property Name" value={formData.propertyName} />
-                    <InfoRow label="Property Grade" value={formData.propertyGrade} />
-                    <InfoRow label="City" value={formData.city} />
-                    <InfoRow label="State" value={formData.state} />
-                    <InfoRow label="Phone" value={formData.phone} />
-                    <InfoRow label="Email" value={formData.email} />
-                    <InfoRow label="Registration VAT" value={formData.registrationVAT} />
-                    <InfoRow label="Registration CST" value={formData.registrationCST} />
+                    <InfoRow label="Property Name" value={savedData.propertyName} />
+                    <InfoRow label="Property Grade" value={savedData.propertyGrade} />
+                    <InfoRow label="City" value={savedData.city} />
+                    <InfoRow label="State" value={savedData.state} />
+                    <InfoRow label="Phone" value={savedData.phone} />
+                    <InfoRow label="Email" value={savedData.email} />
+                    <InfoRow label="Registration VAT" value={savedData.registrationVAT} />
+                    <InfoRow label="Registration CST" value={savedData.registrationCST} />
                   </div>
 
                   {/* Right Column - Display Mode */}
                   <div className="space-y-4">
-                    <InfoRow label="Property Type" value={formData.propertyType} />
-                    <InfoRow label="Address" value={formData.address} />
-                    <InfoRow label="Postal Code" value={formData.postalCode} />
-                    <InfoRow label="Country" value={formData.country} />
-                    <InfoRow label="Fax" value={formData.fax} />
-                    <InfoRow label="Website" value={formData.website} />
-                    <InfoRow label="Registration TIN" value={formData.registrationTIN} />
-                    <InfoRow label="Company Logo" value="No file selected" />
+                    <InfoRow label="Property Type" value={savedData.propertyType} />
+                    <InfoRow label="Address" value={savedData.address} />
+                    <InfoRow label="Postal Code" value={savedData.postalCode} />
+                    <InfoRow label="Country" value={savedData.country} />
+                    <InfoRow label="Fax" value={savedData.fax} />
+                    <InfoRow label="Website" value={savedData.website} />
+                    <InfoRow label="Registration TIN" value={savedData.registrationTIN} />
+                    <InfoRow label="Company Logo" value={savedData.companyLogo || "No file selected"} />
                   </div>
                 </div>
 

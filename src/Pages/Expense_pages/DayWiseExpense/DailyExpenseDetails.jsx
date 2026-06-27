@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { Link, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import { financeService } from "../../../services/financeService";
@@ -68,7 +69,7 @@ const DailyExpenseDetails = () => {
                       <tr key={transaction.id} className="border-b border-border hover:bg-muted/40">
                         <td className="px-4 py-3 text-sm text-foreground">{index + 1}</td>
                         <td className="px-4 py-3 text-sm text-foreground">{transaction.expenseHeadName}</td>
-                        <td className="px-4 py-3 text-sm text-foreground">{Number(transaction.amount).toFixed(2)}</td>
+                        <td className="px-4 py-3 text-sm text-foreground">{formatMoney(transaction.amount)}</td>
                         <td className="px-4 py-3 text-sm text-foreground">{transaction.note || "-"}</td>
                       </tr>
                     ))}
@@ -82,7 +83,7 @@ const DailyExpenseDetails = () => {
               <div className="mt-6 pt-4 border-t border-border">
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-bold text-foreground">Total Expense</h3>
-                  <p className="text-xl font-bold text-destructive">{totalExpense.toFixed(2)}</p>
+                  <p className="text-xl font-bold text-destructive">{formatMoney(totalExpense)}</p>
                 </div>
               </div>
             </>

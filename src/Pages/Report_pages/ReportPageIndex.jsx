@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { formatMoney } from "@/lib/currency";
 import { FiPrinter, FiDownload, FiChevronDown, FiChevronUp, FiDollarSign, FiPercent, FiHome, FiCreditCard, FiDollarSign as FiCash } from 'react-icons/fi';
 import { reportService } from '../../services/reportService';
 
-const formatCurrency = (value) => `$${Number(value || 0).toFixed(2)}`;
+const formatCurrency = (value) => {formatMoney(Number(value || 0).toFixed(2))};
 
 const ReportPageIndex = () => {
   const [showSummary, setShowSummary] = useState(true);
@@ -23,13 +24,13 @@ const ReportPageIndex = () => {
   const summaryData = useMemo(() => {
     const summary = report?.summary || {};
     return [
-      { label: 'Total Food Cost', value: formatCurrency(summary.totalFoodCost), icon: <FiDollarSign className="text-primary" /> },
-      { label: 'Total Discount', value: formatCurrency(summary.totalDiscount), icon: <FiPercent className="text-success" /> },
-      { label: 'Total OnHouse Cost', value: formatCurrency(summary.totalOnHouse), icon: <FiHome className="text-purple-500" /> },
-      { label: 'Total Due Orders Amount', value: formatCurrency(summary.totalDueOrders), icon: <FiDollarSign className="text-primary" /> },
-      { label: 'Total Due Collect Amount', value: formatCurrency(summary.totalDueCollect), icon: <FiDollarSign className="text-orange-500" /> },
-      { label: 'Total Payment Through Card', value: formatCurrency(summary.totalCard), icon: <FiCreditCard className="text-indigo-500" /> },
-      { label: 'Total Cash Payment', value: formatCurrency(summary.totalCash), icon: <FiCash className="text-teal-500" /> },
+      { label: 'Total Food Cost', value: formatMoney(summary.totalFoodCost), icon: <FiDollarSign className="text-primary" /> },
+      { label: 'Total Discount', value: formatMoney(summary.totalDiscount), icon: <FiPercent className="text-success" /> },
+      { label: 'Total OnHouse Cost', value: formatMoney(summary.totalOnHouse), icon: <FiHome className="text-purple-500" /> },
+      { label: 'Total Due Orders Amount', value: formatMoney(summary.totalDueOrders), icon: <FiDollarSign className="text-primary" /> },
+      { label: 'Total Due Collect Amount', value: formatMoney(summary.totalDueCollect), icon: <FiDollarSign className="text-orange-500" /> },
+      { label: 'Total Payment Through Card', value: formatMoney(summary.totalCard), icon: <FiCreditCard className="text-indigo-500" /> },
+      { label: 'Total Cash Payment', value: formatMoney(summary.totalCash), icon: <FiCash className="text-teal-500" /> },
     ];
   }, [report]);
 
@@ -89,13 +90,13 @@ const ReportPageIndex = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{item.orderTime}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground font-medium">{formatCurrency(item.total)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground font-medium">{formatMoney(item.total)}</td>
                     </tr>
                   ))}
                   <tr className="bg-muted/40 font-semibold">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground" colSpan="3"></td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">Total</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{formatCurrency(totalAllOrders)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{formatMoney(totalAllOrders)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -129,13 +130,13 @@ const ReportPageIndex = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{item.orderTime}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground font-medium">{formatCurrency(item.total)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground font-medium">{formatMoney(item.total)}</td>
                     </tr>
                   ))}
                   <tr className="bg-muted/40 font-semibold">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground" colSpan="3"></td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">Total</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{formatCurrency(totalCancelled)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">{formatMoney(totalCancelled)}</td>
                   </tr>
                 </tbody>
               </table>

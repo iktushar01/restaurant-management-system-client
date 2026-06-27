@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { formatMoney } from "@/lib/currency";
 import { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
 import { toast } from "sonner";
@@ -95,7 +96,7 @@ const FoodPageIndex = () => {
     {
       header: "Price",
       accessor: "price",
-      render: (row) => row.price.toFixed(2),
+      render: (row) => formatMoney(row.price),
     },
   ];
 

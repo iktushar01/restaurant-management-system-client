@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { Link } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
@@ -37,7 +38,7 @@ const EmployeeSalaryPayableIndex = () => {
       accessor: "netPayable",
       render: (row) => (
         <span className={row.netPayable < 0 ? "text-destructive" : "text-success"}>
-          {Number(row.netPayable).toFixed(2)}
+          {formatMoney(row.netPayable)}
         </span>
       ),
     },

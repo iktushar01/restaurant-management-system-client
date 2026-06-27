@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
 import { toast } from "sonner";
@@ -32,7 +33,7 @@ const OtherIncomeIndex = () => {
   const columns = [
     { header: "SL No", accessor: "ID" },
     { header: "Others Income Head Name", accessor: "incomeHeadName" },
-    { header: "Amount", accessor: "amount", render: (row) => Number(row.amount).toFixed(2) },
+    { header: "Amount", accessor: "amount", render: (row) => formatMoney(row.amount) },
     { header: "Note", accessor: "note", render: (row) => row.note || <span className="text-muted-foreground">-</span> },
     { header: "Date", accessor: "date" },
   ];

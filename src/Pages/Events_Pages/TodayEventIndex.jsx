@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { formatMoney } from "@/lib/currency";
 import { Link } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { inventoryService } from "../../services/inventoryService";
@@ -51,7 +52,7 @@ const TodayEventIndex = () => {
     {
       header: "Advance Amount",
       accessor: "advanceAmount",
-      render: (row) => `$${parseFloat(row.advanceAmount).toLocaleString()}`,
+      render: (row) => {formatMoney(parseFloat(row.advanceAmount).toLocaleString())},
     },
     {
       header: "Menu",

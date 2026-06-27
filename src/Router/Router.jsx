@@ -65,6 +65,9 @@ import RestaurantDashboardIndex from "../Layouts/RestaurantDashboard/RestaurantD
 import WorkPeriodDashBoard from "../Layouts/WorkPeriodDashBoard/WorkPeriodDashBoard";
 import WorkPeriodPage from "../Pages/Settings_Pages/WorkPeriodPage/WorkPeriodPage";
 import ChangesPage from "../Pages/Settings_Pages/ChangesPage/ChangesPage";
+import CurrencyIndex from "../Pages/Settings_Pages/CurrencyPage/CurrencyIndex";
+import CurrencyCreate from "../Pages/Settings_Pages/CurrencyPage/CurrencyCreate";
+import CurrencyEditById from "../Pages/Settings_Pages/CurrencyPage/CurrencyEditById";
 import PropertyInformation from "../Pages/Settings_Pages/PropertyInformation/PropertyInformation";
 import WaiterPageIndex from "../Pages/Settings_Pages/Waiter_Pages/WaiterPageIndex";
 import WaiterPageCreate from "../Pages/Settings_Pages/Waiter_Pages/WaiterPageCreate";
@@ -497,6 +500,18 @@ export const router = createBrowserRouter([
       {
         path: "/WorkPeriod/Settings/Update",
         element: <ChangesPage />,
+      },
+      {
+        path: "/WorkPeriod/settings/currency",
+        element: <CurrencyIndex />,
+      },
+      {
+        path: "/WorkPeriod/settings/currency/create",
+        element: <CurrencyCreate />,
+      },
+      {
+        path: "/WorkPeriod/settings/currency/edit/:id",
+        element: <CurrencyEditById />,
       },
       {
         path: "/WorkPeriod/PropertyInformation",

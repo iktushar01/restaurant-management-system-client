@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { FaFileExport, FaPrint } from "react-icons/fa";
 import { hrService } from "../../../services/hrService";
 
@@ -75,10 +76,10 @@ const GrandSalaryPayableIndex = () => {
                       {item.employeeName}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                      {Number(item.salaryPayable).toFixed(2)}
+                      {formatMoney(item.salaryPayable)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                      {Number(item.salaryPaid).toFixed(2)}
+                      {formatMoney(item.salaryPaid)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <span
@@ -88,7 +89,7 @@ const GrandSalaryPayableIndex = () => {
                             : "text-success font-medium"
                         }
                       >
-                        {Number(item.due).toFixed(2)}
+                        {formatMoney(item.due)}
                       </span>
                     </td>
                   </tr>
@@ -100,7 +101,7 @@ const GrandSalaryPayableIndex = () => {
                     Total Salary Payable
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-foreground">
-                    {Number(totals.salaryPayable).toFixed(2)}
+                    {formatMoney(totals.salaryPayable)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-foreground"></td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-foreground"></td>
@@ -111,7 +112,7 @@ const GrandSalaryPayableIndex = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-foreground"></td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-foreground">
-                    {Number(totals.salaryPaid).toFixed(2)}
+                    {formatMoney(totals.salaryPaid)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-foreground"></td>
                 </tr>
@@ -127,7 +128,7 @@ const GrandSalaryPayableIndex = () => {
                         totals.due < 0 ? "text-destructive" : "text-success"
                       }
                     >
-                      {Number(totals.due).toFixed(2)}
+                      {formatMoney(totals.due)}
                     </span>
                   </td>
                 </tr>

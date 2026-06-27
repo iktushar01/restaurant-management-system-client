@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
 import { toast } from "sonner";
@@ -35,13 +36,13 @@ const DuePages = () => {
     {
       header: "Total Due Amount",
       accessor: "totalDueAmount",
-      render: (row) => `$${Number(row.totalDueAmount).toFixed(2)}`,
+      render: (row) => {formatMoney(formatMoney(row.totalDueAmount))},
     },
     { header: "Payment Method", accessor: "paymentMethod" },
     {
       header: "Pay Amount",
       accessor: "payAmount",
-      render: (row) => `$${Number(row.payAmount).toFixed(2)}`,
+      render: (row) => {formatMoney(formatMoney(row.payAmount))},
     },
   ];
 

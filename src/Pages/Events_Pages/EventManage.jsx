@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -43,7 +44,7 @@ const EventManage = () => {
     {
       header: "Advance Amount",
       accessor: "advanceAmount",
-      render: (row) => `$${parseFloat(row.advanceAmount).toLocaleString()}`,
+      render: (row) => {formatMoney(parseFloat(row.advanceAmount).toLocaleString())},
     },
     {
       header: "Menu",

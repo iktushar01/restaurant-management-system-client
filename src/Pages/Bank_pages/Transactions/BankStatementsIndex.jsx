@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
@@ -43,17 +44,17 @@ const BankStatementsIndex = () => {
     {
       header: "Deposit",
       accessor: "deposit",
-      render: (row) => (row.deposit > 0 ? row.deposit.toFixed(2) : "-"),
+      render: (row) => (row.deposit > 0 ? formatMoney(row.deposit) : "-"),
     },
     {
       header: "Withdrawn",
       accessor: "withdrawn",
-      render: (row) => (row.withdrawn > 0 ? row.withdrawn.toFixed(2) : "-"),
+      render: (row) => (row.withdrawn > 0 ? formatMoney(row.withdrawn) : "-"),
     },
     {
       header: "Balance",
       accessor: "balance",
-      render: (row) => row.balance.toFixed(2),
+      render: (row) => formatMoney(row.balance),
     },
   ];
 
@@ -139,19 +140,19 @@ const BankStatementsIndex = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-card border border-border rounded-lg p-4">
               <p className="text-sm text-muted-foreground">Opening Balance</p>
-              <p className="text-lg font-semibold text-foreground">{statement.summary.openingBalance.toFixed(2)}</p>
+              <p className="text-lg font-semibold text-foreground">{formatMoney(statement.summary.openingBalance)}</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-4">
               <p className="text-sm text-muted-foreground">Total Deposits</p>
-              <p className="text-lg font-semibold text-success">{statement.summary.totalDeposits.toFixed(2)}</p>
+              <p className="text-lg font-semibold text-success">{formatMoney(statement.summary.totalDeposits)}</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-4">
               <p className="text-sm text-muted-foreground">Total Withdrawals</p>
-              <p className="text-lg font-semibold text-destructive">{statement.summary.totalWithdrawals.toFixed(2)}</p>
+              <p className="text-lg font-semibold text-destructive">{formatMoney(statement.summary.totalWithdrawals)}</p>
             </div>
             <div className="bg-card border border-border rounded-lg p-4">
               <p className="text-sm text-muted-foreground">Closing Balance</p>
-              <p className="text-lg font-semibold text-foreground">{statement.summary.closingBalance.toFixed(2)}</p>
+              <p className="text-lg font-semibold text-foreground">{formatMoney(statement.summary.closingBalance)}</p>
             </div>
           </div>
 

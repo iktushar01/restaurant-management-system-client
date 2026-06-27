@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { Link, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import { financeService } from "../../../services/financeService";
@@ -63,7 +64,7 @@ const DailyIncomeDetails = () => {
                       </div>
                       <div>
                         <p className="text-sm font-medium text-muted-foreground">Amount</p>
-                        <p className="font-medium">{Number(transaction.amount).toFixed(2)}</p>
+                        <p className="font-medium">{formatMoney(transaction.amount)}</p>
                       </div>
                       <div>
                         <p className="text-sm font-medium text-muted-foreground">Note</p>

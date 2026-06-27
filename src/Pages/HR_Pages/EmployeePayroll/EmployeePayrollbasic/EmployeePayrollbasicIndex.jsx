@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
 import { toast } from "sonner";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -42,7 +43,7 @@ const EmployeePayrollbasicIndex = () => {
     {
       header: "Basic",
       accessor: "basic",
-      render: (row) => (row.amount != null ? `$${row.amount}` : row.basic ? `$${row.basic}` : ""),
+      render: (row) => (row.amount != null ? {formatMoney(row.amount)} : row.basic ? {formatMoney(row.basic)} : ""),
     },
     {
       header: "Month",

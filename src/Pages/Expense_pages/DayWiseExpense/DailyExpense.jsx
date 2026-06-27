@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { Link } from "react-router-dom";
 import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
 import { financeService } from "../../../services/financeService";
@@ -42,7 +43,7 @@ const DailyExpense = () => {
   const columns = [
     { header: "SL No", accessor: "ID" },
     { header: "Date", accessor: "date" },
-    { header: "Total Expense", accessor: "totalExpense", render: (row) => Number(row.totalExpense).toFixed(2) },
+    { header: "Total Expense", accessor: "totalExpense", render: (row) => formatMoney(row.totalExpense) },
     {
       header: "Actions",
       accessor: "actions",

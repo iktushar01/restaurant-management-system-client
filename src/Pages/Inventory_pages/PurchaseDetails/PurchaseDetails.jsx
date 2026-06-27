@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { Link } from "react-router-dom";
 import { FaPlus, FaSearch } from "react-icons/fa";
@@ -32,7 +33,7 @@ const PurchaseDetails = () => {
     {
       header: "Total",
       accessor: "total",
-      render: (row) => `$${parseFloat(row.total).toLocaleString()}`,
+      render: (row) => {formatMoney(parseFloat(row.total).toLocaleString())},
     },
     {
       header: "Purchase Date",

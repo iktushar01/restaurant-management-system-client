@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
 import { toast } from "sonner";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -42,7 +43,7 @@ const EmployeePayRollSalaryPaymentIndex = () => {
     {
       header: "Amount",
       accessor: "amount",
-      render: (row) => `$${Number(row.amount).toFixed(2)}`,
+      render: (row) => {formatMoney(formatMoney(row.amount))},
     },
     {
       header: "Month",

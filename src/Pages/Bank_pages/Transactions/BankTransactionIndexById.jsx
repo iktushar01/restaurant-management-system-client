@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { SelectField } from "@/Shared/FormSelect/FormSelect";
 import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
 import { toast } from "sonner";
@@ -61,12 +62,12 @@ const BankTransactionIndexById = () => {
     {
       header: "Deposit",
       accessor: "deposit",
-      render: (row) => (row.deposit > 0 ? row.deposit.toFixed(2) : "-"),
+      render: (row) => (row.deposit > 0 ? formatMoney(row.deposit) : "-"),
     },
     {
       header: "Withdrawn",
       accessor: "withdrawn",
-      render: (row) => (row.withdrawn > 0 ? row.withdrawn.toFixed(2) : "-"),
+      render: (row) => (row.withdrawn > 0 ? formatMoney(row.withdrawn) : "-"),
     },
     {
       header: "Actions",

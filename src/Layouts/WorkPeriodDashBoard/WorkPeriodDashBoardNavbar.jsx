@@ -5,6 +5,7 @@ import {
   ChevronRightIcon,
   ClipboardListIcon,
   CoinsIcon,
+  DollarSignIcon,
   FactoryIcon,
   HamburgerIcon,
   ListIcon,
@@ -84,6 +85,11 @@ const menuItems = [
     name: "Charges",
     path: "/WorkPeriod/Settings/Update",
     icon: CoinsIcon,
+  },
+  {
+    name: "Currency",
+    path: "/WorkPeriod/settings/currency",
+    icon: DollarSignIcon,
   },
 ];
 

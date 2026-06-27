@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react";
+import { formatMoney } from "@/lib/currency";
 import { useConfirmDialog } from "@/Shared/ConfirmDialog/ConfirmDialog";
 import { toast } from "sonner";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -43,7 +44,7 @@ const EmployeePayrollEarningIndex = () => {
     {
       header: "Amount",
       accessor: "amount",
-      render: (row) => `$${Number(row.amount).toLocaleString()}`,
+      render: (row) => {formatMoney(Number(row.amount).toLocaleString())},
     },
     { header: "Month Name", accessor: "monthName" },
     { header: "Year Name", accessor: "yearName" },

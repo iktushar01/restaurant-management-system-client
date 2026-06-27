@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { formatMoney } from "@/lib/currency";
 import { BanknoteIcon, XIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -112,7 +113,7 @@ const RestaurantDashboardCurrentOrder = () => {
                         <Badge variant="secondary">{order.status}</Badge>
                       </TableCell>
                       <TableCell>
-                        ฿{Number(order.billAmount).toFixed(2)}
+                        {formatMoney(formatMoney(order.billAmount))}
                       </TableCell>
                       <TableCell className="text-muted-foreground max-w-xs truncate">
                         {order.items?.join(", ")}

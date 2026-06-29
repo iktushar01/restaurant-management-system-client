@@ -11,6 +11,8 @@ const FoodPageCreate = () => {
   const [categories, setCategories] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
   const {
     register,
     handleSubmit,
@@ -22,6 +24,22 @@ const FoodPageCreate = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (!selectedFile) {
+      setImagePreview("");
+      return undefined;
+    }
+
+    const previewUrl = URL.createObjectURL(selectedFile);
+    setImagePreview(previewUrl);
+
+    return () => URL.revokeObjectURL(previewUrl);
+  }, [selectedFile]);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files?.[0] || null);
+  };
+
   const onSubmit = async (data) => {
     setSubmitError("");
     setSubmitting(true);
@@ -32,7 +50,8 @@ const FoodPageCreate = () => {
         name: data.foodName,
         serialNo: Number(data.serialNo),
         price: Number(data.price),
-        availability: data.availability === "Unavailable" ? "UNAVAILABLE" : "AVAILABLE",
+        availability: data.availability ? "AVAILABLE" : "UNAVAILABLE",
+        ...(selectedFile ? { imageFile: selectedFile } : {}),
       });
       navigate("/WorkPeriod/foods/index");
     } catch (err) {
@@ -67,6 +86,7 @@ const FoodPageCreate = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          {submitError && <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">{submitError}</div>}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
             {/* Basic Information Column */}
@@ -279,7 +299,15 @@ const FoodPageCreate = () => {
                 </label>
                 <div className="border-2 border-dashed border-border rounded-lg p-4 text-center">
                   <div className="flex flex-col items-center justify-center">
-                    <FiUpload className="w-8 h-8 text-muted-foreground mb-2" />
+                    {imagePreview ? (
+                      <img
+                        src={imagePreview}
+                        alt="Food preview"
+                        className="mb-3 h-24 w-24 rounded-lg object-cover border border-border"
+                      />
+                    ) : (
+                      <FiUpload className="w-8 h-8 text-muted-foreground mb-2" />
+                    )}
                     <label className="cursor-pointer">
                       <span className="text-primary font-medium">Choose File</span>
                       <input
@@ -348,9 +376,10 @@ const FoodPageCreate = () => {
             </Link>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r bg-primary text-primary-foreground text-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus-visible:ring-ring focus:ring-offset-2 cursor-pointer"
+              disabled={submitting}
+              className="px-6 py-2.5 bg-gradient-to-r bg-primary text-primary-foreground text-foreground font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus-visible:ring-ring focus:ring-offset-2 cursor-pointer disabled:opacity-60"
             >
-              Save
+              {submitting ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

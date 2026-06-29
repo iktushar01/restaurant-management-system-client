@@ -1,5 +1,22 @@
 import apiClient from "./apiClient";
 
+const buildFoodFormData = (data) => {
+  if (!data?.imageFile) {
+    return data;
+  }
+
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    if (key === "imageFile") {
+      formData.append("image", value);
+    } else if (value !== undefined && value !== null) {
+      formData.append(key, value);
+    }
+  });
+
+  return formData;
+};
+
 export const foodService = {
   getAll: (params) => apiClient("/api/v1/foods", { params }),
 
@@ -10,13 +27,13 @@ export const foodService = {
   create: (data) =>
     apiClient("/api/v1/foods", {
       method: "POST",
-      body: data,
+      body: buildFoodFormData(data),
     }),
 
   update: (id, data) =>
     apiClient(`/api/v1/foods/${id}`, {
       method: "PATCH",
-      body: data,
+      body: buildFoodFormData(data),
     }),
 
   delete: (id) =>

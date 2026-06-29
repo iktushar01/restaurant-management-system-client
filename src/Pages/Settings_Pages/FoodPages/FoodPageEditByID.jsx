@@ -14,6 +14,8 @@ const FoodPageEditByID = () => {
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [currentImage, setCurrentImage] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
 
   const {
     register,
@@ -29,6 +31,7 @@ const FoodPageEditByID = () => {
       .then(([catRes, foodRes]) => {
         setCategories(catRes.data || []);
         const food = foodRes.data;
+        setCurrentImage(food.image || "");
         reset({
           categoryId: food.categoryId,
           foodNo: food.foodNo,
@@ -42,8 +45,20 @@ const FoodPageEditByID = () => {
       .finally(() => setLoading(false));
   }, [id, reset]);
 
+  useEffect(() => {
+    if (!selectedFile) {
+      setImagePreview("");
+      return undefined;
+    }
+
+    const previewUrl = URL.createObjectURL(selectedFile);
+    setImagePreview(previewUrl);
+
+    return () => URL.revokeObjectURL(previewUrl);
+  }, [selectedFile]);
+
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    setSelectedFile(event.target.files?.[0] || null);
   };
 
   const onSubmit = async (data) => {
@@ -57,6 +72,7 @@ const FoodPageEditByID = () => {
         serialNo: Number(data.serialNo),
         price: Number(data.price),
         availability: data.availability ? "AVAILABLE" : "UNAVAILABLE",
+        ...(selectedFile ? { imageFile: selectedFile } : {}),
       });
       navigate("/WorkPeriod/foods/index");
     } catch (err) {
@@ -326,7 +342,15 @@ const FoodPageEditByID = () => {
                 </label>
                 <div className="border-2 border-dashed border-border rounded-lg p-4 text-center">
                   <div className="flex flex-col items-center justify-center">
-                    <FiUpload className="w-8 h-8 text-muted-foreground mb-2" />
+                    {imagePreview || currentImage ? (
+                      <img
+                        src={imagePreview || currentImage}
+                        alt="Food preview"
+                        className="mb-3 h-24 w-24 rounded-lg object-cover border border-border"
+                      />
+                    ) : (
+                      <FiUpload className="w-8 h-8 text-muted-foreground mb-2" />
+                    )}
                     <label className="cursor-pointer">
                       <span className="text-primary font-medium">
                         Choose File
@@ -339,7 +363,7 @@ const FoodPageEditByID = () => {
                       />
                     </label>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {selectedFile ? selectedFile.name : "No file chosen"}
+                      {selectedFile ? selectedFile.name : currentImage ? "Current image" : "No file chosen"}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       PNG, JPG up to 10MB

@@ -36,17 +36,19 @@ export async function apiClient(endpoint, options = {}) {
 
   const accessToken = tokenStorage.getAccessToken();
 
+  const isFormData = fetchOptions.body instanceof FormData;
+
   const config = {
     credentials: "include",
     headers: {
-      "Content-Type": "application/json",
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
       ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       ...fetchOptions.headers,
     },
     ...fetchOptions,
   };
 
-  if (config.body && typeof config.body === "object") {
+  if (config.body && typeof config.body === "object" && !isFormData) {
     config.body = JSON.stringify(config.body);
   }
 

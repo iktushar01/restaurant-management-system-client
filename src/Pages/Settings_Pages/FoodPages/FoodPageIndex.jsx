@@ -9,6 +9,7 @@ import ReusableTable from "../../../Shared/ReusableTable/ReusableTable";
 import { foodService } from "../../../services/foodService";
 
 const FoodPageIndex = () => {
+  const { confirm } = useConfirmDialog();
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,6 +59,22 @@ const FoodPageIndex = () => {
     {
       header: "SL No",
       accessor: "serialNo",
+    },
+    {
+      header: "Image",
+      accessor: "image",
+      render: (row) => row.image ? (
+        <img
+          src={row.image}
+          alt={row.foodName || row.name || "Food item"}
+          className="h-12 w-12 rounded-md border border-border object-cover"
+          loading="lazy"
+        />
+      ) : (
+        <div className="flex h-12 w-12 items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-muted-foreground">
+          <FaUtensils className="text-base" />
+        </div>
+      ),
     },
     {
       header: "Category Name",
